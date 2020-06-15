@@ -21,13 +21,13 @@ var authSettings = {
     clientData: {
       'app-web-auth:description': {
         'type': 'note/txt',
-        'content': 'This sample app, demonstrates how an institution can track the weight of a newborn baby alongside mother\'s blood pressure to prevent hypertension'
+        'content': 'This sample app demonstrates how an institution can track the weight of a newborn baby alongside with the mother\'s blood pressure to prevent hypertension.'
       }
     },
   }
 };
 
-function pryvAuthStateChange(state) { // called each time the authentication state changed
+function pryvAuthStateChange(state) { // called each time the authentication state changes
   console.log('##pryvAuthStateChange', state);
   if (state.id === Pryv.Browser.AuthStates.AUTHORIZED) {
     document.getElementById('please-login').style.visibility = 'hidden';
@@ -54,9 +54,9 @@ async function submitForm() {
   const babyWeight = document.getElementById('baby-weight').value;
   const systolic = document.getElementById('systolic').value;
   const diastolic = document.getElementById('diastolic').value;
-   // we include creation of the streams anyway
-   // if they already exists on the account, this will not affect the nexts 
-   // calls while insuring their existance.
+   // We include creation of the streams anyways
+   // If they already exist in the account, this will not affect the next 
+   // calls while insuring their existence.
   const apiCall = [
     {
       method: 'streams.create',
@@ -113,6 +113,6 @@ async function submitForm() {
 
   const result = await connection.api(apiCall);
   console.log(result);
-  alert('Thank you!');
+  alert('Thank you for answering these questions!');
   return false;
 }

@@ -1,0 +1,34 @@
+## Pryv Simple Form Tutorial 
+
+Example of implementation of a web app used for creation & collection of answers to a simple form.
+
+## User story
+
+You are creating a simple form to track the mother's blood pressure and the baby's weight after the mother leaves the maternity hospital.
+After the mother logs in to her Pryv.io account, she receives an access request from your app on the necessary streams.
+Once she gives her consent to the app, she can answer the questions of the form and submit the values.
+
+## Project Specifications
+
+- Create form UI
+- Ask for login
+- Request access for the app on the necessary streams 
+- Display the form
+- Submit answers and store the values in the relevant streams
+
+## Data structure
+
+This use case implies the creation of a stream structure and the use of different event types that are explained below.
+
+### Streams structure
+
+The weight of the baby is stored as an event and added to the stream "Baby-Body", while the blood pressure of the mother is added to the stream "Heart".
+
+The following streams structure is created in the variable `apiCall`:
+![Stream structure](/assets/Use_case_form_collection.svg) 
+
+### Event types
+
+The [Event types directory](https://api.pryv.com/event-types/) contains standard event types, and can be customized and completed with your own event types.
+
+In our example, we use the event type `[mass/kg](https://api.pryv.com/event-types/#mass)` for the baby's weight and the event type `[blood-pressure/mmhg-bpm](https://api.pryv.com/event-types/#blood-pressure)` for the blood pressure of the mother.
