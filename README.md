@@ -12,7 +12,7 @@ Once she gives her consent to the app, she can answer the questions of the form 
 
 - Create form UI
 - Ask for login
-- Request access for the app on the necessary streams 
+- Request access for the app "pryv-example-simple-form" on the streams "Baby" and "Body
 - Display the form
 - Submit answers and store the values in the relevant streams
 
@@ -25,10 +25,11 @@ This use case implies the creation of a stream structure and the use of differen
 The weight of the baby is stored as an event and added to the stream "Baby-Body", while the blood pressure of the mother is added to the stream "Heart".
 
 The following streams structure is created in the variable `apiCall`:
-![Stream structure](/assets/Use_case_form_collection.png) 
+
+![Stream structure](/simple-form/assets/Use_case_form_collection.png) 
 
 ### Event types
 
 The [Event types directory](https://api.pryv.com/event-types/) contains standard event types, and can be customized and completed with your own event types.
 
-In our example, we use the event type `mass/kg` for the baby's weight (see [here](https://api.pryv.com/event-types/#mass) for details) and the event type `blood-pressure/mmhg-bpm` for the blood pressure of the mother (see [here](https://api.pryv.com/event-types/#blood-pressure) for details) 
+In our example, we use the event type `mass/kg` for the baby's weight (see [here](https://api.pryv.com/event-types/#mass) for details) and the event type `blood-pressure/mmhg-bpm` for the blood pressure of the mother (see [here](https://api.pryv.com/event-types/#blood-pressure) for details).
