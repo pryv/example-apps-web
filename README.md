@@ -26,7 +26,7 @@ The weight of the baby is stored as an event and added to the stream "Baby-Body"
 
 The following streams structure is created in the variable `apiCall`:
 
-![Stream structure](/simple-form/assets/Use_case_form_collection.png) 
+![Stream structure](/simple-form/assets/Use_case_form_collection.svg) 
 
 ### Event types
 
