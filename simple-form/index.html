@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="style.css" />
+  <title>Pryv Simple Form Example</title>
+</head>
+<script src="https://api.pryv.com/lib-js/pryv.js"></script>
+<script src="script.js"></script>
+
+<body>
+  <div class="container">
+
+    <div class="welcome-container">
+      <span id="pryv-button"></span>
+      <br><br>
+      <label id="welcome-message">
+        Dear Madam, following your recent visit to the maternity we invite you to answer the following two
+        questions to track your child’s weight and your blood pressure.
+      </label>
+      <br><br>
+      <label id="please-login">
+        Please login.
+      </label>
+    </div>
+    <form id="form" class="form">
+      <hr>
+      <div class="form-control">
+        <label for="baby-weight">Baby weight in Kgs</label>
+        <input type="text" id="baby-weight" placeholder="Enter your baby's weight" />
+      </div>
+      <label>
+        Please take your blood pressure with the device that you received from the maternity.
+        And note the values displayed on the screen below.
+      </label>
+      <hr>
+      <div class="form-control">
+        <label for="systolic">Systolic value (top number)</label>
+        <input type="text" id="systolic" placeholder="Enter systolic value in mmHg" />
+        <label for="diastolic">Diastolic value (bottom number)</label>
+        <input type="text" id="diastolic" placeholder="Enter systolic value in mmHg" />
+        <small>Error message</small>
+      </div>
+      <button id="submit-button">Submit</button>
+    </form>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
