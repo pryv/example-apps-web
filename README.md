@@ -25,10 +25,10 @@ This use case implies the creation of a stream structure and the use of differen
 The weight of the baby is stored as an event and added to the stream "Baby-Body", while the blood pressure of the mother is added to the stream "Heart".
 
 The following streams structure is created in the variable `apiCall`:
-![Stream structure](/assets/Use_case_form_collection.svg) 
+![Stream structure](/assets/Use_case_form_collection.png) 
 
 ### Event types
 
 The [Event types directory](https://api.pryv.com/event-types/) contains standard event types, and can be customized and completed with your own event types.
 
-In our example, we use the event type `[mass/kg](https://api.pryv.com/event-types/#mass)` for the baby's weight and the event type `[blood-pressure/mmhg-bpm](https://api.pryv.com/event-types/#blood-pressure)` for the blood pressure of the mother.
+In our example, we use the event type `mass/kg` for the baby's weight (see [here](https://api.pryv.com/event-types/#mass) for details) and the event type `blood-pressure/mmhg-bpm` for the blood pressure of the mother (see [here](https://api.pryv.com/event-types/#blood-pressure) for details) 
