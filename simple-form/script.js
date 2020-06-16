@@ -94,7 +94,7 @@ async function submitForm() {
     alert('Please enter a number for baby\'s weight');
   }
 
-  if (!isNaN(systolic) && !isNaN(diastolic) && !isNaN(rate)) {
+  if (!isNaN(systolic) && !isNaN(diastolic) {
     apiCall.push({
       method: 'events.create',
       params: {
@@ -103,13 +103,12 @@ async function submitForm() {
         content: {
           systolic: systolic,
           diastolic: diastolic,
-          rate: rate,
         }
       },
       handleResult: logResultToConsole
     });
   } else {
-    alert('Please enter a number for the systolic, diastolic values');
+    alert('Please enter a number for the systolic & diastolic values');
   }
 
   const result = await connection.api(apiCall);
