@@ -86,7 +86,7 @@ async function submitForm() {
       params: {
         streamId: 'baby-body',
         type: 'mass/kg',
-        content: babyWeight,
+        content: Number(babyWeight),
       },
       handleResult: logResultToConsole // Pryv's js-lib handles per-call handler
     });
@@ -101,8 +101,8 @@ async function submitForm() {
         streamId: 'heart',
         type: 'blood-pressure/mmhg-bpm',
         content: {
-          systolic: systolic,
-          diastolic: diastolic,
+          systolic: Number(systolic),
+          diastolic: Number(diastolic),
         }
       },
       handleResult: logResultToConsole
