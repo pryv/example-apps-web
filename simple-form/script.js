@@ -102,7 +102,7 @@ async function submitForm() {
         type: 'blood-pressure/mmhg-bpm',
         content: {
           systolic: systolic,
-          diastolic: diastolic
+          diastolic: diastolic,
         }
       },
       handleResult: logResultToConsole
