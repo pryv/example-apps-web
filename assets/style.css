@@ -37,11 +37,11 @@ h2 {
   visibility: hidden;
 }
 
-.welcome-container {
+.welcome-container, .data-view {
   padding: 30px 40px;
 }
 
-.form-control, .welcome-container {
+.form-control, .welcome-container, .data-view {
   margin-bottom: 10px;
   padding-bottom: 20px;
   position: relative;

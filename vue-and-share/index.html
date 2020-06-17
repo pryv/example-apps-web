@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="../assets/style.css" />
+  <title>Pryv Vue and Share Example</title>
+</head>
+<script src="https://api.pryv.com/lib-js/pryv.js"></script>
+<script src="script.js"></script>
+
+<body>
+  <div class="container">
+
+    <div class="welcome-container">
+      <span id="pryv-button"></span>
+      <br><br>
+      <label id="welcome-message">
+        Dear Madam, this page presents the data ....
+      </label>
+      <br><br>
+      <label id="please-login">
+        Please login.
+      </label>
+    </div>
+
+    <div id="data-view" class="data-view"> 
+      <label>Baby weights</label>
+      <ul id='baby-weight'></ul>
+      <hr>
+      <label>Blood pressure</label>
+      <ul id='blood-pressure'></ul>
+      <br>
+      <hr>
+      <label>Sharings</label>
+      <div>
+        <button type="button" id="create-sharing">Create</button>
+        <input type="text" id="sharing-name" placeholder="name of the sharing" size=10>
+        <input type="checkbox" id="check-baby" value="baby-data" checked="checked">
+        <label for="check-baby">Baby</label>
+        <input type="checkbox" id="check-bp" value="baby-data" checked="checked">
+        <label for="check-bp">Blood</label>
+      </div>
+      <ul id='sharings'></ul>
+    </div>
+
+   
+  </div>
+</body>
+
+</html>
