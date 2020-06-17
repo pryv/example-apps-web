@@ -44,19 +44,37 @@ function pryvAuthStateChange(state) { // called each time the authentication sta
   }
 }
 
+// following APP GUIDLINE: https://api.pryv.com/guides/app-guidelines/
+// there are two options for this app .. if we have an apiEndpoint is the parameters, 
+// then we do not propose to login but directly display the data 
+const urlParams = new URLSearchParams(window.location.search);
+const apiEndPoint = urlParams.get('pryvApiEndPoint');
+const serviceInfoUrl = urlParams.get('pryvServiceInfoURL') || 'https://reg.pryv.me/service/info';
 
-var serviceInfoUrl = 'https://reg.pryv.me/service/info';
 var service = null; // will be initialized after setupAuth;
 var username = null; // will be inialized after AUTHORIZED auth State is recieved
 window.onload = async (event) => {
-  service = await Pryv.Browser.setupAuth(authSettings, serviceInfoUrl);
-  // register "Create" sharing button event listener 
-  document.getElementById('create-sharing').addEventListener("click", createSharing);
+  
+  if (apiEndPoint) { // if apiEndpoint then we are in "Vue only mode"
+    document.getElementById('welcome-message-mme').style.visibility = 'hidden';
+    document.getElementById('sharing-view').style.visibility = 'hidden';
+    document.getElementById('username').innerText = apiEndPoint.split('@')[1].slice(0,-1);
+    connection = new Pryv.Connection(apiEndPoint);
+    loadData();
+  } else { // we propose a login
+    document.getElementById('welcome-message-viewer').style.visibility = 'visible';
+    service = await Pryv.Browser.setupAuth(authSettings, serviceInfoUrl);
+
+    // register "Create" sharing button event listener 
+    document.getElementById('create-sharing').addEventListener("click", createSharing);
+  }
 };
 
 
 function resetData() {
-
+  document.getElementById('baby-weight').innerHTML = '';
+  document.getElementById('blood-pressure').innerHTML = '';
+  document.getElementById('sharings').innerHTML = '';
 }
 
 

@@ -17,8 +17,11 @@
     <div class="welcome-container">
       <span id="pryv-button"></span>
       <br><br>
-      <label id="welcome-message">
+      <label id="welcome-message-mme">
         Dear Madam, this page presents the data ....
+      </label>
+      <label id="welcome-message-viewer">
+        Your are vieweing shared data from <span id="username"></span>
       </label>
       <br><br>
       <label id="please-login">
@@ -26,7 +29,7 @@
       </label>
     </div>
 
-    <div id="data-view" class="data-view"> 
+    <div id="data-view" class="container"> 
       <label>Baby weights</label>
       <ul id='baby-weight'></ul>
       <hr>
@@ -34,6 +37,9 @@
       <ul id='blood-pressure'></ul>
       <br>
       <hr>
+    </div>
+
+    <div id="sharing-view" class="container">
       <label>Sharings</label>
       <div>
         <button type="button" id="create-sharing">Create</button>
