@@ -41,8 +41,11 @@ function pryvAuthStateChange(state) { // called each time the authentication sta
   }
 }
 
+// following APP GUIDLINE: https://api.pryv.com/guides/app-guidelines/
+const urlParams = new URLSearchParams(window.location.search);
+const serviceInfoUrl = urlParams.get('pryvServiceInfoURL') || 'https://reg.pryv.me/service/info';
+si on passe ça en parametre il va l'utiliser 
 
-var serviceInfoUrl = 'https://reg.pryv.me/service/info';
 window.onload = (event) => {
   Pryv.Browser.setupAuth(authSettings, serviceInfoUrl);
   document.getElementById('submit-button').addEventListener("click", submitForm);
