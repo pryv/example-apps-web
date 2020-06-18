@@ -41,6 +41,7 @@ function pryvAuthStateChange(state) { // called each time the authentication sta
   if (state.id === Pryv.Browser.AuthStates.INITIALIZED) {
     document.getElementById('please-login').style.visibility = 'visible';
     document.getElementById('data-view').style.visibility = 'hidden';
+    document.getElementById('sharing-view').style.visibility = 'hidden';
     connection = null;
     resetData();
   }
