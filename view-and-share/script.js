@@ -4,7 +4,7 @@ var authSettings = {
   spanButtonID: 'pryv-button', // span id the DOM that will be replaced by the Service specific button
   onStateChange: pryvAuthStateChange, // event Listener for Authentication steps
   authRequest: { // See: https://api.pryv.com/reference/#auth-request
-    requestingAppId: 'pryv-example-vue-and-share',
+    requestingAppId: 'pryv-example-view-and-share',
     languageCode: 'en', // optional (default english)
     requestedPermissions: [
       {
@@ -21,7 +21,7 @@ var authSettings = {
     clientData: {
       'app-web-auth:description': {
         'type': 'note/txt',
-        'content': 'This sample app demonstrates how we can visualize and re-share data with an app-token.'
+        'content': 'This sample app demonstrates how you can visualize and share data with an app token.'
       }
     },
   }
@@ -47,8 +47,8 @@ function pryvAuthStateChange(state) { // called each time the authentication sta
   }
 }
 
-// following APP GUIDLINE: https://api.pryv.com/guides/app-guidelines/
-// there are two options for this app .. if we have an apiEndpoint in the parameters, 
+// following the APP GUIDELINES: https://api.pryv.com/guides/app-guidelines/
+// there are two options for this app : if we have an apiEndpoint in the parameters, 
 // then we do not propose to login but directly display the data 
 const urlParams = new URLSearchParams(window.location.search);
 const apiEndPoint = urlParams.get('pryvApiEndPoint');
@@ -58,7 +58,7 @@ var service = null; // will be initialized after setupAuth;
 var username = null; // will be inialized after AUTHORIZED auth State is recieved
 window.onload = async (event) => {
   
-  if (apiEndPoint) { // if apiEndpoint then we are in "Vue only mode"
+  if (apiEndPoint) { // if apiEndpoint then we are in "View only mode"
     document.getElementById('welcome-message-mme').style.visibility = 'hidden';
     document.getElementById('welcome-message-viewer').style.visibility = 'visible';
     document.getElementById('username').innerText = apiEndPoint.split('@')[1].slice(0,-1);
@@ -120,7 +120,7 @@ function addTableEvent(table, event, items) {
 };
 
 
-// ----- sharings
+// ----- Sharings
 
 async function updateSharings() {
   const result = await connection.api([{ method: 'accesses.get', params: {}}]);
@@ -141,7 +141,7 @@ async function createSharing() {
   const checkBaby = document.getElementById('check-baby').checked;
   const checkBP = document.getElementById('check-bp').checked;
   if (! checkBP && ! checkBaby) { 
-    alert('Check at least one of Baby or Blood');
+    alert('Check at least one of the streams "Baby-Body" or "Heart"');
     return;
   }
   const name = document.getElementById('sharing-name').value.trim();
