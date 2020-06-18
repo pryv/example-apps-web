@@ -3,16 +3,20 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <link rel="stylesheet" href="../assets/style.css" />
-  <title>Pryv Simple Form Example</title>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://api.pryv.com/style/pryv.min.css" />
+  <title>Simple Form - Pryv Example</title>
 </head>
 <script src="https://api.pryv.com/lib-js/pryv.js"></script>
 <script src="script.js"></script>
 
 <body>
   <div class="container">
+    <h1>Simple Form - Pryv Examples</h1>
 
     <div class="welcome-container">
       <span id="pryv-button"></span>
@@ -21,36 +25,39 @@
         Dear Madam, following your recent visit to the maternity we invite you to answer the following two
         questions to track your baby's weight and your blood pressure.
       </label>
-      <br><br>
-      <label id="please-login">
+      <span id="please-login">
         Please login.
-      </label>
+      </span>
     </div>
 
-    <form id="form" class="form">
-      <hr>
-      <div class="form-control">
+    <form id="form">
+      <div class="form-group">
         <label for="baby-weight">Baby weight in kgs</label>
-        <input type="text" id="baby-weight" placeholder="Enter your baby's weight" />
+        <input type="text" class="form-control" id="baby-weight" placeholder="Enter your baby's weight" />
       </div>
-      <label>
-        Please take your blood pressure with the device that you received from the maternity, and note the values displayed on the screen below.
-      </label>
-      <hr>
-      <div class="form-control">
-        <label for="systolic">Systolic value (top number)</label>
-        <input type="text" id="systolic" placeholder="Enter the systolic value in mmHg" />
-        <label for="diastolic">Diastolic value (bottom number)</label>
-        <input type="text" id="diastolic" placeholder="Enter the diastolic value in mmHg" />
-        <small>Error message</small>
-      </div>
-      <button type="button" id="submit-button">Submit</button>
-    </form>
 
+
+
+      <div class="form-group">
+        <label for="input-bp">
+          Please take your blood pressure with the device that you received from the maternity, and note the values
+          displayed on
+          the screen below.
+        </label>
+        <div class="input-group" id="input-bp"></div>
+        <label for="systolic">Systolic: </label>
+        <input type="text" class="form-control" id="systolic" placeholder="top value (mmHg)" />
+        <label for="diastolic">Diastolic: </label>
+        <input type="text" class="form-control" id="diastolic" placeholder="bottom value (mmHg)" />
+      </div>
+
+
+      <button type="button" id="submit-button" class="btn btn-primary mb-2">Submit</button>
+    </form>
+    
     <div class="next-example">
       Next example: <a href="../vue-and-share/">Vue and Share</a>
     </div>
-
   </div>
 
 </body>

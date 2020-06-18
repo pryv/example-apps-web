@@ -3,24 +3,27 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <link rel="stylesheet" href="../assets/style.css" />
-  <title>Pryv Vue and Share Example</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://api.pryv.com/style/pryv.min.css" />
+  <title>Vue and Share - Pryv Example</title>
 </head>
 <script src="https://api.pryv.com/lib-js/pryv.js"></script>
 <script src="script.js"></script>
 
 <body>
   <div class="container">
-
+    <h1>Simple Form - Pryv Examples</h1>
     <div class="welcome-container">
       <span id="pryv-button"></span>
       <br><br>
       <label id="welcome-message-mme">
         Dear Madam, this page presents the data ....
       </label>
-      <label id="welcome-message-viewer">
+      <label id="welcome-message-viewer" style="visibility: hidden;">
         Your are vieweing shared data from <span id="username"></span>
       </label>
       <br><br>
@@ -29,9 +32,10 @@
       </label>
     </div>
 
-    <div id="data-view" class="container"> 
+    <div id="data-view" class="container">
       <label>Baby weights</label>
       <ul id='baby-weight'></ul>
+      </ul>
       <hr>
       <label>Blood pressure</label>
       <ul id='blood-pressure'></ul>
@@ -39,21 +43,28 @@
       <hr>
     </div>
 
-    <div id="sharing-view" class="container">
+    <div id="sharing-view" class="container" style="visibility: hidden;">
       <label>Sharings</label>
-      <div>
-        <button type="button" id="create-sharing">Create</button>
-        <input type="text" id="sharing-name" placeholder="name of the sharing" size=10>
-        <input type="checkbox" id="check-baby" value="baby-data" checked="checked">
-        <label for="check-baby">Baby</label>
-        <input type="checkbox" id="check-bp" value="baby-data" checked="checked">
-        <label for="check-bp">Blood</label>
-      </div>
+      <form class="form-inline">
+       
+        <button type="button" id="create-sharing" class="btn btn-primary btn-sm">Create</button>
+        &nbsp;
+        <input type="text" id="sharing-name" placeholder="name of the sharing">
+        &nbsp;
+        <input class="form-check-input" type="checkbox" id="check-baby" value="baby-data" checked="checked">
+        <label class="form-check-label" for="check-baby">Baby</label>
+        &nbsp;
+        <input class="form-check-input" type="checkbox" id="check-bp" value="baby-data" checked="checked">
+        <label class="form-check-label" for="check-bp">Blood</label>
+
+      </form>
       <ul id='sharings'></ul>
       <small id='sharing-delete-message'>Click on a sharing's name to delete it.</small>
     </div>
 
-   
+    <div class="next-example">
+      Previous example: <a href="../simple-form/">Simple Form</a>
+    </div>
   </div>
 </body>
 
