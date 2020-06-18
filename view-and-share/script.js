@@ -48,7 +48,7 @@ function pryvAuthStateChange(state) { // called each time the authentication sta
 }
 
 // following the APP GUIDELINES: https://api.pryv.com/guides/app-guidelines/
-// there are two options for this app : if we have an apiEndpoint in the parameters, 
+// there are two options for this app : if we have the apiEndpoint provided in the parameters, 
 // then we do not propose to login but directly display the data 
 const urlParams = new URLSearchParams(window.location.search);
 const apiEndPoint = urlParams.get('pryvApiEndPoint');

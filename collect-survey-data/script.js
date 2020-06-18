@@ -22,7 +22,7 @@ var authSettings = {
       'app-web-auth:description': {
         'type': 'note/txt',
         'content': 'This sample app demonstrates how an institution can track the weight of a newborn baby alongside with the mother\'s blood pressure to prevent hypertension.'
-      } // to customize according to your use case
+      } // to customize according to your own use case
     },
   }
 };
@@ -41,10 +41,11 @@ function pryvAuthStateChange(state) { // called each time the authentication sta
   }
 }
 
-// following APP GUIDELINES: https://api.pryv.com/guides/app-guidelines/
+// following the APP GUIDELINES: https://api.pryv.com/guides/app-guidelines/
+// there are two options for this app : if we have the apiEndpoint provided in the parameters, 
+// then we do not propose to login but directly display the data 
 const urlParams = new URLSearchParams(window.location.search);
 const serviceInfoUrl = urlParams.get('pryvServiceInfoURL') || 'https://reg.pryv.me/service/info';
-//if serviceInfoUrl is provided in the parameters, then it will be used
 
 window.onload = (event) => {
   Pryv.Browser.setupAuth(authSettings, serviceInfoUrl);
@@ -87,7 +88,7 @@ async function submitForm() {
       method: 'events.create', // create the event in the corresponding stream 'Baby-Body'
       params: {
         streamId: 'baby-body',
-        type: 'mass/kg', // See: https://api.pryv.com/event-types/ for event types
+        type: 'mass/kg', // See: https://api.pryv.com/event-types/ for event types directory
         content: Number(babyWeight),
       },
       handleResult: logResultToConsole // Pryv's js-lib handles per-call handler
@@ -101,7 +102,7 @@ async function submitForm() {
       method: 'events.create', // create the event in the corresponding stream 'Heart'
       params: {
         streamId: 'heart',
-        type: 'blood-pressure/mmhg-bpm', // See: https://api.pryv.com/event-types/ for event types
+        type: 'blood-pressure/mmhg-bpm', // See: https://api.pryv.com/event-types/ for event types directory
         content: {
           systolic: Number(systolic),
           diastolic: Number(diastolic),
