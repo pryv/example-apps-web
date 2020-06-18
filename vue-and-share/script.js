@@ -30,6 +30,7 @@ var authSettings = {
 function pryvAuthStateChange(state) { // called each time the authentication state changes
   console.log('##pryvAuthStateChange', state);
   if (state.id === Pryv.Browser.AuthStates.AUTHORIZED) {
+    resetData();
     document.getElementById('please-login').style.visibility = 'hidden';
     document.getElementById('data-view').style.visibility = 'visible';
     document.getElementById('sharing-view').style.visibility = 'visible';
@@ -70,11 +71,16 @@ window.onload = async (event) => {
   }
 };
 
+function resetTable(tableId) {
+  var tableBody = document.querySelector('#' + tableId + ' tbody');
+  if (tableBody)
+    while (tableBody.firstChild) tableBody.removeChild(tableBody.firstChild);
+}
 
 function resetData() {
-  document.getElementById('baby-weight').innerHTML = '';
-  document.getElementById('blood-pressure').innerHTML = '';
-  document.getElementById('sharings').innerHTML = '';
+  resetTable('baby-weight-table');
+  resetTable('blood-pressure-table');
+  resetTable('sharings-table');
 }
 
 
@@ -86,45 +92,47 @@ async function loadData() {
     return;
   }
   // grab data lists
-  const babyDataList = document.getElementById('baby-weight');
-  const heartDataList = document.getElementById('blood-pressure');
+  const babyDataTable = document.getElementById('baby-weight-table');
+  const heartDataTable = document.getElementById('blood-pressure-table');
   for (const event of events) {
     if (event.streamIds.includes('baby-body') && event.type === 'mass/kg') {
-      addListEvent(babyDataList, event, event.content + ' Kg');
+      addTableEvent(babyDataTable, event, [event.content + ' Kg']);
     }
     if (event.streamIds.includes('heart') && event.type === 'blood-pressure/mmhg-bpm') {
-      addListEvent(heartDataList, event, 'S: ' + 
-      event.content.systolic + 'mmHg - D:' +
-      event.content.diastolic + 'mmHg');
+
+      addTableEvent(heartDataTable, event, 
+        [event.content.systolic + 'mmHg', event.content.diastolic + 'mmHg']);
     }
   }
   updateSharings();
 }
-
-function addListEvent(list, event, text) {
+function addTableEvent(table, event, items) {
   const date = new Date(event.time * 1000);
   const dateText = date.getDay() + '/' + date.getMonth() + '/' + date.getFullYear()
     + ' ' + date.getHours() + ':' + date.getMinutes();
-  const node = document.createElement("LI");
-  const textnode = document.createTextNode(dateText + ' - ' + text);
-  node.appendChild(textnode);
-  list.appendChild(node);
+
+  const row = table.insertRow(-1);
+  row.insertCell(-1).innerHTML = dateText;
+  for (const item of items) {
+    row.insertCell(-1).innerHTML = item;
+  }
 };
+
 
 // ----- sharings
 
 async function updateSharings() {
   const result = await connection.api([{ method: 'accesses.get', params: {}}]);
-  const sharingList = document.getElementById('sharings');
+  const sharingTable = document.getElementById('sharings-table');
   console.log(result);
   const accesses = result[0].accesses;
   if (! accesses || accesses.length === 0) {
-    sharingList.innerHTML = '<small>No sharings, add one</small>'; 
+    //sharingList.innerHTML = '<small>No sharings, add one</small>'; 
     return;
   }
-  sharingList.innerHTML = ''; // empty list
+  resetTable('sharings-table'); // empty list
   for (const access of accesses) {
-    await addListAccess(sharingList, access);
+    await addListAccess(sharingTable, access);
   }
 }
 
@@ -160,8 +168,7 @@ async function createSharing() {
   updateSharings();
 }
 
-async function addListAccess(list, access) {
-  const node = document.createElement("LI");
+async function addListAccess(table, access) {
   
   const permissions = [];
   for (const permission of access.permissions) permissions.push(permission.streamId);
@@ -177,10 +184,11 @@ async function addListAccess(list, access) {
 
   const deleteLink = '<a href="" onclick="javascript:deleteSharing(\'' + access.id + '\');return false;">' + access.name + '</a>';
 
-  const html = deleteLink + ': [' + permissions.join(', ') + '] ' + sharingLink + ' - ' + emailLink;
-  //const textnode = document.createHTMLNode(text);
-  node.innerHTML = html;
-  list.appendChild(node);
+  const row = table.insertRow(-1);
+  row.insertCell(-1).innerHTML = deleteLink;
+  row.insertCell(-1).innerHTML = permissions.join(', ');
+  row.insertCell(-1).innerHTML = sharingLink;
+  row.insertCell(-1).innerHTML = emailLink;
 };
 
 async function deleteSharing(accessId) {

@@ -34,11 +34,28 @@
 
     <div id="data-view" class="container">
       <label>Baby weights</label>
-      <ul id='baby-weight'></ul>
-      </ul>
-      <hr>
-      <label>Blood pressure</label>
-      <ul id='blood-pressure'></ul>
+      <table id='baby-weight-table' class="table">
+        <thead>
+          <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Weight</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+      <label>Blood pressures</label>
+      <table id='blood-pressure-table' class="table">
+        <thead>
+          <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Systolic</th>
+            <th scope="col">Diastolic</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
       <br>
       <hr>
     </div>
@@ -58,7 +75,18 @@
         <label class="form-check-label" for="check-bp">Blood</label>
 
       </form>
-      <ul id='sharings'></ul>
+      <table id='sharings-table' class="table">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Scope</th>
+            <th scope="col">Link</th>
+            <th scope="col">Mail</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
       <small id='sharing-delete-message'>Click on a sharing's name to delete it.</small>
     </div>
 
