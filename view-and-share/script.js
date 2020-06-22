@@ -51,18 +51,20 @@ function pryvAuthStateChange(state) { // called each time the authentication sta
 // there are two options for this app : if we have the apiEndpoint provided in the parameters, 
 // then we do not propose to login but directly display the data 
 const urlParams = new URLSearchParams(window.location.search);
-const apiEndPoint = urlParams.get('pryvApiEndPoint');
+const apiEndpoint = urlParams.get('pryvApiEndpoint');
 const serviceInfoUrl = urlParams.get('pryvServiceInfoURL') || 'https://reg.pryv.me/service/info';
 
 var service = null; // will be initialized after setupAuth;
 var username = null; // will be inialized after AUTHORIZED auth State is recieved
 window.onload = async (event) => {
   
-  if (apiEndPoint) { // if apiEndpoint then we are in "View only mode"
+  if (apiEndpoint) { // if apiEndpoint then we are in "View only mode"
     document.getElementById('welcome-message-mme').style.visibility = 'hidden';
+    document.getElementById('please-login').style.visibility = 'hidden';
+    document.getElementById('data-view').style.visibility = 'visible';
     document.getElementById('welcome-message-viewer').style.visibility = 'visible';
-    document.getElementById('username').innerText = apiEndPoint.split('@')[1].slice(0,-1);
-    connection = new Pryv.Connection(apiEndPoint);
+    document.getElementById('username').innerText = apiEndpoint.split('@')[1].slice(0,-1);
+    connection = new Pryv.Connection(apiEndpoint);
     loadData();
   } else { // we propose a login
     service = await Pryv.Browser.setupAuth(authSettings, serviceInfoUrl);
@@ -105,7 +107,8 @@ async function loadData() {
         [event.content.systolic + 'mmHg', event.content.diastolic + 'mmHg']);
     }
   }
-  updateSharings();
+  if (! apiEndpoint) // display sharings only when loggged-in
+    updateSharings();
 }
 function addTableEvent(table, event, items) {
   const date = new Date(event.time * 1000);
@@ -175,7 +178,7 @@ async function addListAccess(table, access) {
   for (const permission of access.permissions) permissions.push(permission.streamId);
   const apiEndpoint = await service.apiEndpointFor(username, access.token);
 
-  const sharingURL = window.location.href.split('?')[0] + '?pryvApiEndPoint=' + apiEndpoint;
+  const sharingURL = window.location.href.split('?')[0] + '?pryvApiEndpoint=' + apiEndpoint;
   const sharingLink = '<a href="' + sharingURL + '" target="_new"> open </a>';
 
   const emailSubject = encodeURIComponent('Access my ' + permissions.join(', ') + ' data');
