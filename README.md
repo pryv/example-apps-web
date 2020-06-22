@@ -7,5 +7,5 @@ This is the main repository for all the web apps that you can implement using Op
 
 |  #  |      Web App Example           | Demo Video | Tutorial |
 | :-: | :----------------------------: | :--------: |:-------: |
-| 01  |       [Collect Survey Data](https://github.com/pryv/app-web-examples/tree/master/collect-survey-data)  | [Live Demo](https://video-1-link)  | [Tutorial](https://tutorial-1-link/)
-| 02  |     [View and Share Data](https://github.com/pryv/app-web-examples/tree/master/view-and-share)    | [Live Demo](https://video-2-link)  |[Tutorial](https://tutorial-2-link/)
+| 01  |       [Collect Survey Data](collect-survey-data/)  | [Live Demo](https://pryv.github.io/app-web-examples/collect-survey-data/)  | [Tutorial](collect-survey-data/tutorial.md)
+| 02  |     [View and Share Data](view-and-share/)    | [Live Demo](https://pryv.github.io/app-web-examples/view-and-share/)  |[Tutorial](/view-and-share/tutorial.md)
