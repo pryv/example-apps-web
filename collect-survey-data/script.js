@@ -88,22 +88,22 @@ async function submitForm() {
       method: 'events.create', // create the event in the corresponding stream 'Baby-Body'
       params: {
         streamId: 'baby-body',
-        type: 'mass/kg', // See: https://api.pryv.com/event-types/ for event types directory
+        type: 'mass/kg', // See: https://api.pryv.com/event-types/#mass
         content: Number(babyWeight),
       },
-      handleResult: logResultToConsole // Pryv's js-lib handles per-call handler
+      handleResult: logResultToConsole // Pryv's lib-js per-call handler
     });
     apiCall.push({
       method: 'events.create', // create the event in the corresponding stream 'Heart'
       params: {
         streamId: 'heart',
-        type: 'blood-pressure/mmhg-bpm', // See: https://api.pryv.com/event-types/ for event types directory
+        type: 'blood-pressure/mmhg-bpm', // See: https://api.pryv.com/event-types/#blood-pressure
         content: {
           systolic: Number(systolic),
           diastolic: Number(diastolic),
         }
       },
-      handleResult: logResultToConsole // Pryv's js-lib handles per-call handler
+      handleResult: logResultToConsole // Pryv's lib-js per-call handler
     });
   } else {
     alert('Please enter a number for the baby\'s weight and the systolic / diastolic values.');
