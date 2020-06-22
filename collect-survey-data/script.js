@@ -1,6 +1,6 @@
-var connection = null;
+let connection = null;
 
-var authSettings = {
+const authSettings = {
   spanButtonID: 'pryv-button', // span id the DOM that will be replaced by the Service specific button
   onStateChange: pryvAuthStateChange, // event Listener for Authentication steps
   authRequest: { // See: https://api.pryv.com/reference/#auth-request
