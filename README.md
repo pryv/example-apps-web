@@ -2,7 +2,6 @@
 
 This is the main repository for all the web apps that you can implement using Open Pryv.io.
 
-- [Tutorials](https://www.linktotutorials.com)
 - [Open Pryv.io](https://github.com/pryv/open-pryv.io)
 
 |  #  |      Web App Example           | Demo Video | Tutorial |
