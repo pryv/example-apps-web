@@ -4,7 +4,7 @@ Example of implementation of a web app used for visualizing & sharing data.
 
 ## User story
 
-In the previous tutorial [Collect Survey Data](https://github.com/pryv/app-web-examples/tree/master/view-and-share), you have collected and stored data from the mother in her Pryv.io account when she has answered to the example survey.
+In the previous tutorial [Collect Survey Data](https://github.com/pryv/app-web-examples/tree/master/view-and-share), you have collected and stored data from the mother in her Pryv.io account when she has answered the example survey.
 
 In this web app, you provide her with a tool to visualize data from her account and to share it with third parties.
 
@@ -24,3 +24,12 @@ The app "pryv-example-view-and-share" first requests an access on the streams "B
 
 ![Stream structure](README-illustration.svg) 
 
+## Display data
+
+Data from the streams "Baby-Body" and "Heart" is fetched by the app and displayed in a table form.
+The weight of the baby and the blood pressure are presented along with the time and date of the measurement, that needs to be converted from milliseconds to ISO 8601 format.
+
+## Data sharing
+
+Either one of the streams "Baby-Body" or "Heart", or both streams, can be shared with third-parties. The sharing consists in a link that can be communicated to the third party of the user's choice directly or by email.
+When opened, it displays the data within the scope of the sharing.
