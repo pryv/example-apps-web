@@ -83,7 +83,7 @@ async function submitForm() {
     console.log('result: ', JSON.stringify(result));
   }
 
-  if (!isNaN(babyWeight)) {
+  if (!isNaN(babyWeight) || !isNaN(systolic) || !isNaN(diastolic)) {
     apiCall.push({
       method: 'events.create', // create the event in the corresponding stream 'Baby-Body'
       params: {
@@ -93,11 +93,6 @@ async function submitForm() {
       },
       handleResult: logResultToConsole // Pryv's js-lib handles per-call handler
     });
-  } else {
-    alert('Please enter a number for baby\'s weight');
-  }
-
-  if (!isNaN(systolic) && !isNaN(diastolic)) {
     apiCall.push({
       method: 'events.create', // create the event in the corresponding stream 'Heart'
       params: {
@@ -111,7 +106,7 @@ async function submitForm() {
       handleResult: logResultToConsole // Pryv's js-lib handles per-call handler
     });
   } else {
-    alert('Please enter a number for the systolic & diastolic values');
+    alert('Please enter a number for the baby\'s weight and the systolic / diastolic values.');
   }
 
   const result = await connection.api(apiCall);
