@@ -27,9 +27,9 @@ The app "pryv-example-view-and-share" first requests an access on the streams "B
 ## Display data
 
 Data from the streams "Baby-Body" and "Heart" is fetched by the app and displayed in a table form.
-The weight of the baby and the blood pressure are presented along with the time and date of the measurement, that needs to be converted from milliseconds to ISO 8601 format.
+The weight of the baby and the blood pressure are presented along with the time and date of the measurement, that is converted from milliseconds to ISO 8601 format.
 
 ## Data sharing
 
-Either one of the streams "Baby-Body" or "Heart", or both streams, can be shared with third-parties. The sharing consists in a link that can be communicated to the third party of the user's choice directly or by email.
+Either one of the streams "Baby-Body" or "Heart", or both streams, can be shared with third-parties. The sharing consists in a link that can be communicated directly to the third party of the user's choice or by email.
 When opened, it displays the data within the scope of the sharing.
