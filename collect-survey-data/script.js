@@ -10,12 +10,12 @@ var authSettings = {
       {
         streamId: 'body',
         defaultName: 'Body',
-        level: 'create-only' // permissions for the app to write data in stream 'Body'
+        level: 'manage' // permissions for the app to write data in stream 'Body'
       },
       {
         streamId: 'baby',
         defaultName: 'Baby',
-        level: 'create-only' // permissions for the app to write data in stream 'Baby'
+        level: 'manage' // permissions for the app to write data in stream 'Baby'
       }
     ],
     clientData: {
