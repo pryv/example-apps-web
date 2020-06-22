@@ -107,7 +107,7 @@ async function loadData() {
         [event.content.systolic + 'mmHg', event.content.diastolic + 'mmHg']);
     }
   }
-  if (! apiEndpoint)
+  if (! apiEndpoint) // display sharings only when loggged-in
     updateSharings();
 }
 function addTableEvent(table, event, items) {
