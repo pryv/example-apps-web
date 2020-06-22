@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="https://api.pryv.com/style/pryv.min.css">
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400">
+  <title>Collect Survey Data - Pryv Example</title>
+</head>
+<script src="https://api.pryv.com/lib-js/pryv.js"></script>
+<script src="script.js"></script>
+
+<body>
+  <div class="container">
+    <h1>Collect Survey Data - Pryv Examples</h1>
+
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title">Welcome</h2>
+        <span id="pryv-button"></span>
+        <br><br>
+        <label id="welcome-message">
+          Dear Madam, following your recent visit to the maternity we invite you to answer the following two
+          questions to track your baby's weight and your blood pressure.
+        </label>
+        <span id="please-login">
+          Please login.
+        </span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body"></div>
+        <form id="form">
+          <h2 class="card-title">Form</h2>
+          <div class="form-group">
+            <label for="baby-weight">Baby weight in kgs</label>
+            <input type="text" class="form-control" id="baby-weight" placeholder="Enter your baby's weight" />
+          </div>
+
+          <div class="form-group">
+            <label for="input-bp">
+              Please take your blood pressure with the device that you received from the maternity, and note the values
+              displayed on
+              the screen below.
+            </label>
+            <div class="input-group" id="input-bp"></div>
+            <label for="systolic">Systolic: </label>
+            <input type="text" class="form-control" id="systolic" placeholder="top value (mmHg)" />
+            <label for="diastolic">Diastolic: </label>
+            <input type="text" class="form-control" id="diastolic" placeholder="bottom value (mmHg)" />
+          </div>
+
+
+          <button type="button" id="submit-button" class="btn btn-primary mb-2">Submit</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="next-example">
+      Next example: <a href="../view-and-share/index.html">View and Share</a>
+    </div>
+  </div>
+
+</body>
+
+</html>

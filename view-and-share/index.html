@@ -8,90 +8,96 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
     integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://api.pryv.com/style/pryv.min.css" />
-  <title>Vue and Share - Pryv Example</title>
+  <link rel="stylesheet" type="text/css" href="https://api.pryv.com/style/pryv.min.css">
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400">
+  <title>View and Share - Pryv Example</title>
 </head>
 <script src="https://api.pryv.com/lib-js/pryv.js"></script>
 <script src="script.js"></script>
 
 <body>
   <div class="container">
-    <h1>Simple Form - Pryv Examples</h1>
-    <div class="welcome-container">
-      <span id="pryv-button"></span>
-      <br><br>
-      <label id="welcome-message-mme">
-        Dear Madam, this page presents the data ....
-      </label>
-      <label id="welcome-message-viewer" style="visibility: hidden;">
-        Your are vieweing shared data from <span id="username"></span>
-      </label>
-      <br><br>
-      <label id="please-login">
-        Please login.
-      </label>
+    <h1>View and share - Pryv Examples</h1>
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title">Welcome</h2>
+        <span id="pryv-button"></span>
+        <br><br>
+        <span id="welcome-message-mme">
+          Dear Madam, you can visualize the data you entered and share it with third parties on the following page.
+        </span>
+        <span id="welcome-message-viewer" style="visibility: hidden;">
+          You are currently consulting shared data from <span id="username"></span>
+        </span>
+        <br>
+        <span id="please-login">
+          Please login.
+        </span>
+      </div>
+    </div>
+    <div class="card" id="data-view" style="visibility: hidden;">
+      <div class="card-body">
+        <h2 class="card-title">Data</h2>
+        <label>Baby's weight</label>
+        <table id='baby-weight-table' class="table">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Weight</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+        <label>Blood pressure</label>
+        <table id='blood-pressure-table' class="table">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Systolic</th>
+              <th scope="col">Diastolic</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
     </div>
 
-    <div id="data-view" class="container">
-      <label>Baby weights</label>
-      <table id='baby-weight-table' class="table">
-        <thead>
-          <tr>
-            <th scope="col">Date</th>
-            <th scope="col">Weight</th>
-          </tr>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
-      <label>Blood pressures</label>
-      <table id='blood-pressure-table' class="table">
-        <thead>
-          <tr>
-            <th scope="col">Date</th>
-            <th scope="col">Systolic</th>
-            <th scope="col">Diastolic</th>
-          </tr>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
-      <br>
-      <hr>
-    </div>
+    <div class="card" id="sharing-view" style="visibility: hidden;">
+      <div class="card-body">
+        <h2 class="card-title">Sharings</h2>
+        <form class="form-inline">
 
-    <div id="sharing-view" class="container" style="visibility: hidden;">
-      <label>Sharings</label>
-      <form class="form-inline">
-       
-        <button type="button" id="create-sharing" class="btn btn-primary btn-sm">Create</button>
-        &nbsp;
-        <input type="text" id="sharing-name" placeholder="name of the sharing">
-        &nbsp;
-        <input class="form-check-input" type="checkbox" id="check-baby" value="baby-data" checked="checked">
-        <label class="form-check-label" for="check-baby">Baby</label>
-        &nbsp;
-        <input class="form-check-input" type="checkbox" id="check-bp" value="baby-data" checked="checked">
-        <label class="form-check-label" for="check-bp">Blood</label>
+          <button type="button" id="create-sharing" class="btn btn-primary btn-sm">Create</button>
+          &nbsp;
+          <input type="text" id="sharing-name" placeholder="name of the sharing">
+          &nbsp;
+          <input class="form-check-input" type="checkbox" id="check-baby" value="baby-data" checked="checked">
+          <label class="form-check-label" for="check-baby">Baby-Body</label>
+          &nbsp;
+          <input class="form-check-input" type="checkbox" id="check-bp" value="baby-data" checked="checked">
+          <label class="form-check-label" for="check-bp">Heart</label>
 
-      </form>
-      <table id='sharings-table' class="table">
-        <thead>
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Scope</th>
-            <th scope="col">Link</th>
-            <th scope="col">Mail</th>
-          </tr>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
-      <small id='sharing-delete-message'>Click on a sharing's name to delete it.</small>
+        </form>
+        <table id='sharings-table' class="table">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Scope</th>
+              <th scope="col">Link</th>
+              <th scope="col">Mail</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+        <small id='sharing-delete-message'>Click on the name of a sharing to delete it.</small>
+      </div>
     </div>
 
     <div class="next-example">
-      Previous example: <a href="../simple-form/">Simple Form</a>
+      Previous example: <a href="../simple-form/index.html">Collect Survey Data</a>
     </div>
   </div>
 </body>
