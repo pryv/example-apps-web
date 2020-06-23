@@ -44,7 +44,7 @@ function pryvAuthStateChange(state) { // called each time the authentication sta
 // there are two options for this app : if we have the apiEndpoint provided in the parameters, 
 // then we do not propose to login but directly display the data 
 const urlParams = new URLSearchParams(window.location.search);
-const serviceInfoUrl = urlParams.get('pryvServiceInfoURL') || 'https://reg.pryv.me/service/info';
+const serviceInfoUrl = urlParams.get('fixed pryvServiceInfoUrl') || 'https://reg.pryv.me/service/info';
 
 window.onload = (event) => {
   Pryv.Browser.setupAuth(authSettings, serviceInfoUrl);

@@ -9,4 +9,3 @@ This is the main repository for all the web apps that you can implement using Op
 |  #  |      Web App Example           | Live Demo | Tutorial | Video |
 | :-: | :----------------------------: | :-------: |:-------: |:---: |
 | 01  |       [Collect Survey Data](collect-survey-data/)  | [Live Demo](https://pryv.github.io/app-web-examples/collect-survey-data/)  | [Tutorial](collect-survey-data/tutorial.md) | [Video](youtube_video) |
-| 02  |     [View and Share Data](view-and-share/)    | [Live Demo](https://pryv.github.io/app-web-examples/view-and-share/)  |[Tutorial](/view-and-share/tutorial.md) | [Video](youtube_video) |
