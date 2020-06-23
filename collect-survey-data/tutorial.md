@@ -11,7 +11,7 @@ When you have entered the requested values, you can press *submit* to save data 
 
 ## Define form
 
-You will find the form related code in the [index.html](index.html) file.
+You will find the form related code in the [index.html](index.html) file. We invite you to customize it with your own welcome message, style and survey questions according to your use case.
 
 ## Authenticate your app
 
