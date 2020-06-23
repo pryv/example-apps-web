@@ -9,7 +9,7 @@ Once you have accepted, it displays the form to enter your baby's weight and you
 
 When you have entered the requested values, you can press *submit* to save data into your Pryv.io account.
 
-## Define form
+## Customize the form
 
 You will find the form related code in the [index.html](index.html) file. We invite you to customize it with your own welcome message, style and survey questions according to your use case.
 
