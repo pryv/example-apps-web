@@ -36,7 +36,7 @@ var authSettings = {
   spanButtonID: 'pryv-button', 
   onStateChange: pryvAuthStateChange, 
   authRequest: { 
-    requestingAppId: 'pryv-example-simple-form', 
+    requestingAppId: 'pryv-simple-form', 
     languageCode: 'en', 
     requestedPermissions: [ 
       {

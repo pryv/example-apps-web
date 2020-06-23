@@ -4,7 +4,7 @@ const authSettings = {
   spanButtonID: 'pryv-button', // span id the DOM that will be replaced by the Service specific button
   onStateChange: pryvAuthStateChange, // event Listener for Authentication steps
   authRequest: { // See: https://api.pryv.com/reference/#auth-request
-    requestingAppId: 'pryv-example-simple-form', // to customize for your own app
+    requestingAppId: 'pryv-simple-form', // to customize for your own app
     languageCode: 'en', // optional (default english)
     requestedPermissions: [ 
       {
