@@ -22,7 +22,7 @@ This use case implies the creation of a stream structure and the use of differen
 
 ### Stream structure
 
-The app "pryv-example-simple-form" first requests an access on the streams "Baby" and "Body" with a "create-only" level in order to be able to add events to these streams.
+The app "pryv-example-simple-form" first requests an access on the streams "Baby" and "Body" with a "manage" level in order to be able to manage data in these streams children.
 The blood pressure of the mother is stored as an event and added to the stream "Heart", while the weight of the baby is added to the stream "Baby-Body".
 
 The following stream structure is created in the variable `apiCall`:
