@@ -37,7 +37,6 @@ var authSettings = {
   onStateChange: pryvAuthStateChange, 
   authRequest: { 
     requestingAppId: 'pryv-simple-form', 
-    languageCode: 'en', 
     requestedPermissions: [ 
       {
         streamId: 'body',

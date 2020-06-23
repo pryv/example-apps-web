@@ -5,7 +5,6 @@ const authSettings = {
   onStateChange: pryvAuthStateChange, // event Listener for Authentication steps
   authRequest: { // See: https://api.pryv.com/reference/#auth-request
     requestingAppId: 'pryv-simple-form', // to customize for your own app
-    languageCode: 'en', // optional (default english)
     requestedPermissions: [ 
       {
         streamId: 'body',
