@@ -3,9 +3,9 @@
 
 ## Define form
 
-This is a simple form application, as you can see, when open, it displays a button to initiate the authentication process, which opens a popup where you can either authenticate or create a new account, then you can consent to give the app access to some streams where the form data will be saved.
+This is a simple form application that first displays a welcome message and a button to initiate the authentication process. With click on the login button, a popup opens in your browser where you can either authenticate or create a new account. When signed in, you can consent to give the app access to some streams where the form data will be saved.
 
-Once you have accepted, it displays the form to enter your baby's weight and his blood pressure.
+Once you have accepted, it displays the form to enter your baby's weight and your own blood pressure.
 
 When you have entered the requested values, you can press *submit* to save data into your Pryv.io account.
 
@@ -33,33 +33,32 @@ The [auth request parameters](https://api.pryv.com/reference/#auth-request) and 
 var connection = null;
 
 var authSettings = {
-  spanButtonID: 'pryv-button', // span id the DOM that will be replaced by the Service specific button
-  onStateChange: pryvAuthStateChange, // event Listener for Authentication steps
-  authRequest: { // See: https://api.pryv.com/reference/#auth-request
-    requestingAppId: 'pryv-example-simple-form', // to customize for your own app
-    languageCode: 'en', // optional (default english)
+  spanButtonID: 'pryv-button', 
+  onStateChange: pryvAuthStateChange, 
+  authRequest: { 
+    requestingAppId: 'pryv-example-simple-form', 
+    languageCode: 'en', 
     requestedPermissions: [ 
       {
         streamId: 'body',
         defaultName: 'Body',
-        level: 'manage' // permissions for the app to write data in stream 'Body'
+        level: 'manage' 
       },
       {
         streamId: 'baby',
         defaultName: 'Baby',
-        level: 'manage' // permissions for the app to write data in stream 'Baby'
-      }
+        level: 'manage' 
     ],
     clientData: {
       'app-web-auth:description': {
         'type': 'note/txt',
         'content': 'This sample app demonstrates how an institution can track the weight of a newborn baby alongside with the mother\'s blood pressure to prevent hypertension.'
-      } // to customize according to your own use case
+      }
     },
   }
 };
 
-function pryvAuthStateChange(state) { // called each time the authentication state changes
+function pryvAuthStateChange(state) { 
   console.log('##pryvAuthStateChange', state);
   if (state.id === Pryv.Browser.AuthStates.AUTHORIZED) {
     document.getElementById('please-login').style.visibility = 'hidden';
@@ -96,7 +95,7 @@ window.onload = (event) => {
 };
 ```
 
-This will fetch, values from the `input` tags:
+This will fetch values from the `input` tags:
 
 ```javascript
 const babyWeight = document.getElementById('baby-weight').value;
@@ -109,32 +108,32 @@ It will package those values into [events.create](https://api.pryv.com/reference
 ```javascript
 if (!isNaN(babyWeight) || !isNaN(systolic) || !isNaN(diastolic)) {
     apiCall.push({
-      method: 'events.create', // create the event in the corresponding stream 'Baby-Body'
+      method: 'events.create', 
       params: {
         streamId: 'baby-body',
-        type: 'mass/kg', // See: https://api.pryv.com/event-types/#mass
+        type: 'mass/kg', 
         content: Number(babyWeight),
       },
-      handleResult: logResultToConsole // Pryv's lib-js per-call handler
+      handleResult: logResultToConsole 
     });
     apiCall.push({
-      method: 'events.create', // create the event in the corresponding stream 'Heart'
+      method: 'events.create', 
       params: {
         streamId: 'heart',
-        type: 'blood-pressure/mmhg-bpm', // See: https://api.pryv.com/event-types/#blood-pressure
+        type: 'blood-pressure/mmhg-bpm', 
         content: {
           systolic: Number(systolic),
           diastolic: Number(diastolic),
         }
       },
-      handleResult: logResultToConsole // Pryv's lib-js per-call handler
+      handleResult: logResultToConsole
     });
   } else {
     alert('Please enter a number for the baby\'s weight and the systolic / diastolic values.');
   }
 ```
 
-As we wish to save these values into streams that are not part of the streams of the `requestedPermissions`, we ensure that they exist by bundling them in the batch call, previous to the `events.create` methods, as the array of methods is execute in order by the API:
+As we wish to save these values into streams that are not part of the streams of the `requestedPermissions`, we ensure that they exist by bundling them in the batch call, previous to the `events.create` methods, as the array of methods is executed in order by the API:
 
 ```javascript
 const apiCall = [
