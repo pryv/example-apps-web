@@ -168,9 +168,9 @@ Following our [app guidelines](https://api.pryv.com/guides/app-guidelines/), we 
 
 ```javascript
 const urlParams = new URLSearchParams(window.location.search);
-const serviceInfoUrl = urlParams.get('pryvServiceInfoURL') || 'https://reg.pryv.me/service/info';
+const serviceInfoUrl = urlParams.get('fixed pryvServiceInfoUrl') || 'https://reg.pryv.me/service/info';
 ```
 
 This allows to launch this app on your [local Open Pryv.io](https://github.com/pryv/open-pryv.io#development) providing the service information URL:
 
-[https://pryv.github.io/app-web-examples/collect-survey-data/?pryvServiceInfoURL=https://my-computer.rec.la:4443/reg/service/info](https://pryv.github.io/app-web-examples/collect-survey-data/?pryvServiceInfoURL=https://my-computer.rec.la:4443/reg/service/info).
+[https://pryv.github.io/app-web-examples/collect-survey-data/?fixed pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info](https://pryv.github.io/app-web-examples/collect-survey-data/?fixed pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info).
