@@ -4,6 +4,7 @@ This is the main repository for all the web apps that you can implement using Op
 
 - [Open Pryv.io](https://github.com/pryv/open-pryv.io)
 - [Tutorial Videos](https://www.youtube.com/user/pryvme/videos?view=0&sort=dd&shelf_id=0)
+- [Developer documentation](https://api.pryv.com/)
 
 |  #  |      Web App Example           | Live Demo | Tutorial | Video |
 | :-: | :----------------------------: | :-------: |:-------: |:---: |
