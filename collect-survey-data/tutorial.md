@@ -1,5 +1,5 @@
 
-# Collect survey data tutorial
+# Pryv Collect survey data tutorial
 
 ## Define form
 

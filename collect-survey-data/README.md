@@ -1,4 +1,4 @@
-## Pryv collect survey data tutorial 
+## Pryv collect survey data example 
 
 Web app for creation & collection of answers using a simple form.
 
