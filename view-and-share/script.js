@@ -112,8 +112,7 @@ async function loadData() {
 }
 function addTableEvent(table, event, items) {
   const date = new Date(event.time * 1000);
-  const dateText = date.getDay() + '/' + date.getMonth() + '/' + date.getFullYear()
-    + ' ' + date.getHours() + ':' + date.getMinutes();
+  const dateText = date.getFullYear() + '/' + date.getMonth() + '/' + date.getDay() + ' ' + date.getHours() + ':' + date.getMinutes();
 
   const row = table.insertRow(-1);
   row.insertCell(-1).innerHTML = dateText;
