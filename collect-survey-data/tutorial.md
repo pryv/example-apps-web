@@ -1,8 +1,6 @@
 
 # Pryv Collect survey data tutorial
 
-## Define form
-
 This is a simple form application that first displays a welcome message and a button to initiate the authentication process. With click on the login button, a popup opens in your browser where you can either authenticate or create a new account. When signed in, you can consent to give the app access to some streams where the form data will be saved.
 
 Once you have accepted, it displays the form to enter your baby's weight and your own blood pressure.
@@ -173,9 +171,13 @@ const result = await connection.api(apiCall);
 Following our [app guidelines](https://api.pryv.com/guides/app-guidelines/), we build apps that can work for multiple Pryv.io platforms providing a `serviceInfoUrl` query parameter:
 
 ```javascript
-  const serviceInfoUrl = Pryv.Browser.serviceInfoFromUrl() || 'https://reg.pryv.me/service/info';
+const serviceInfoUrl = Pryv.Browser.serviceInfoFromUrl() || 'https://reg.pryv.me/service/info';
 ```
 
-This allows to launch this app on your [local Open Pryv.io platform](https://github.com/pryv/open-pryv.io#development) providing the service information URL:
+To set a custom Pryv.io platform, provide the service information URL as shown here for the Pryv Lab:
+
+[https://pryv.github.io/app-web-examples/collect-survey-data/?pryvServiceInfoUrl=https://reg.pryv.me/service/info](https://pryv.github.io/app-web-examples/collect-survey-data/?pryvServiceInfoUrl=https://reg.pryv.me/service/info)
+
+ To launch this app on your [local Open Pryv.io platform](https://github.com/pryv/open-pryv.io#development) use (the link requires to have a running Open Pryv.io with the rec-la SSL proxy):
 
 [https://pryv.github.io/app-web-examples/collect-survey-data/?pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info](https://pryv.github.io/app-web-examples/collect-survey-data/?pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info).
