@@ -29,14 +29,21 @@ const authSettings = {
 function pryvAuthStateChange(state) { // called each time the authentication state changes
   console.log('##pryvAuthStateChange', state);
   if (state.id === Pryv.Browser.AuthStates.AUTHORIZED) {
-    document.getElementById('please-login').style.visibility = 'hidden';
-    document.getElementById('form').style.visibility = 'visible';
+    showForm();
     connection = new Pryv.Connection(state.apiEndpoint);
   }
   if (state.id === Pryv.Browser.AuthStates.INITIALIZED) {
+    showLoginMessage();
+    connection = null;
+  }
+
+  function showForm() {
+    document.getElementById('please-login').style.visibility = 'hidden';
+    document.getElementById('form').style.visibility = 'visible';
+  }
+  function showLoginMessage() {
     document.getElementById('please-login').style.visibility = 'visible';
     document.getElementById('form').style.visibility = 'hidden';
-    connection = null;
   }
 }
 
