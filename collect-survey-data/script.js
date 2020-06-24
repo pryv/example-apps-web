@@ -47,17 +47,13 @@ function pryvAuthStateChange(state) { // called each time the authentication sta
   }
 }
 
-// following the APP GUIDELINES: https://api.pryv.com/guides/app-guidelines/
-// there are two options for this app : if we have the apiEndpoint provided in the parameters, 
-// then we do not propose to login but directly display the data 
-const urlParams = new URLSearchParams(window.location.search);
-const serviceInfoUrl = urlParams.get('pryvServiceInfoUrl') || 'https://reg.pryv.me/service/info';
-
 window.onload = (event) => {
-  Pryv.Browser.setupAuth(authSettings, serviceInfoUrl);
   document.getElementById('submit-button').addEventListener("click", submitForm);
-};
 
+  // following the APP GUIDELINES: https://api.pryv.com/guides/app-guidelines/
+  const serviceInfoUrl = Pryv.Browser.serviceInfoFromUrl() || 'https://reg.pryv.me/service/info';
+  Pryv.Browser.setupAuth(authSettings, serviceInfoUrl);
+};
 
 async function submitForm() {
   const babyWeight = document.getElementById('baby-weight').value;
