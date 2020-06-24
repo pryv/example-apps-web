@@ -163,13 +163,12 @@ const result = await connection.api(apiCall);
 
 ## App guidelines
 
-Following our [app guidelines](https://api.pryv.com/guides/app-guidelines/), we build apps that can work for specific Pryv.io platforms using a [service information URL] or [apiEndpoint] provided in the URL's query parameters:
+Following our [app guidelines](https://api.pryv.com/guides/app-guidelines/), we build apps that can work for multiple Pryv.io platforms providing a `serviceInfoUrl` query parameter:
 
 ```javascript
-const urlParams = new URLSearchParams(window.location.search);
-const serviceInfoUrl = urlParams.get('pryvServiceInfoUrl') || 'https://reg.pryv.me/service/info';
+  const serviceInfoUrl = Pryv.Browser.serviceInfoFromUrl() || 'https://reg.pryv.me/service/info';
 ```
 
-This allows to launch this app on your [local Open Pryv.io](https://github.com/pryv/open-pryv.io#development) providing the service information URL:
+This allows to launch this app on your [local Open Pryv.io platform](https://github.com/pryv/open-pryv.io#development) providing the service information URL:
 
 [https://pryv.github.io/app-web-examples/collect-survey-data/?pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info](https://pryv.github.io/app-web-examples/collect-survey-data/?pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info).
