@@ -27,7 +27,7 @@ The blood pressure of the mother is stored as an event and added to the stream "
 
 The following stream structure is created in the variable `apiCall`:
 
-![Stream structure](README-illustration.svg) 
+![Stream structure](images/README-illustration.svg)
 
 ### Event types
 
