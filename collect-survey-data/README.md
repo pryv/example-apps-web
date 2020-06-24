@@ -8,6 +8,10 @@ You are creating a simple form to track the mother's blood pressure and the baby
 When the mother logs in to her Pryv.io account, she receives an access request from your app on the necessary streams.
 Once she gives her consent to the app, she can answer the questions of the form and submit the data. The data is then accessible on her Pryv.io account.
 
+| Sign in                                                 | Consent                                                      | Fill form                                                      |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| <img src="images/1-base.png" alt="base" style="zoom:33%;" /> | <img src="images/2-consent.png" alt="consent" style="zoom:33%;" /> | <img src="images/3-authenticated.png" alt="form" style="zoom:33%;" /> |
+
 ## Project Specifications
 
 - Create form UI
