@@ -2,10 +2,10 @@
 
 This is the main repository for all the web apps that you can implement using Open Pryv.io.
 
-- [Tutorials](https://www.linktotutorials.com)
 - [Open Pryv.io](https://github.com/pryv/open-pryv.io)
+- [Tutorial Videos](https://www.youtube.com/user/pryvme/videos?view=0&sort=dd&shelf_id=0)
+- [Developer documentation](https://api.pryv.com/)
 
-|  #  |      Web App Example           | Demo Video | Tutorial |
-| :-: | :----------------------------: | :--------: |:-------: |
-| 01  |       [Collect Survey Data](https://github.com/pryv/app-web-examples/tree/master/collect-survey-data)  | [Live Demo](https://video-1-link)  | [Tutorial](https://tutorial-1-link/)
-| 02  |     [View and Share Data](https://github.com/pryv/app-web-examples/tree/master/view-and-share)    | [Live Demo](https://video-2-link)  |[Tutorial](https://tutorial-2-link/)
+|  #  |      Web App Example           | Live Demo | Tutorial | Video |
+| :-: | :----------------------------: | :-------: |:-------: |:---: |
+| 01  |       [Collect Survey Data](collect-survey-data/)  | [Live Demo](https://pryv.github.io/app-web-examples/collect-survey-data/)  | [Tutorial](collect-survey-data/tutorial.md) | [Video](youtube_video) |

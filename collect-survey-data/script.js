@@ -1,21 +1,20 @@
-var connection = null;
+let connection = null;
 
-var authSettings = {
+const authSettings = {
   spanButtonID: 'pryv-button', // span id the DOM that will be replaced by the Service specific button
   onStateChange: pryvAuthStateChange, // event Listener for Authentication steps
   authRequest: { // See: https://api.pryv.com/reference/#auth-request
-    requestingAppId: 'pryv-example-simple-form', // to customize for your own app
-    languageCode: 'en', // optional (default english)
+    requestingAppId: 'pryv-simple-form', // to customize for your own app
     requestedPermissions: [ 
       {
         streamId: 'body',
         defaultName: 'Body',
-        level: 'create-only' // permissions for the app to write data in stream 'Body'
+        level: 'manage' // permissions for the app to write data in stream 'Body'
       },
       {
         streamId: 'baby',
         defaultName: 'Baby',
-        level: 'create-only' // permissions for the app to write data in stream 'Baby'
+        level: 'manage' // permissions for the app to write data in stream 'Baby'
       }
     ],
     clientData: {
@@ -45,7 +44,7 @@ function pryvAuthStateChange(state) { // called each time the authentication sta
 // there are two options for this app : if we have the apiEndpoint provided in the parameters, 
 // then we do not propose to login but directly display the data 
 const urlParams = new URLSearchParams(window.location.search);
-const serviceInfoUrl = urlParams.get('pryvServiceInfoURL') || 'https://reg.pryv.me/service/info';
+const serviceInfoUrl = urlParams.get('pryvServiceInfoUrl') || 'https://reg.pryv.me/service/info';
 
 window.onload = (event) => {
   Pryv.Browser.setupAuth(authSettings, serviceInfoUrl);
@@ -83,35 +82,30 @@ async function submitForm() {
     console.log('result: ', JSON.stringify(result));
   }
 
-  if (!isNaN(babyWeight)) {
+  if (!isNaN(babyWeight) || !isNaN(systolic) || !isNaN(diastolic)) {
     apiCall.push({
       method: 'events.create', // create the event in the corresponding stream 'Baby-Body'
       params: {
         streamId: 'baby-body',
-        type: 'mass/kg', // See: https://api.pryv.com/event-types/ for event types directory
+        type: 'mass/kg', // See: https://api.pryv.com/event-types/#mass
         content: Number(babyWeight),
       },
-      handleResult: logResultToConsole // Pryv's js-lib handles per-call handler
+      handleResult: logResultToConsole // Pryv's lib-js per-call handler
     });
-  } else {
-    alert('Please enter a number for baby\'s weight');
-  }
-
-  if (!isNaN(systolic) && !isNaN(diastolic)) {
     apiCall.push({
       method: 'events.create', // create the event in the corresponding stream 'Heart'
       params: {
         streamId: 'heart',
-        type: 'blood-pressure/mmhg-bpm', // See: https://api.pryv.com/event-types/ for event types directory
+        type: 'blood-pressure/mmhg-bpm', // See: https://api.pryv.com/event-types/#blood-pressure
         content: {
           systolic: Number(systolic),
           diastolic: Number(diastolic),
         }
       },
-      handleResult: logResultToConsole // Pryv's js-lib handles per-call handler
+      handleResult: logResultToConsole // Pryv's lib-js per-call handler
     });
   } else {
-    alert('Please enter a number for the systolic & diastolic values');
+    alert('Please enter a number for the baby\'s weight and the systolic / diastolic values.');
   }
 
   const result = await connection.api(apiCall);

@@ -1,8 +1,8 @@
-## Pryv Collect Survey Data Tutorial 
+## Pryv collect survey data example 
 
-Example of implementation of a web app used for creation & collection of answers to a simple form.
+Web app for creation & collection of answers using a simple form.
 
-## User story
+## Story
 
 You are creating a simple form to track the mother's blood pressure and the baby's weight after the mother leaves the maternity hospital.
 When the mother logs in to her Pryv.io account, she receives an access request from your app on the necessary streams.
@@ -12,7 +12,7 @@ Once she gives her consent to the app, she can answer the questions of the form 
 
 - Create form UI
 - Ask for login
-- Request access for the app "pryv-example-simple-form" to write in the streams "Baby" and "Body"
+- Request access for the app "pryv-simple-form" to write in the streams "Baby" and "Body"
 - Display the form
 - Submit answers and store values in the relevant streams
 
@@ -22,7 +22,7 @@ This use case implies the creation of a stream structure and the use of differen
 
 ### Stream structure
 
-The app "pryv-example-simple-form" first requests an access on the streams "Baby" and "Body" with a "create-only" level in order to be able to add events to these streams.
+The app "pryv-simple-form" first requests an access on the streams "Baby" and "Body" with a "manage" level in order to be able to manage data in these streams children.
 The blood pressure of the mother is stored as an event and added to the stream "Heart", while the weight of the baby is added to the stream "Baby-Body".
 
 The following stream structure is created in the variable `apiCall`:
