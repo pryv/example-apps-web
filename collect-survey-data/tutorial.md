@@ -30,9 +30,9 @@ For authentication, we will use the [Pryv.io consent process](https://github.com
 The [auth request parameters](https://api.pryv.com/reference/#auth-request) and callback are defined in the separate [script.js](script.js) file:
 
 ```javascript
-var connection = null;
+let connection = null;
 
-var authSettings = {
+const authSettings = {
   spanButtonID: 'pryv-button', 
   onStateChange: pryvAuthStateChange, 
   authRequest: { 
@@ -57,17 +57,24 @@ var authSettings = {
   }
 };
 
-function pryvAuthStateChange(state) { 
+function pryvAuthStateChange(state) {
   console.log('##pryvAuthStateChange', state);
   if (state.id === Pryv.Browser.AuthStates.AUTHORIZED) {
-    document.getElementById('please-login').style.visibility = 'hidden';
-    document.getElementById('form').style.visibility = 'visible';
+    showForm();
     connection = new Pryv.Connection(state.apiEndpoint);
   }
   if (state.id === Pryv.Browser.AuthStates.INITIALIZED) {
+    showLoginMessage();
+    connection = null;
+  }
+
+  function showForm() {
+    document.getElementById('please-login').style.visibility = 'hidden';
+    document.getElementById('form').style.visibility = 'visible';
+  }
+  function showLoginMessage() {
     document.getElementById('please-login').style.visibility = 'visible';
     document.getElementById('form').style.visibility = 'hidden';
-    connection = null;
   }
 }
 ```
@@ -78,8 +85,8 @@ The auth request is done on page load:
 
 ```javascript
 window.onload = (event) => {
-  Pryv.Browser.setupAuth(authSettings, serviceInfoUrl);
   // ...
+  Pryv.Browser.setupAuth(authSettings, serviceInfoUrl);
 };
 ```
 
@@ -89,8 +96,8 @@ In order to save data, we add a listener to the *submit* button:
 
 ```javascript
 window.onload = (event) => {
-  // ...
   document.getElementById('submit-button').addEventListener("click", submitForm);
+  // ...
 };
 ```
 
@@ -107,19 +114,19 @@ It will package those values into [events.create](https://api.pryv.com/reference
 ```javascript
 if (!isNaN(babyWeight) || !isNaN(systolic) || !isNaN(diastolic)) {
     apiCall.push({
-      method: 'events.create', 
+      method: 'events.create',
       params: {
         streamId: 'baby-body',
-        type: 'mass/kg', 
+        type: 'mass/kg',
         content: Number(babyWeight),
       },
       handleResult: logResultToConsole 
     });
     apiCall.push({
-      method: 'events.create', 
+      method: 'events.create',
       params: {
         streamId: 'heart',
-        type: 'blood-pressure/mmhg-bpm', 
+        type: 'blood-pressure/mmhg-bpm',
         content: {
           systolic: Number(systolic),
           diastolic: Number(diastolic),
