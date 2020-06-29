@@ -1,6 +1,6 @@
 ## Pryv View and Share Data Tutorial 
 
-Example of implementation of a web app used for visualizing & sharing data.
+Web app for data visualization & sharing with third parties.
 
 ## Story
 
@@ -22,7 +22,7 @@ This use case implies the stream structure from the example "Collect Survey Data
 
 The app "pryv-example-view-and-share" first requests an access on the streams "Baby" and "Body" with a "read" level in order to be able to display the events contained in these streams:
 
-![Stream structure](view-and-share/images/README-illustration.svg) 
+![Stream structure](images/README-illustration.svg) 
 
 ## Display data
 
