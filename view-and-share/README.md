@@ -1,4 +1,4 @@
-## Pryv View and Share Data Tutorial 
+## Pryv view and share data example 
 
 Web app for data visualization & sharing with third parties.
 
@@ -7,6 +7,10 @@ Web app for data visualization & sharing with third parties.
 In the previous tutorial [Collect Survey Data](https://github.com/pryv/app-web-examples/tree/master/collect-survey-data), you have collected and stored data from the mother in her Pryv.io account when she answered the example survey.
 
 In this web app, you provide her with a tool to visualize data from her account and to share it with third parties.
+
+| Sign in                                                 | Visualize data                                                  | Share data                                                      |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| <img src="images/1-login.png" alt="base" style="zoom:33%;" /> | <img src="images/2-visualize.png" alt="consent" style="zoom:33%;" /> | <img src="images/3-sharing.png" alt="form" style="zoom:33%;" /> |
 
 ## Project Specifications
 
