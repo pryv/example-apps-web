@@ -5,7 +5,6 @@ const authSettings = {
   onStateChange: pryvAuthStateChange, // event Listener for Authentication steps
   authRequest: { // See: https://api.pryv.com/reference/#auth-request
     requestingAppId: 'pryv-simple-form', // to customize for your own app
-    languageCode: 'en', // optional (default english)
     requestedPermissions: [ 
       {
         streamId: 'body',
@@ -30,28 +29,31 @@ const authSettings = {
 function pryvAuthStateChange(state) { // called each time the authentication state changes
   console.log('##pryvAuthStateChange', state);
   if (state.id === Pryv.Browser.AuthStates.AUTHORIZED) {
-    document.getElementById('please-login').style.visibility = 'hidden';
-    document.getElementById('form').style.visibility = 'visible';
+    showForm();
     connection = new Pryv.Connection(state.apiEndpoint);
   }
   if (state.id === Pryv.Browser.AuthStates.INITIALIZED) {
+    showLoginMessage();
+    connection = null;
+  }
+
+  function showForm() {
+    document.getElementById('please-login').style.visibility = 'hidden';
+    document.getElementById('form').style.visibility = 'visible';
+  }
+  function showLoginMessage() {
     document.getElementById('please-login').style.visibility = 'visible';
     document.getElementById('form').style.visibility = 'hidden';
-    connection = null;
   }
 }
 
-// following the APP GUIDELINES: https://api.pryv.com/guides/app-guidelines/
-// there are two options for this app : if we have the apiEndpoint provided in the parameters, 
-// then we do not propose to login but directly display the data 
-const urlParams = new URLSearchParams(window.location.search);
-const serviceInfoUrl = urlParams.get('pryvServiceInfoURL') || 'https://reg.pryv.me/service/info';
-
 window.onload = (event) => {
-  Pryv.Browser.setupAuth(authSettings, serviceInfoUrl);
   document.getElementById('submit-button').addEventListener("click", submitForm);
-};
 
+  // following the APP GUIDELINES: https://api.pryv.com/guides/app-guidelines/
+  const serviceInfoUrl = Pryv.Browser.serviceInfoFromUrl() || 'https://reg.pryv.me/service/info';
+  Pryv.Browser.setupAuth(authSettings, serviceInfoUrl);
+};
 
 async function submitForm() {
   const babyWeight = document.getElementById('baby-weight').value;

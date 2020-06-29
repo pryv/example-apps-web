@@ -1,7 +1,7 @@
 
-# Collect survey data tutorial
+# Pryv Collect survey data tutorial
 
-## Define form
+All you need to run this app is to download [index.html](index.html) and [script.js](script.js) files and open **index.html** with your browser.
 
 This is a simple form application that first displays a welcome message and a button to initiate the authentication process. With click on the login button, a popup opens in your browser where you can either authenticate or create a new account. When signed in, you can consent to give the app access to some streams where the form data will be saved.
 
@@ -30,14 +30,13 @@ For authentication, we will use the [Pryv.io consent process](https://github.com
 The [auth request parameters](https://api.pryv.com/reference/#auth-request) and callback are defined in the separate [script.js](script.js) file:
 
 ```javascript
-var connection = null;
+let connection = null;
 
-var authSettings = {
+const authSettings = {
   spanButtonID: 'pryv-button', 
   onStateChange: pryvAuthStateChange, 
   authRequest: { 
     requestingAppId: 'pryv-simple-form', 
-    languageCode: 'en', 
     requestedPermissions: [ 
       {
         streamId: 'body',
@@ -58,17 +57,24 @@ var authSettings = {
   }
 };
 
-function pryvAuthStateChange(state) { 
+function pryvAuthStateChange(state) {
   console.log('##pryvAuthStateChange', state);
   if (state.id === Pryv.Browser.AuthStates.AUTHORIZED) {
-    document.getElementById('please-login').style.visibility = 'hidden';
-    document.getElementById('form').style.visibility = 'visible';
+    showForm();
     connection = new Pryv.Connection(state.apiEndpoint);
   }
   if (state.id === Pryv.Browser.AuthStates.INITIALIZED) {
+    showLoginMessage();
+    connection = null;
+  }
+
+  function showForm() {
+    document.getElementById('please-login').style.visibility = 'hidden';
+    document.getElementById('form').style.visibility = 'visible';
+  }
+  function showLoginMessage() {
     document.getElementById('please-login').style.visibility = 'visible';
     document.getElementById('form').style.visibility = 'hidden';
-    connection = null;
   }
 }
 ```
@@ -79,8 +85,8 @@ The auth request is done on page load:
 
 ```javascript
 window.onload = (event) => {
-  Pryv.Browser.setupAuth(authSettings, serviceInfoUrl);
   // ...
+  Pryv.Browser.setupAuth(authSettings, serviceInfoUrl);
 };
 ```
 
@@ -90,8 +96,8 @@ In order to save data, we add a listener to the *submit* button:
 
 ```javascript
 window.onload = (event) => {
-  // ...
   document.getElementById('submit-button').addEventListener("click", submitForm);
+  // ...
 };
 ```
 
@@ -108,19 +114,19 @@ It will package those values into [events.create](https://api.pryv.com/reference
 ```javascript
 if (!isNaN(babyWeight) || !isNaN(systolic) || !isNaN(diastolic)) {
     apiCall.push({
-      method: 'events.create', 
+      method: 'events.create',
       params: {
         streamId: 'baby-body',
-        type: 'mass/kg', 
+        type: 'mass/kg',
         content: Number(babyWeight),
       },
       handleResult: logResultToConsole 
     });
     apiCall.push({
-      method: 'events.create', 
+      method: 'events.create',
       params: {
         streamId: 'heart',
-        type: 'blood-pressure/mmhg-bpm', 
+        type: 'blood-pressure/mmhg-bpm',
         content: {
           systolic: Number(systolic),
           diastolic: Number(diastolic),
@@ -164,13 +170,16 @@ const result = await connection.api(apiCall);
 
 ## App guidelines
 
-Following our [app guidelines](https://api.pryv.com/guides/app-guidelines/), we build apps that can work for specific Pryv.io platforms using a [service information URL] or [apiEndpoint] provided in the URL's query parameters:
+Following our [app guidelines](https://api.pryv.com/guides/app-guidelines/), we build apps that can work for multiple Pryv.io platforms providing a `serviceInfoUrl` query parameter:
 
 ```javascript
-const urlParams = new URLSearchParams(window.location.search);
-const serviceInfoUrl = urlParams.get('pryvServiceInfoURL') || 'https://reg.pryv.me/service/info';
+const serviceInfoUrl = Pryv.Browser.serviceInfoFromUrl() || 'https://reg.pryv.me/service/info';
 ```
 
-This allows to launch this app on your [local Open Pryv.io](https://github.com/pryv/open-pryv.io#development) providing the service information URL:
+To set a custom Pryv.io platform, provide the service information URL as shown here for the Pryv Lab:
 
-[https://pryv.github.io/app-web-examples/collect-survey-data/?pryvServiceInfoURL=https://my-computer.rec.la:4443/reg/service/info](https://pryv.github.io/app-web-examples/collect-survey-data/?pryvServiceInfoURL=https://my-computer.rec.la:4443/reg/service/info).
+[https://pryv.github.io/app-web-examples/collect-survey-data/?pryvServiceInfoUrl=https://reg.pryv.me/service/info](https://pryv.github.io/app-web-examples/collect-survey-data/?pryvServiceInfoUrl=https://reg.pryv.me/service/info)
+
+ To launch this app on your [local Open Pryv.io platform](https://github.com/pryv/open-pryv.io#development) use (the link requires to have a running Open Pryv.io with the rec-la SSL proxy):
+
+[https://pryv.github.io/app-web-examples/collect-survey-data/?pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info](https://pryv.github.io/app-web-examples/collect-survey-data/?pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info).
