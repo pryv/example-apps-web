@@ -2,7 +2,7 @@
 
 Example of implementation of a web app used for visualizing & sharing data.
 
-## User story
+## Story
 
 In the previous tutorial [Collect Survey Data](https://github.com/pryv/app-web-examples/tree/master/collect-survey-data), you have collected and stored data from the mother in her Pryv.io account when she answered the example survey.
 
@@ -22,7 +22,7 @@ This use case implies the stream structure from the example "Collect Survey Data
 
 The app "pryv-example-view-and-share" first requests an access on the streams "Baby" and "Body" with a "read" level in order to be able to display the events contained in these streams:
 
-![Stream structure](README-illustration.svg) 
+![Stream structure](view-and-share/images/README-illustration.svg) 
 
 ## Display data
 
