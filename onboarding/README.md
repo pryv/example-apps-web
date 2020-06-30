@@ -87,5 +87,7 @@ For example, the logo can be changed for the authentication page by modifying th
 	}
 }
 ```
+### Next steps
 
+Direct to tutorials using Pryv.io (collecting survey data, view and share, etc)
 
