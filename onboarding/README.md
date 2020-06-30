@@ -47,23 +47,45 @@ Therefore, when boot, your app should launch an auth request and present a butto
 
 As your users could be onboarded from multiple entry points, such as multiple applications accessing data from a single platform, it is convenient to have to implement the aforementioned steps at a single place.
 
-These are all implemented by our open source application [app-web-auth3](https://github.com/pryv/app-web-auth3). For example, user creation is available as following: 
-
-When open, you can either create a user or sign in:
-
-![](/Users/iliakebets/Dev/Pryv/git/app-web-examples/onboarding/images/auth3.png)
-
-
+These are all implemented by our open source application [app-web-auth3](https://github.com/pryv/app-web-auth3). 
+These web pages are the "popup frame" that opens during the user account creation, the signin, the consent request from the app and the password reset process.
 
 #### User creation
 
-If you wish to 
+A form asks for information about the new user: email, username, password, choice of hosting.
+A click on `Create` triggers the user creation - an API POST call [Create user](https://api.pryv.com/reference-system/#create-user) to create a new user account on the specified core server.
+The registration flow ends and the new user is redirected to the demo dashboard.
 
+#### Signin
 
+Web page that prompts the user to enter his Pryv.io username and password and then uses the provided Pryv.io credentials (username, password) to login with the Pryv.io API.
+It returns a personal token for this user.
 
+#### Consent 
 
+Checks the requested app access (especially the permissions it contains) and compares it with eventually existing ones (only accesses of type 'app' are considered here) using the personal token.
 
+The requested permissions are shown to the user, who can decide to Accept or Refuse, granting access to the app by clicking on the corresponding button. If accepted, it creates a new app access.
 
+#### Reset password 
+
+Asks for a Pryv.io username or email and triggers the sending of a reset password email to the user.
+The reset link in the email targets the password reset page, and asks the user for his username or email and a new password.
 
 ### Customize some minor feature
+
+All these web pages and visuals can be customized here : https://github.com/pryv/assets-pryv.me
+
+For example, the logo can be changed for the authentication page by modifying the corresponding section in the `app-web-auth3` assets properties :
+
+```json
+{ 
+  "app-web-auth3": {
+    "logo": {
+      "url": "app-web-auth3/logo.png"
+    }
+	}
+}
+```
+
 
