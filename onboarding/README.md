@@ -1,4 +1,4 @@
-Onboarding:
+# Onboarding:
 
 This example shows you how to implement a pleasant onboarding experience for your users.
 
@@ -11,9 +11,9 @@ References:
 
 You will need to define in your application, the service information URL, which contains all the necessary URL endpoints that your app requires to function.
 
-Upon start, your app will fetch this information, and use it for example to define the Url where the user authentication call will be made.
+Upon start, your app will fetch this information, and use it for example to define the [URL where the app authentication call will be made](https://api.pryv.com/reference/#auth-request).
 
-there are also several optional parameters that allow to define some visuals such as the name of the platform. You can set these in the platform configuration:
+There are also several optional parameters that allow to define some visuals such as the name of the platform. You can set these in the platform configuration:
 
 - Open Pryv.io: https://github.com/pryv/open-pryv.io#open-pryvio-configuration
 - Pryv.io: See your manual
@@ -37,12 +37,12 @@ As a Pryv.io account is only interesting when used through a certain app present
 
 We recommend to onboard users through the app authentication process, such as: https://api.pryv.com/reference/#authenticate-your-app
 
-Therefore, when boot, your app should launch an auth request and present a button that opens the steps of:
+Therefore, when boot, your app should initiate an [authentication request](https://api.pryv.com/reference/#auth-request) and present a button that opens a web application used for:
 
-- user creation
 - app authentication
   - sign in
   - consent
+- account creation
 - password reset request
 
 As your users could be onboarded from multiple entry points, such as multiple applications accessing data from a single platform, it is convenient to have to implement the aforementioned steps at a single place.
@@ -52,14 +52,15 @@ These web pages are the "popup frame" that opens during the user account creatio
 
 #### User creation
 
-A form asks for information about the new user: email, username, password, choice of hosting.
-A click on `Create` triggers the user creation - an API POST call [Create user](https://api.pryv.com/reference-system/#create-user) to create a new user account on the specified core server.
-The registration flow ends and the new user is redirected to the demo dashboard.
+**Feature proposition:** If you wish to skip the step of clicking on `create an account` from the *sign in* page, you can open the URL in the `authUrl` field of the response, but changing the path to `/register.html` from `access.html`.
+
+After creating an account, you will be redirected to the sign in flow
+
+**Feature proposition**: after creating an account, perform a login call, so we don't have to sign in again. I don't think anyone likes it.
 
 #### Signin
 
-Web page that prompts the user to enter his Pryv.io username and password and then uses the provided Pryv.io credentials (username, password) to login with the Pryv.io API.
-It returns a personal token for this user.
+insert bla bla here
 
 #### Consent 
 
