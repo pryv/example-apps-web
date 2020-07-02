@@ -29,11 +29,11 @@
           <optgroup label="Open Pryv.io">
             <option value="https://my-computer.rec.la:4443/reg/service/info">Dev rec-la cert</option>
             <option value="http://localhost:3000/reg/service/info">Dev localhost</option>
-            <option value="https://HOSTNAME/reg/service/info">Your own hostname</option>
+            <option value="https://{HOSTNAME}/reg/service/info">Your own hostname</option>
           </optgroup>
           <optgroup label="Pryv.io">
             <option value="https://reg.pryv.me/service/info" selected="selected">Pryv Lab</option>
-            <option value="https://reg.DOMAIN/service/info">Your own domain</option>
+            <option value="https://reg.{DOMAIN}/service/info">Your own domain</option>
           </optgroup>
         </select>
         <div class="form-group">
@@ -44,14 +44,12 @@
           type="button" 
           id="fetch-service-info-button"
           class="btn btn-primary mb-2">Fetch service info</button>
-        <div id="service-info-display">
-
-        </div>
+        <pre id="service-info-display"></pre>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-body"></div>
+      <div class="card-body">
           <h2 class="card-title">Auth request</h2>
 
           Now that you have fetched the service information, you have the URL to perform the auth request
@@ -66,7 +64,7 @@
     </div>
 
     <div class="next-example">
-      Next example: <a href="../view-and-share/index.html">View and Share</a>
+      Next example: <a href="../collect-survey-data/index.html">Collect survey data</a>
     </div>
   </div>
 
