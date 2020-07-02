@@ -55,10 +55,25 @@ window.onload = (event) => {
 };
 
 async function fetchServiceInfo() {
-  service = new Pryv.Service(serviceInfoInput);
+  /*service = new Pryv.Service(serviceInfoInput);
   service = await service.info();
+  */
+  service = {
+    "serial": "2019061301",
+    "name": "Pryv Lab",
+    "support": "https://pryv.com/helpdesk",
+    "terms": "https://pryv.com/terms-of-use/",
+    "access": "https://access.pryv.me/access/",
+    "register": "https://reg.pryv.me/",
+    "home": "https://sw.pryv.me",
+    "eventTypes": "https://api.pryv.com/event-types/flat.json",
+    "assets": {
+      "definitions": "https://pryv.github.io/assets-pryv.me/index.json"
+    },
+    "api": "https://{username}.pryv.me/"
+  };
   service = JSON.stringify(service, null, 2);
-  serviceInfoDisplay.value = service;
+  serviceInfoDisplay.innerHTML = service;
 }
 
 function setServiceInfo() {
