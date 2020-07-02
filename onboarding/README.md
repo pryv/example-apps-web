@@ -23,8 +23,9 @@ There are also several optional parameters that allow to define some visuals suc
 in the app, we provide a way to enter the service information (maybe provide links with serviceInfo in query params):
 
 - default local Open Pryv.io with rec-la: https://my-computer.rec.la:4443/reg/service/info
-- Your Open Pryv.io running on some hostname: http(s)://HOSTNAME/reg/service/info
-- Your Pryv.io platform: XXX
+- Your Open Pryv.io running on some hostname: http(s)://${PUBLIC_URL}/reg/service/info
+- Your Pryv.io platform: https://reg.${DOMAIN}/service/info
+- Pryv Lab: https://reg.pryv.me/service/info
 
 ### App onboarding
 
