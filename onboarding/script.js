@@ -49,7 +49,6 @@ function pryvAuthStateChange(state) { // called each time the authentication sta
   }
   if (state.id === Pryv.Browser.AuthStates.INITIALIZED) {
     connection = null;
-    apiEndpointDiv.style.visibility = 'hidden';
   }
 }
 
