@@ -40,8 +40,11 @@ async function fetchServiceInfo() {
   accessUrlDisplay.innerHTML = service.access;
   serviceName.innerHTML = service.name;
   serviceTerms.innerHTML = service.terms;
+  serviceTerms.href = service.terms;
   serviceHome.innerHTML = service.home;
+  serviceHome.href = service.home;
   serviceSupport.innerHTML = service.support;
+  serviceSupport.href = service.support;
 }
 
 async function authRequest() {
