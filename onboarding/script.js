@@ -65,24 +65,8 @@ window.onload = (event) => {
 };
 
 async function fetchServiceInfo() {
-  /*service = new Pryv.Service(serviceInfoInput);
+  service = new Pryv.Service(serviceInfoInput.value);
   service = await service.info();
-  */
-  console.log('yo')
-  service = {
-    "serial": "2019061301",
-    "name": "Pryv Lab",
-    "support": "https://pryv.com/helpdesk",
-    "terms": "https://pryv.com/terms-of-use/",
-    "access": "https://access.pryv.me/access/",
-    "register": "https://reg.pryv.me/",
-    "home": "https://sw.pryv.me",
-    "eventTypes": "https://api.pryv.com/event-types/flat.json",
-    "assets": {
-      "definitions": "https://pryv.github.io/assets-pryv.me/index.json"
-    },
-    "api": "https://{username}.pryv.me/"
-  };
   serviceInfoDisplay.innerHTML = JSON.stringify(service, null, 2);
   accessUrlDisplay.value = service.access;
   serviceName.innerHTML = service.name;
