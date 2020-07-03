@@ -1,6 +1,8 @@
 
 # Pryv Collect survey data tutorial
 
+All you need to run this app is to download [index.html](index.html) and [script.js](script.js) files and open **index.html** with your browser.
+
 This is a simple form application that first displays a welcome message and a button to initiate the authentication process. With click on the login button, a popup opens in your browser where you can either authenticate or create a new account. When signed in, you can consent to give the app access to some streams where the form data will be saved.
 
 Once you have accepted, it displays the form to enter your baby's weight and your own blood pressure.
