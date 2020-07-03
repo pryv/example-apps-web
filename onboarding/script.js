@@ -9,7 +9,8 @@ let connection,
   serviceTerms,
   accessUrlDisplay,
   apiEndpointDiv,
-  apiEndpointText;
+  apiEndpointText,
+  authRequestButton;
 
 window.onload = (event) => {
   serviceInfoSelect = document.getElementById('service-info-select');
@@ -22,9 +23,10 @@ window.onload = (event) => {
   serviceSupport = document.getElementById('service-support');
   apiEndpointDiv = document.getElementById('api-endpoint-div');
   apiEndpointText = document.getElementById('api-endpoint-text');
+  authRequestButton = document.getElementById('auth-request-button')
 
   serviceInfoSelect.addEventListener("change", setServiceInfo);
-  document.getElementById('auth-request-button').addEventListener("click", authRequest);
+  authRequestButton.addEventListener("click", authRequest);
   document.getElementById('fetch-service-info-button').addEventListener("click", fetchServiceInfo);
 };
 
@@ -45,6 +47,7 @@ async function fetchServiceInfo() {
   serviceHome.href = service.home;
   serviceSupport.innerHTML = service.support;
   serviceSupport.href = service.support;
+  authRequestButton.disabled = false;
 }
 
 async function authRequest() {
