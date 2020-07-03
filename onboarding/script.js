@@ -2,7 +2,8 @@ let connection,
   serviceInfoSelect,
   serviceInfoInput,
   serviceInfo,
-  serviceInfoDisplay;
+  serviceInfoDisplay,
+  accessUrlDisplay;
 
 const authSettings = {
   spanButtonID: 'pryv-button', // span id the DOM that will be replaced by the Service specific button
@@ -49,6 +50,7 @@ window.onload = (event) => {
   serviceInfoSelect = document.getElementById('service-info-select');
   serviceInfoInput = document.getElementById('service-info-text');
   serviceInfoDisplay = document.getElementById('service-info-display');
+  accessUrlDisplay = document.getElementById('access-url');
   serviceInfoSelect.addEventListener("change", setServiceInfo);
   document.getElementById('auth-request-button').addEventListener("click", authRequest);
   document.getElementById('fetch-service-info-button').addEventListener("click", fetchServiceInfo);
@@ -72,8 +74,8 @@ async function fetchServiceInfo() {
     },
     "api": "https://{username}.pryv.me/"
   };
-  service = JSON.stringify(service, null, 2);
-  serviceInfoDisplay.innerHTML = service;
+  serviceInfoDisplay.innerHTML = JSON.stringify(service, null, 2);
+  accessUrlDisplay.value = service.access;
 }
 
 function setServiceInfo() {
