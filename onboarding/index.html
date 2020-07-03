@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="https://api.pryv.com/style/pryv.min.css">
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400">
+  <title>Pryv onboarding</title>
+  <script src="https://api.pryv.com/lib-js/pryv.js"></script>
+  <script src="script.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Pryv onboarding</h1>
+
+    <div class="card">
+      <div class="card-body">
+          <h2 class="card-title" id="service-name">PLATFORM NAME</h2>
+          Welcome,<br>
+          You want to create an account on this Open Pryv.io platform to save XXX.<br><br>
+
+          Here are the links for:<br>
+          <ul>
+            <li>terms and conditions: <label id="service-terms">PLATFORM-TERMS</label></li>
+            <li>support URL: <label id="service-support">SERVICE-SUPPORT</label></li>
+            <li>Homepage: <label id="service-home">SERVICE-HOMEPAGE</label></li>
+          </ul>
+
+          Click on the button below to authenticate with your app or create a new account (it will appear after making an access request below).<br>
+          <div class="center"><span id="pryv-button"></span></div>
+          <br>
+          <div id="api-endpoint-div" style="visibility: hidden">Now you have been authenticated and obtain your apiEndpoint: <label id="api-endpoint-text"></label></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title">Service information</h2>
+        <br><br>
+        <label id="welcome-message">
+          Enter the <a href="https://api.pryv.com/reference/#service-info">service information URL</a> to fetch all the required information to display your app information and initiate the authentication process.<br>
+          You can use the selector to initialize the URL depending on your deployment type:
+        </label>
+        <select name="service-info-select" id="service-info-select">
+          <optgroup label="Open Pryv.io">
+            <option value="https://my-computer.rec.la:4443/reg/service/info">Dev rec-la cert</option>
+            <option value="http://localhost:3000/reg/service/info">Dev localhost</option>
+            <option value="https://{HOSTNAME}/reg/service/info">Your own hostname</option>
+          </optgroup>
+          <optgroup label="Pryv.io">
+            <option value="https://reg.pryv.me/service/info" selected="selected">Pryv Lab</option>
+            <option value="https://reg.{DOMAIN}/service/info">Your own domain</option>
+          </optgroup>
+        </select>
+        <div class="form-group">
+          <label for="service-info">Service Information URL:</label>
+          <input type="text" class="form-control" id="service-info-text" value="https://reg.pryv.me/service/info" />
+        </div>
+        <button 
+          type="button" 
+          id="fetch-service-info-button"
+          class="btn btn-primary mb-2">Fetch service info</button>
+        <pre id="service-info-display"></pre>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+          <h2 class="card-title">Auth request</h2>
+
+          Now that you have fetched the service information, you have the URL to perform the auth request.<br>
+          Access URL: <label id="access-url">SALUT</label><br>
+
+          <button 
+          type="button" 
+          id="auth-request-button"
+          class="btn btn-primary mb-2">Auth request</button>
+
+      </div>
+    </div>
+
+    <div class="next-example">
+      Next example: <a href="../collect-survey-data/index.html">Collect survey data</a>
+    </div>
+  </div>
+
+</body>
+
+<style>
+.center {
+  margin: auto;
+  width: 60%;
+  padding: 10px;
+}
+</style>
+
+</html>
