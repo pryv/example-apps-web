@@ -26,12 +26,11 @@ There are also several optional parameters that allow to define some [visual ass
 
 ## Application onboarding
 
-As a Pryv.io account is only interesting when used through a certain app presenting:
+As a Pryv.io account is meant to be accessed by specialized apps with well defined permissions sets depending on:
 
-- a user interface
-- possible sensors
+- visualized data
+- data sources such as sensors
 - algorithms
-- and requires access to a defined set of permissions
 
 We recommend to onboard users through the app authentication process, described here: https://api.pryv.com/reference/#authenticate-your-app
 
