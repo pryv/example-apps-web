@@ -3,6 +3,10 @@ let connection,
   serviceInfoInput,
   serviceInfo,
   serviceInfoDisplay,
+  serviceName,
+  serviceHome,
+  serviceSupport,
+  serviceTerms,
   accessUrlDisplay;
 
 const authSettings = {
@@ -51,6 +55,10 @@ window.onload = (event) => {
   serviceInfoInput = document.getElementById('service-info-text');
   serviceInfoDisplay = document.getElementById('service-info-display');
   accessUrlDisplay = document.getElementById('access-url');
+  serviceName = document.getElementById('service-name');
+  serviceTerms = document.getElementById('service-terms');
+  serviceHome = document.getElementById('service-home');
+  serviceSupport = document.getElementById('service-support');
   serviceInfoSelect.addEventListener("change", setServiceInfo);
   document.getElementById('auth-request-button').addEventListener("click", authRequest);
   document.getElementById('fetch-service-info-button').addEventListener("click", fetchServiceInfo);
@@ -60,6 +68,7 @@ async function fetchServiceInfo() {
   /*service = new Pryv.Service(serviceInfoInput);
   service = await service.info();
   */
+  console.log('yo')
   service = {
     "serial": "2019061301",
     "name": "Pryv Lab",
@@ -76,10 +85,13 @@ async function fetchServiceInfo() {
   };
   serviceInfoDisplay.innerHTML = JSON.stringify(service, null, 2);
   accessUrlDisplay.value = service.access;
+  serviceName.innerHTML = service.name;
+  serviceTerms.innerHTML = service.terms;
+  serviceHome.innerHTML = service.home;
+  serviceSupport.innerHTML = service.support;
 }
 
 function setServiceInfo() {
-  console.log('ca a bougé')
   const selection = document.getElementById('service-info-select').value;
   serviceInfoInput.value = selection;
 }
