@@ -1,4 +1,4 @@
-# Onboarding:
+# Pryv.io onboarding
 
 This example shows you how to implement an onboarding experience for your users.
 
