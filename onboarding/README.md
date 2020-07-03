@@ -2,7 +2,7 @@
 
 This example describes how to implement an onboarding experience for your users.
 
-This application demonstrates how your app should initialize, allowing the developer to interactively perform the different steps to illustrate the process.
+This example demonstrates how your application should initialize, allowing the developer to interactively perform the different steps to illustrate the process.
 
 The main parts are the service information and the authentication request, which are exposed in the lower part of the interface and dynamically adapt the onboarding message. In a real life application, only the welcome part will be displayed to the user, while the service information and authentication request calls are done automatically.
 
