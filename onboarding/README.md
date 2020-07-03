@@ -4,7 +4,7 @@ This example describes how to implement an onboarding experience for your users.
 
 This application demonstrates how your app should initialize, allowing the developer to interactively perform the different steps to illustrate the process.
 
-The main parts are service information and authentication request, which are exposed in the lower part of the interface and dynamically adapt the onboarding message. In a real life application, only the welcome part will be displayed to the user, while the service information and authentication request calls are done automatically.
+The main parts are the service information and the authentication request, which are exposed in the lower part of the interface and dynamically adapt the onboarding message. In a real life application, only the welcome part will be displayed to the user, while the service information and authentication request calls are done automatically.
 
 ## Service information
 
@@ -15,7 +15,7 @@ References:
 - https://api.pryv.com/reference/#service-info
 - https://api.pryv.com/guides/app-guidelines/
 
-Upon start, your app will retrieve this information, and use it e.g. to:
+Upon start, your app will retrieve this information, and use it to:
 - customize the platform name and useful links: terms and conditions, support and homepage
 - define the [URL where the app authentication call will be made](https://api.pryv.com/reference/#auth-request)
 
@@ -35,7 +35,7 @@ As a Pryv.io account is only interesting when used through a certain app present
 
 We recommend to onboard users through the app authentication process, described here: https://api.pryv.com/reference/#authenticate-your-app
 
-Therefore, during boot, your app should initiate an [authentication request](https://api.pryv.com/reference/#auth-request) and present a view used for:
+Therefore, when boot, your app should initiate an [authentication request](https://api.pryv.com/reference/#auth-request) and present a view used for:
 
 - app authentication
   - sign in
@@ -48,7 +48,7 @@ As your users could be onboarded from multiple entry points, such as multiple ap
 These are all implemented by our open source application [app-web-auth3](https://github.com/pryv/app-web-auth3). 
 These views are implemented as "popups" that open during user account creation, signin, consent request from the app and password reset process.
 
-## Test the API
+## Play with the API
 
 At the end of the process, you will have a Pryv.io API endpoint which allows you to save your users swimming practice.
 
