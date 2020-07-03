@@ -16,13 +16,13 @@
 
 <body>
   <div class="container">
-    <h1>Pryv onboarding</h1>
+    <h1>Pryv.io onboarding</h1>
 
     <div class="card">
       <div class="card-body">
           <h2 class="card-title" id="service-name">PLATFORM NAME</h2>
           Welcome,<br>
-          You want to create an account on this Open Pryv.io platform to save XXX.<br><br>
+          You can sign in or create an account on this Pryv.io platform to save your crawl stroke performance.<br><br>
 
           Here are the links for:<br>
           <ul>
@@ -31,7 +31,7 @@
             <li>Homepage: <label id="service-home">SERVICE-HOMEPAGE</label></li>
           </ul>
 
-          Click on the button below to authenticate with your app or create a new account (it will appear after making an access request below).<br>
+          Click on the button below to authenticate with your app or create a new account (it will appear after making an authentication request below).<br>
           <div class="center"><span id="pryv-button"></span></div>
           <br>
           <div id="api-endpoint-div" style="visibility: hidden">Now you have been authenticated and obtain your apiEndpoint: <label id="api-endpoint-text"></label></div>
@@ -41,11 +41,10 @@
     <div class="card">
       <div class="card-body">
         <h2 class="card-title">Service information</h2>
-        <br><br>
-        <label id="welcome-message">
-          Enter the <a href="https://api.pryv.com/reference/#service-info">service information URL</a> to fetch all the required information to display your app information and initiate the authentication process.<br>
-          You can use the selector to initialize the URL depending on your deployment type:
-        </label>
+        <br>
+        Enter the <a href="https://api.pryv.com/reference/#service-info">service information URL</a> to fetch all the required information to customize your app information and fetch the URL for the authentication process.<br>
+        You can use the selector to initialize the URL depending on your deployment type:
+        <br>
         <select name="service-info-select" id="service-info-select">
           <optgroup label="Open Pryv.io">
             <option value="https://my-computer.rec.la:4443/reg/service/info">Dev rec-la cert</option>
@@ -65,16 +64,19 @@
           type="button" 
           id="fetch-service-info-button"
           class="btn btn-primary mb-2">Fetch service info</button>
+        <br>
+        Service information content:
+
         <pre id="service-info-display"></pre>
       </div>
     </div>
 
     <div class="card">
       <div class="card-body">
-          <h2 class="card-title">Auth request</h2>
-
+          <h2 class="card-title">Authentication request</h2>
+          <br>
           Now that you have fetched the service information, you have the URL to perform the auth request.<br>
-          Access URL: <label id="access-url">SALUT</label><br>
+          Access URL: <label id="access-url"></label><br>
 
           <button 
           type="button" 
