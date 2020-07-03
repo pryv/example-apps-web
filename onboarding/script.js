@@ -7,7 +7,9 @@ let connection,
   serviceHome,
   serviceSupport,
   serviceTerms,
-  accessUrlDisplay;
+  accessUrlDisplay,
+  apiEndpointDiv,
+  apiEndpointText;
 
 const authSettings = {
   spanButtonID: 'pryv-button', // span id the DOM that will be replaced by the Service specific button
@@ -39,14 +41,15 @@ const authSettings = {
 function pryvAuthStateChange(state) { // called each time the authentication state changes
   console.log('##pryvAuthStateChange', state);
   if (state.id === Pryv.Browser.AuthStates.AUTHORIZED) {
-    document.getElementById('please-login').style.visibility = 'hidden';
-    document.getElementById('form').style.visibility = 'visible';
-    connection = new Pryv.Connection(state.apiEndpoint);
+    apiEndpointText.innerHTML = state.apiEndpoint;
+    apiEndpointDiv.style.visibility = 'visible';
+
+    // Normally you would create a connection object and do something with the data here.
+    //connection = new Pryv.Connection(state.apiEndpoint);
   }
   if (state.id === Pryv.Browser.AuthStates.INITIALIZED) {
-    document.getElementById('please-login').style.visibility = 'visible';
-    document.getElementById('form').style.visibility = 'hidden';
     connection = null;
+    apiEndpointDiv.style.visibility = 'hidden';
   }
 }
 
@@ -59,29 +62,32 @@ window.onload = (event) => {
   serviceTerms = document.getElementById('service-terms');
   serviceHome = document.getElementById('service-home');
   serviceSupport = document.getElementById('service-support');
+  apiEndpointDiv = document.getElementById('api-endpoint-div');
+  apiEndpointText = document.getElementById('api-endpoint-text');
+
   serviceInfoSelect.addEventListener("change", setServiceInfo);
   document.getElementById('auth-request-button').addEventListener("click", authRequest);
   document.getElementById('fetch-service-info-button').addEventListener("click", fetchServiceInfo);
-};
 
-async function fetchServiceInfo() {
-  service = new Pryv.Service(serviceInfoInput.value);
-  service = await service.info();
-  serviceInfoDisplay.innerHTML = JSON.stringify(service, null, 2);
-  accessUrlDisplay.value = service.access;
-  serviceName.innerHTML = service.name;
-  serviceTerms.innerHTML = service.terms;
-  serviceHome.innerHTML = service.home;
-  serviceSupport.innerHTML = service.support;
-}
+  apiEndpointDiv.style.visibility = 'hidden';
+};
 
 function setServiceInfo() {
   const selection = document.getElementById('service-info-select').value;
   serviceInfoInput.value = selection;
 }
 
+async function fetchServiceInfo() {
+  service = new Pryv.Service(serviceInfoInput.value);
+  service = await service.info();
+  serviceInfoDisplay.innerHTML = JSON.stringify(service, null, 2);
+  accessUrlDisplay.innerHTML = service.access;
+  serviceName.innerHTML = service.name;
+  serviceTerms.innerHTML = service.terms;
+  serviceHome.innerHTML = service.home;
+  serviceSupport.innerHTML = service.support;
+}
 
 async function authRequest() {
-  console.log('ca clique')
-  //Pryv.Browser.setupAuth(authSettings, serviceInfoUrl);
+  Pryv.Browser.setupAuth(authSettings, serviceInfoInput.value);
 }

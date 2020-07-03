@@ -30,6 +30,11 @@
             <li>support URL: <label id="service-support">SERVICE-SUPPORT</label></li>
             <li>Homepage: <label id="service-home">SERVICE-HOMEPAGE</label></li>
           </ul>
+
+          Click on the button below to authenticate with your app or create a new account (it will appear after making an access request below).<br>
+          <div class="center"><span id="pryv-button"></span></div>
+          <br>
+          <div id="api-endpoint-div">Now you have been authenticated and obtain your apiEndpoint: <label id="api-endpoint-text"></label></div>
       </div>
     </div>
 
@@ -38,7 +43,8 @@
         <h2 class="card-title">Service information</h2>
         <br><br>
         <label id="welcome-message">
-          Welcome to your Pryv.io platform, please enter the <a href="https://api.pryv.com/reference/#service-info">service information URL</a> to initiate token generation and account creation if needed.
+          Enter the <a href="https://api.pryv.com/reference/#service-info">service information URL</a> to fetch all the required information to display your app information and initiate the authentication process.<br>
+          You can use the selector to initialize the URL depending on your deployment type:
         </label>
         <select name="service-info-select" id="service-info-select">
           <optgroup label="Open Pryv.io">
@@ -68,14 +74,12 @@
           <h2 class="card-title">Auth request</h2>
 
           Now that you have fetched the service information, you have the URL to perform the auth request.<br>
-
-          <label>Access URL:</label> <div id="access-url"></div>
+          Access URL: <label id="access-url">SALUT</label><br>
 
           <button 
           type="button" 
           id="auth-request-button"
           class="btn btn-primary mb-2">Auth request</button>
-          <span id="pryv-button"></span>
 
       </div>
     </div>
@@ -86,5 +90,13 @@
   </div>
 
 </body>
+
+<style>
+.center {
+  margin: auto;
+  width: 60%;
+  padding: 10px;
+}
+</style>
 
 </html>
