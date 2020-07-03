@@ -16,6 +16,7 @@ References:
 - https://api.pryv.com/guides/app-guidelines/
 
 Upon start, your app will retrieve this information, and use it to:
+
 - customize the platform name and useful links: terms and conditions, support and homepage
 - define the [URL where the app authentication call will be made](https://api.pryv.com/reference/#auth-request)
 
