@@ -25,9 +25,9 @@ window.onload = (event) => {
   apiEndpointText = document.getElementById('api-endpoint-text');
   authRequestButton = document.getElementById('auth-request-button')
 
-  serviceInfoSelect.addEventListener("change", setServiceInfo);
-  authRequestButton.addEventListener("click", authRequest);
-  document.getElementById('fetch-service-info-button').addEventListener("click", fetchServiceInfo);
+  serviceInfoSelect.addEventListener('change', setServiceInfo);
+  authRequestButton.addEventListener('click', authRequest);
+  document.getElementById('fetch-service-info-button').addEventListener('click', fetchServiceInfo);
 };
 
 function setServiceInfo() {
