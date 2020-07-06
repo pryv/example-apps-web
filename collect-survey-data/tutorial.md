@@ -46,7 +46,8 @@ const authSettings = {
       {
         streamId: 'baby',
         defaultName: 'Baby',
-        level: 'manage' 
+        level: 'manage'
+      }
     ],
     clientData: {
       'app-web-auth:description': {
