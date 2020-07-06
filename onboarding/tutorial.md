@@ -3,7 +3,7 @@
 
 All you need to run this app is to download [index.html](index.html) and [script.js](script.js) files and open **index.html** with your browser.
 
-This is an example application that performs the necessary calls that need to be implemented by a web application to onboard users on a Pryv.io platform. These calls are exposed for this example to emphasize the different steps of the process in a didactic fashion. In a real-life case, these API calls should be called automatically upon page load.
+This is an example application that performs the necessary calls that need to be implemented by a web application to onboard users on a Pryv.io platform. These calls are exposed in this example to emphasize the different steps of the process in a didactic fashion. In a real-life case, these API calls should be called automatically upon page load.
 
 It allows the user to manually fetch the service information, displaying the retrieved data and where it is used. Next, it allows to perform the authentication loading the button that opens the sign in / user creation pop up.  
 Finally, it displays the obtained API endpoint that can be used to make API calls to the Pryv.io platform whose service information you loaded. 
@@ -16,7 +16,7 @@ For this application, we have used the [Pryv JavaScript library](), loading it f
 <script src="https://api.pryv.com/lib-js/pryv.js"></script>
 ```
 
-In your application, you will need to fetch the [service information](https://api.pryv.com/reference/#service-info) as the first call of most of your apps working with a Pryv.io platform. It allows to obtain information such as the API endpoint format or the authentication request URL. Using it in your apps allows you to make them interoperable between Pryv.ioplatforms which is useful when working with production and staging environments for example.
+In your application, you will need to fetch the [service information](https://api.pryv.com/reference/#service-info) as the first call of most of your apps working with a Pryv.io platform. It allows to obtain information such as the API endpoint format or the authentication request URL. Using it in your apps allows you to make them interoperable between Pryv.io platforms which is useful when working with production and staging environments for example.
 
 ### Define URL
 
