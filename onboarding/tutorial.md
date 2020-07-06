@@ -20,6 +20,8 @@ In your application, you will need to fetch the [service information](https://ap
 
 ### Define URL
 
+![](images/fetchServiceInfo.png)
+
 In this example, the service information block allows to define the service information you will fetch from a list of editable preset values.
 
 ```html
