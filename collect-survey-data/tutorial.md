@@ -21,7 +21,7 @@ For this application, we have used the [Pryv JavaScript library](), loading it f
 <script src="https://api.pryv.com/lib-js/pryv.js"></script>
 ```
 
-For authentication, we will use the [Pryv.io consent process](https://github.com/pryv/lib-js#within-a-webpage-with-a-login-button) adding the following element in the HTLM:
+For authentication, we will use the [Pryv.io consent process](https://github.com/pryv/lib-js#within-a-webpage-with-a-login-button) adding the following element in the HTML:
 
 ```html
 <span id="pryv-button"></span>
