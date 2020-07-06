@@ -2,7 +2,7 @@
 
 This example describes how to implement an onboarding experience for your users.
 
-This example demonstrates how your application should initialize, allowing the developer to interactively perform the different steps to illustrate the process.
+It demonstrates how your application should initialize, allowing the developer to interactively perform the different steps to illustrate the process.
 
 The main parts are the service information and the authentication request, which are exposed in the lower part of the interface and dynamically adapt the onboarding message. In a real life application, only the welcome part will be displayed to the user, while the service information and authentication request calls are done automatically.
 
@@ -10,7 +10,7 @@ The main parts are the service information and the authentication request, which
 
 ## Service information
 
-You will need to call service information URL which contains all the necessary information that your application requires to function.
+You will need to call the service information URL which contains all the necessary information that your application requires to function.
 
 References:
 
@@ -35,7 +35,7 @@ As a Pryv.io account is meant to be accessed by specialized apps with well defin
 - data sources such as sensors
 - algorithms
 
-We recommend to onboard users through the app authentication process, described here: https://api.pryv.com/reference/#authenticate-your-app
+We recommend to onboard users through the app authentication process, described here: https://api.pryv.com/reference/#authenticate-your-app.
 
 ![app-web-auth3](images/authenticate-your-app.png)
 
@@ -60,4 +60,4 @@ To improve your stroke performance, you can use our [Postman collection](https:/
 
 ### Next steps
 
-- [collecting survey data](collect-survey-data)
+- [Collecting survey data](collect-survey-data)
