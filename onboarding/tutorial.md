@@ -21,7 +21,7 @@ In your application, you will need to fetch the [service information](https://ap
 
 ### Define URL
 
-![](images/fetchServiceInfo.png)
+![fetch service info](images/fetchServiceInfo.png)
 
 In this example, the service information block allows to define the service information you will fetch from a list of editable preset values.
 
@@ -99,21 +99,21 @@ async function fetchServiceInfo() {
 
 Placeholder screen:
 
-![](images/welcome-base.png)
+![templat message](images/welcome-base.png)
 
 Customized screen:
 
-![](images/welcome-initialized.png)
+![initialized message](images/welcome-initialized.png)
 
 ## Authentication request
 
 Once the service information is fetched and its values displayed, we can initiate the authentication process. As shown here, we display the URL for the authentication request API call, which was retrieved in the service information:
 
-![](images/auth-request.png)
+![Auth request](images/auth-request.png)
 
 Here again, we perform it by manually pressing a button, which will load the [lib-js login button](https://github.com/pryv/lib-js#within-a-webpage-with-a-login-button).
 
-![](images/login-button.png)
+![Login button](images/login-button.png)
 
 ### Sign in / create account
 
@@ -172,4 +172,4 @@ function pryvAuthStateChange(state) {
 
 Once the user has created an account and authenticated himself, you will receive an API endpoint which you can use to perform API calls on his account.
 
-![](images/api-endpoint.png)
+![API endpoint](images/api-endpoint.png)
