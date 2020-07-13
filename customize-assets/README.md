@@ -10,7 +10,7 @@ You can either :
 - fork the [Github repositery](https://github.com/pryv/assets-open-pryv.io) containing visual assets for the Open Pryv platform and customize it. We strongly recommend you to choose this method for a production environment so that you can benefit from updates of our Javascript library. The procedure is explained in the [tutorial](customize-assets/tutorial.md).
 
 <p align="center">
-  <img src="customize-assets/images/customize_pryv.png" alt="customize-logo" style="zoom:33%;" />
+  <img src="images/customize_pryv.png" alt="customize-logo" style="zoom:33%;" />
 </p>
 
 ## Locate the assets in your Open Pryv.io
@@ -26,13 +26,13 @@ The code for the assets can be found in the **"public_html/assets/"** folder of 
 To change the logo of the authentication app **app-web-auth3** you should navigate to the **"app-web-auth3"** folder in **"public_html/assets/"**.
 
 <p align="center">
-  <img src="customize-assets/images/change-logo.png" alt="change-logo" style="zoom:33%;" />
+  <img src="images/change-logo.png" alt="change-logo" style="zoom:33%;" />
 </p>
 
 You can change the existing logo into your own logo :
 
 <p align="center">
-  <img src="customize-assets/images/my-logo.png" alt="my-logo" style="zoom:33%;" />
+  <img src="images/my-logo.png" alt="my-logo" style="zoom:33%;" />
 </p>
 
 In the `index.json` file, modify the URL path to the logo :
@@ -52,13 +52,13 @@ If you are using another public URL, replace `https://my-computer.rec.la` by it 
 After requesting access, you can click on the login button:
 
 <p align="center">
-  <img src="customize-assets/images/login-open-pryv.png" alt="login-open-pryv" style="zoom:33%;" />
+  <img src="images/login-open-pryv.png" alt="login-open-pryv" style="zoom:33%;" />
 </p>
 
 This will open the login page on which you can see the applied changes :
 
 <p align="center">
-  <img src="customize-assets/images/login-open-pryv.png" alt="login-open-pryv" style="zoom:33%;" />
+  <img src="images/new-logo.png" alt="new-logo" style="zoom:33%;" />
 </p>
 
 
