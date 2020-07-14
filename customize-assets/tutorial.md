@@ -23,7 +23,7 @@ You can for example edit the logo of your authentication app ([app-web-auth3](ht
 To do so, navigate to the folder **app-web-auth3** in **assets-open-pryv.io**.
 
 <p align="center">
-    <img src="images/change_logo_open_assets.png" alt="change_logo_open_assets" width="350"/>
+    <img src="images/change_logo_open_assets.png" alt="change_logo_open_assets" width="600"/>
 </p>
 
 Add your own logo "my-logo.png" and update the relevant section in the **index.json** file :
@@ -40,7 +40,7 @@ Add your own logo "my-logo.png" and update the relevant section in the **index.j
 Once your changes are done, copy the content of your **assets-open-pryv.io** folder to **public_html/assets** folder of your Open Pryv.io instance.
 
 <p align="center">
-    <img src="images/move_files.png" alt="move" width="350"/>
+    <img src="images/move_files.png" alt="move" width="600"/>
 </p>
 
 ## Run Open Pryv.io
@@ -51,9 +51,19 @@ Run your Open Pryv instance from your terminal and see the changes when opening 
 
 - from [https://api.pryv.com/app-web-access/?pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info](https://api.pryv.com/app-web-access/?pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info.) if you are using the Native version
 
+If you are using another public URL, replace `https://my-computer.rec.la` by it in the link above.
+
+After requesting access, you can click on the login button:
 
 <p align="center">
-    <img src="images/new_logo.png" alt="new_logo" width="350"/>
+<img src="images/login-open-pryv.png" alt="login-open-pryv" width="190" />
 </p>
+
+This will open the login page on which you can see the applied changes :
+
+<p align="center">
+<img src="images/new_logo.png" alt="new-logo" width="350" />
+</p>
+
 
 

@@ -27,13 +27,13 @@ The code for the assets can be found in the **"public_html/assets/"** folder of 
 To change the logo of the authentication app **app-web-auth3** you should navigate to the **"app-web-auth3"** folder in **"public_html/assets/"**.
 
 <p align="center">
-<img src="images/change-logo.png" alt="change-logo" width="500" />
+<img src="images/change-logo.png" alt="change-logo" width="400" />
 </p>
 
-You can change the existing logo into your own logo :
+You can add your own logo "my-logo.png" :
 
 <p align="center">
-<img src="images/my-logo.png" alt="my-logo" width="500" />
+<img src="images/my-logo.png" alt="my-logo" width="600" />
 </p>
 
 In the `index.json` file, modify the URL path to the logo :
