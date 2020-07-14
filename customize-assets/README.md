@@ -59,7 +59,7 @@ After requesting access, you can click on the login button:
 This will open the login page on which you can see the applied changes :
 
 <p align="center">
-<img src="images/new-logo.png" alt="new-logo" width="350" />
+<img src="images/new_logo.png" alt="new-logo" width="350" />
 </p>
 
 ### Next steps
