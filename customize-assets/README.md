@@ -15,9 +15,9 @@ You can either :
 
 ## Locate the assets in your Open Pryv.io
 
-You will first need to run your instance of Open Pryv.io on your computer. 
+You first need to run your instance of Open Pryv.io on your computer. 
 
-If you haven't installed it yet, you can do so by forking the [Github repositery](https://github.com/pryv/open-pryv.io) of Open Pryv and following the instructions in the README.
+If you haven't installed it yet, you can do so by forking the [Github repositery](https://github.com/pryv/open-pryv.io) of Open Pryv.io and following the instructions in the README.
 
 The code for the assets can be found in the **"public_html/assets/"** folder of your Open Pryv.io. You can directly modify the files from the folder to adapt the style and assets to your own branding.
 
@@ -25,15 +25,12 @@ The code for the assets can be found in the **"public_html/assets/"** folder of 
 
 To change the logo of the authentication app **app-web-auth3** you should navigate to the **"app-web-auth3"** folder in **"public_html/assets/"**.
 
-<p align="center">
-  <img src="images/change-logo.png" alt="change-logo" style="zoom:10%;" />
-</p>
+<img src="images/change-logo.png" alt="change-logo" style="zoom:33%;" />
+
 
 You can change the existing logo into your own logo :
 
-<p align="center">
-  <img src="images/my-logo.png" alt="my-logo" style="zoom:10%;" />
-</p>
+<img src="images/my-logo.png" alt="my-logo" style="zoom:33%;" />
 
 In the `index.json` file, modify the URL path to the logo :
 ```json
@@ -51,16 +48,12 @@ If you are using another public URL, replace `https://my-computer.rec.la` by it 
 
 After requesting access, you can click on the login button:
 
-<p align="center">
-  <img src="images/login-open-pryv.png" alt="login-open-pryv" style="zoom:10%;" />
-</p>
+<img src="images/login-open-pryv.png" alt="login-open-pryv" style="zoom:33%;" />
+
 
 This will open the login page on which you can see the applied changes :
 
-<p align="center">
-  <img src="images/new-logo.png" alt="new-logo" style="zoom:10%;" />
-</p>
-
+<img src="images/new-logo.png" alt="new-logo" style="zoom:33%;" />
 
 ### Next steps
 
