@@ -53,7 +53,7 @@ If you are using another public URL, replace `https://my-computer.rec.la` by it 
 After requesting access, you can click on the login button:
 
 <p align="center">
-<img src="images/login-open-pryv.png" alt="login-open-pryv" width="150" />
+<img src="images/login-open-pryv.png" alt="login-open-pryv" width="190" />
 </p>
 
 This will open the login page on which you can see the applied changes :
