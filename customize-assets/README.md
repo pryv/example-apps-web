@@ -7,7 +7,7 @@ It demonstrates how you can modify the logo to adapt it to your own branding fol
 You can either :
 - modify assets directly in the **"public_html/assets/"** folder of your Open Pryv.io as explained below
 
-- fork the [Github repositery](https://github.com/pryv/assets-open-pryv.io) containing visual assets for the Open Pryv platform and customize it. We strongly recommend you to choose this method for a production environment so that you can benefit from updates of our Javascript library. The procedure is explained in the [tutorial](customize-assets/tutorial.md).
+- fork the [Github repositery](https://github.com/pryv/assets-open-pryv.io) containing visual assets for the Open Pryv.io platform and customize it. We strongly recommend you to choose this method for a production environment so that you can benefit from updates of our Javascript library. The procedure is explained in the [tutorial](customize-assets/tutorial.md).
 
 <p align="center">
 <img src="images/customize_pryv.png" alt="customize-pryv" width="350"/>
@@ -45,8 +45,8 @@ In the `index.json` file, modify the URL path to the logo :
 ```
 
 You can now test your changes on your Open Pryv.io by opening the authentication page: 
-- on [https://api.pryv.com/app-web-access/?pryvServiceInfoUrl=https://my-computer.rec.la/reg/service/info](https://api.pryv.com/app-web-access/?pryvServiceInfoUrl=https://my-computer.rec.la/reg/service/info.) if you are using the Dockerized version
-- on [https://api.pryv.com/app-web-access/?pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info](https://api.pryv.com/app-web-access/?pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info.) if you are using the Native version
+- from [https://api.pryv.com/app-web-access/?pryvServiceInfoUrl=https://my-computer.rec.la/reg/service/info](https://api.pryv.com/app-web-access/?pryvServiceInfoUrl=https://my-computer.rec.la/reg/service/info.) if you are using the Dockerized version
+- from [https://api.pryv.com/app-web-access/?pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info](https://api.pryv.com/app-web-access/?pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info.) if you are using the Native version
 
 If you are using another public URL, replace `https://my-computer.rec.la` by it in the link above.
 
