@@ -9,7 +9,9 @@ You can either :
 
 - fork the [Github repositery](https://github.com/pryv/assets-open-pryv.io) containing visual assets for the Open Pryv platform and customize it. We strongly recommend you to choose this method for a production environment so that you can benefit from updates of our Javascript library. The procedure is explained in the [tutorial](customize-assets/tutorial.md).
 
-<img src="images/customize_pryv.png" alt="customize-pryv" style="zoom:33%;" />
+<p align="center">
+<img src="images/customize_pryv.png" alt="customize-pryv" width="250"/>
+</p>
 
 
 ## Locate the assets in your Open Pryv.io
@@ -24,12 +26,15 @@ The code for the assets can be found in the **"public_html/assets/"** folder of 
 
 To change the logo of the authentication app **app-web-auth3** you should navigate to the **"app-web-auth3"** folder in **"public_html/assets/"**.
 
-<img src="images/change-logo.png" alt="change-logo" style="zoom:33%;" />
-
+<p align="center">
+<img src="images/change-logo.png" alt="change-logo" width="250" />
+</p>
 
 You can change the existing logo into your own logo :
 
-<img src="images/my-logo.png" alt="my-logo" style="zoom:33%;" />
+<p align="center">
+<img src="images/my-logo.png" alt="my-logo" width="250" />
+</p>
 
 In the `index.json` file, modify the URL path to the logo :
 ```json
@@ -47,12 +52,15 @@ If you are using another public URL, replace `https://my-computer.rec.la` by it 
 
 After requesting access, you can click on the login button:
 
-<img src="images/login-open-pryv.png" alt="login-open-pryv" style="zoom:33%;" />
-
+<p align="center">
+<img src="images/login-open-pryv.png" alt="login-open-pryv" width="250" />
+</p>
 
 This will open the login page on which you can see the applied changes :
 
-<img src="images/new-logo.png" alt="new-logo" style="zoom:33%;" />
+<p align="center">
+<img src="images/new-logo.png" alt="new-logo" width="250" />
+</p>
 
 ### Next steps
 
