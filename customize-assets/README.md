@@ -7,7 +7,7 @@ It demonstrates how you can modify the logo to adapt it to your own branding fol
 You can either :
 - modify assets directly in the **"public_html/assets/"** folder of your Open Pryv.io as explained below
 
-- fork the [Github repositery](https://github.com/pryv/assets-open-pryv.io) containing visual assets for the Open Pryv.io platform and customize it. We strongly recommend you to choose this method for a production environment so that you can benefit from updates of our Javascript library. The procedure is explained in the [tutorial](../tutorial.md).
+- fork the [Github repositery](https://github.com/pryv/assets-open-pryv.io) containing visual assets for the Open Pryv.io platform and customize it. We strongly recommend you to choose this method for a production environment so that you can benefit from updates of our Javascript library. The procedure is explained in the [tutorial](/tutorial.md).
 
 <p align="center">
   <img src="images/customize_pryv.png" alt="customize-pryv" width="350"/>
