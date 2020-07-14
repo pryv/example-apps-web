@@ -1,7 +1,7 @@
 
 # Pryv Customize assets tutorial
 
-In this tutorial we describe the procedure to customize your Pryv.io web apps. As described in the [README](customize-assets/README.md), it is also possible to directly edit your platform assets in the **public_html/assets** folder of your Open Pryv.io instance.
+In this tutorial we describe the procedure to customize your Pryv.io web apps. As explained in the [README](customize-assets/README.md), it is also possible to directly edit your platform assets in the **public_html/assets** folder of your Open Pryv.io instance.
 
 However, when working in a production environment, we stronly recommend to follow the steps below to change assets for your Open Pryv.io platform.
 
