@@ -9,8 +9,7 @@ You can either :
 
 - fork the [Github repositery](https://github.com/pryv/assets-open-pryv.io) containing visual assets for the Open Pryv platform and customize it. We strongly recommend you to choose this method for a production environment so that you can benefit from updates of our Javascript library. The procedure is explained in the [tutorial](customize-assets/tutorial.md).
 
-
-<img src="images/customize-logo.png" alt="customize-logo" style="zoom:33%;" />
+<img src="images/customize_pryv.png" alt="customize-pryv" style="zoom:33%;" />
 
 
 ## Locate the assets in your Open Pryv.io
