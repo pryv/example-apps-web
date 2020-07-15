@@ -54,7 +54,7 @@ You can test your changes by opening the onboarding example page [https://pryv.g
 
 In the **Service information** section, select your deployment type and enter the service information URL to fetch service info :
 <p align="center">
-  <img src="images/service-info.png" alt="service-info" width="400" />
+  <img src="images/service-info.png" alt="service-info" width="800" />
 </p>
 
 Once this is done, perform the "Auth request" in the **Authentication request** section.
