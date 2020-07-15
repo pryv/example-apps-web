@@ -1,6 +1,6 @@
 # Web App Examples with Pryv.io
 
-This is the main repository for all the web apps that you can implement using Pryv.io.
+This is the main repository for all the web apps that you can implement using Pryv.io and related tutorials.
 
 - [Open Pryv.io](https://github.com/pryv/open-pryv.io)
 - [Tutorial Videos](https://www.youtube.com/user/pryvme/videos)

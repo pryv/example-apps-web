@@ -5,7 +5,7 @@ In this tutorial we describe the procedure to customize your Pryv.io web apps. A
 
 However, when working in a production environment, we stronly recommend to follow the steps below to change assets for your Open Pryv.io platform.
 
-This will allow you to benefit from updates and improvements of our [Javascript library](https://github.com/pryv/lib-js) and [Pryv.io visual assets](https://github.com/pryv/assets-open-pryv.io).
+This will allow you to keep track of your changes and our updates to the [Pryv.io visual assets](https://github.com/pryv/assets-open-pryv.io).
 
 
 ## Fork the Visual Assets repositery 
@@ -45,15 +45,21 @@ Once your changes are done, copy the content of your **assets-open-pryv.io** fol
 
 ## Run Open Pryv.io
 
-Run your Open Pryv instance from your terminal and see the changes when opening the authentication app :
+Run your Open Pryv instance from your terminal.
 
-- from [https://api.pryv.com/app-web-access/?pryvServiceInfoUrl=https://my-computer.rec.la/reg/service/info](https://api.pryv.com/app-web-access/?pryvServiceInfoUrl=https://my-computer.rec.la/reg/service/info.) if you are using the Dockerized version
+You can see the changes using the [onboarding page](https://pryv.github.io/app-web-examples/onboarding/) for example.
+<p align="center">
+    <img src="images/onboarding.png" alt="onboarding" width="600"/>
+</p>
 
-- from [https://api.pryv.com/app-web-access/?pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info](https://api.pryv.com/app-web-access/?pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info.) if you are using the Native version
+In the **Service information** section, select your deployment type and enter the service information URL to fetch service info :
+<p align="center">
+  <img src="images/service-info" alt="service-info" width="400" />
+</p>
 
-If you are using another public URL, replace `https://my-computer.rec.la` by it in the link above.
+Once this is done, perform the "Auth request" in the **Authentication request** section.
 
-After requesting access, you can click on the login button:
+You can then click on the login button on the top of the page:
 
 <p align="center">
 <img src="images/login-open-pryv.png" alt="login-open-pryv" width="190" />
