@@ -1,5 +1,5 @@
 
-# Pryv Customize assets tutorial
+# Customize assets tutorial
 
 In this tutorial we describe the procedure to customize your Pryv.io web apps. As explained in the [README](customize-assets/README.md), it is also possible to directly edit your platform assets in the **public_html/assets** folder of your Open Pryv.io instance.
 
@@ -47,14 +47,14 @@ Once your changes are done, copy the content of your **assets-open-pryv.io** fol
 
 Run your Open Pryv instance from your terminal.
 
-You can see the changes using the [onboarding page](https://pryv.github.io/app-web-examples/onboarding/) for example.
+You can test your changes by opening the onboarding example page [https://pryv.github.io/app-web-examples/onboarding/](https://pryv.github.io/app-web-examples/onboarding/).
 <p align="center">
     <img src="images/onboarding.png" alt="onboarding" width="600"/>
 </p>
 
 In the **Service information** section, select your deployment type and enter the service information URL to fetch service info :
 <p align="center">
-  <img src="images/service-info" alt="service-info" width="400" />
+  <img src="images/service-info.png" alt="service-info" width="400" />
 </p>
 
 Once this is done, perform the "Auth request" in the **Authentication request** section.
