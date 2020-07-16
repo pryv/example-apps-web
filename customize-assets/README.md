@@ -12,7 +12,7 @@ You can either :
 Follow the [tutorial](tutorial.md) that explains how to use a fork to edit the assets.
 
 <p align="center">
-    <img src="images/customize_pryv.png" alt="customize_pryv" width="500"/>
+    <img src="images/customize_pryv.png" alt="customize_pryv" width="300"/>
 </p>
 
 ### Next steps
