@@ -11,6 +11,10 @@ You can either :
 
 Follow the [tutorial](tutorial.md) that explains how to use a fork to edit the assets.
 
+<p align="center">
+    <img src="images/customize_pryv.png" alt="customize_pryv" width="500"/>
+</p>
+
 ### Next steps
 
 You can check out some more template apps that you can customize for your own use:
