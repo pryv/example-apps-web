@@ -38,3 +38,8 @@ The following stream structure is created in the variable `apiCall`:
 The [Event types directory](https://api.pryv.com/event-types/) contains standard event types, and can be customized and completed with your own event types.
 
 In our example, we use the event type `mass/kg` for the baby's weight (see [here](https://api.pryv.com/event-types/#mass) for details) and the event type `blood-pressure/mmhg-bpm` for the blood pressure of the mother (see [here](https://api.pryv.com/event-types/#blood-pressure) for details).
+
+### Next steps
+
+You can check out the tutorial to create a web app for data collection from a form:
+- [Collect Survey Data Tutorial](tutorial.md)

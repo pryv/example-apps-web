@@ -60,4 +60,5 @@ To improve your stroke performance, you can use our [Postman collection](https:/
 
 ### Next steps
 
-- [Collecting survey data](collect-survey-data)
+You can check out the tutorial to implement an onboarding experience for your users:
+- [Onboarding Tutorial](tutorial.md)

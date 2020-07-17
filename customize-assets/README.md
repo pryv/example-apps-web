@@ -17,6 +17,5 @@ Follow the [tutorial](tutorial.md) that explains how to use a fork to edit the a
 
 ### Next steps
 
-You can check out some more template apps that you can customize for your own use:
-- [Onboarding](../onboarding)
-- [Collecting survey data](../collect-survey-data)
+You can check out the tutorial to edit assets for your web apps:
+- [Customize Assets Tutorial](tutorial.md)
