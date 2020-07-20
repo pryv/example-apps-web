@@ -9,7 +9,7 @@ This is a visualization and sharing web app that first displays a welcome messag
 
 When signed in, you can consent to give the app access to the streams "Baby-Body" and "Heart" where the data from the form (see tutorial on form creation and data collection [here](collect-survey-data/tutorial.md)) is stored.
 
-<img src="images/request-permissions.png" alt="request-permissions" style="zoom:50%;" />
+<img src="images/request-permissions.png" alt="request-permissions" width=300 />
 
 Once you have accepted, it displays the saved data of your baby's weight and your own blood pressure.
 
