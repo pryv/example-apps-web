@@ -86,7 +86,6 @@ function resetData() {
   resetTable('sharings-table');
 }
 
-
 async function loadData() {
   const result = await connection.api([{method: 'events.get', params: {limit: 40}}]);
   const events = result[0].events;
@@ -107,7 +106,7 @@ async function loadData() {
         [event.content.systolic + 'mmHg', event.content.diastolic + 'mmHg']);
     }
   }
-  if (! apiEndpoint) // display sharings only when loggged-in
+  if (! apiEndpoint) // display sharings only when logged-in
     updateSharings();
 }
 function addTableEvent(table, event, items) {

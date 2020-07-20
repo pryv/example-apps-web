@@ -11,7 +11,7 @@ You can choose to share this data by creating a new sharing at the bottom of the
 
 ## Customize the display of the data
 
-The recorded data and the sharings are put into tabular form. You will find the code related to the data display in the [index.html](index.html) file. We invite you to customize it with your own message, headings and data form to suit your needs.
+The recorded data and the sharings are put into tabular form. You will find the code related to the data display in the [index.html](index.html) file. We invite you to customize it with your own message and headings, and adapt the data display according to your needs.
 
 ## Authenticate your app
 
@@ -82,7 +82,7 @@ function pryvAuthStateChange(state) {
 
 If the streams of the `requestedPermissions` array do not exist in the user's account upon authentication, they are created, the `defaultName` field serving as `name` for the [data structure](https://api.pryv.com/reference/#stream).
 
-The auth request is done on page load, except when the shared data is displayed by a third-party:
+The auth request is done on page load, except when the shared data is loaded by a third-party:
 
 ```javascript
 window.onload = async (event) => {
@@ -101,7 +101,7 @@ window.onload = async (event) => {
 
 ## Load data
 
-Once the user is signed in, data from his Pryv.io account is fetched. If there is no data, a warning is displayed to invite the user to fill in the form from the previous [tutorial](collect-survey-data/tutorial.md) on Simple Form creation.
+Once the user is signed in, data from his Pryv.io account is fetched. If there is no data, a warning is displayed to invite the user to fill in the form from the previous [tutorial](collect-survey-data/tutorial.md) on **Simple Form** creation.
 
 ```javascript
 async function loadData() {
@@ -112,7 +112,7 @@ async function loadData() {
     return;
   }
 ```
-Data from both "Baby-Body" and "Heart" streams is displayed in a table
+Data from both "Baby-Body" and "Heart" streams is presented in a tabular form:
 
 ```javascript
   const babyDataTable = document.getElementById('baby-weight-table');
@@ -131,84 +131,83 @@ Data from both "Baby-Body" and "Heart" streams is displayed in a table
     updateSharings();
 }
 ```
+The sharings of the user are also displayed using the function **updateSharings()** that performs a **get.accesses** API call:
 
-## Save a sharing
+```javascript
+async function updateSharings() {
+  const result = await connection.api([{ method: 'accesses.get', params: {}}]);
+  const sharingTable = document.getElementById('sharings-table');
+  console.log(result);
+  const accesses = result[0].accesses;
+  if (! accesses || accesses.length === 0) {
+    return;
+  }
+  resetTable('sharings-table');
+  for (const access of accesses) {
+    await addListAccess(sharingTable, access);
+  }
+}
+```
 
-In order to save a sharing, we add a listener to the *Create a sharing* button:
+## Create a sharing
+
+In order to create a sharing, we add a listener to the *Create* button:
 
 ```javascript
 window.onload = (event) => {
-  document.getElementById('submit-button').addEventListener("click", submitForm);
+  document.getElementById('create-sharing').addEventListener("click", createSharing);
   // ...
 };
 ```
 
-This will fetch values from the `input` tags:
+This will fetch values for the scope of the sharing ('streamId' and 'level' for permissions):
 
 ```javascript
-const babyWeight = document.getElementById('baby-weight').value;
-const systolic = document.getElementById('systolic').value;
-const diastolic = document.getElementById('diastolic').value;
+const checkBaby = document.getElementById('check-baby').checked;
+const checkBP = document.getElementById('check-bp').checked;
+const permissions = [];
+  if (checkBaby) permissions.push({streamId: 'baby-body', level: 'read'});
+  if (checkBP) permissions.push({ streamId: 'heart', level: 'read' });
 ```
 
-It will package those values into [events.create](https://api.pryv.com/reference/#create-event) [batch calls](https://api.pryv.com/reference/#call-batch), previously verifying that the entered values are indeed numbers:
+It will package those values into an [accesses.create](https://api.pryv.com/reference/#create-access) API call.
 
 ```javascript
-if (!isNaN(babyWeight) || !isNaN(systolic) || !isNaN(diastolic)) {
-    apiCall.push({
-      method: 'events.create',
+  const res = await connection.api([
+    { 
+      method: 'accesses.create', 
       params: {
-        streamId: 'baby-body',
-        type: 'mass/kg',
-        content: Number(babyWeight),
-      },
-      handleResult: logResultToConsole 
-    });
-    apiCall.push({
-      method: 'events.create',
-      params: {
-        streamId: 'heart',
-        type: 'blood-pressure/mmhg-bpm',
-        content: {
-          systolic: Number(systolic),
-          diastolic: Number(diastolic),
-        }
-      },
-      handleResult: logResultToConsole
-    });
-  } else {
-    alert('Please enter a number for the baby\'s weight and the systolic / diastolic values.');
+        name: name,
+        permissions: permissions
+      }
+  }]);
+  if (res[0].error) {
+    alert(JSON.stringify(res[0].error, null, 2));
+    return;
   }
+  updateSharings();
+}
 ```
 
-As we wish to save these values into streams that are not part of the streams of the `requestedPermissions`, we ensure that they exist by bundling them in the batch call, previous to the `events.create` methods, as the array of methods is executed in order by the API:
+This call is made using [Connection.api()](https://github.com/pryv/lib-js#api-calls) method.
+
+Similarly, 
 
 ```javascript
-const apiCall = [
-  {
-    method: 'streams.create',
-    params: {
-      id: 'baby-body',
-      name: 'Baby-Body',
-      parentId: 'baby'
-    }
-  },
-  {
-    method: 'streams.create',
-    params: {
-      id: 'heart',
-      name: 'Heart',
-      parentId: 'body'
-    }
-  }
-];
+
+async function deleteSharing(accessId) {
+  if (! confirm('delete?')) return;
+  await connection.api([{method: 'accesses.delete', params: {id: accessId}}]);
+  updateSharings();
+}
 ```
 
-Finally, we make the API call using [Connection.api()](https://github.com/pryv/lib-js#api-calls) method:
 
-```javascript
-const result = await connection.api(apiCall);
-```
+
+
+
+
+------------------
 
 ## App guidelines
 

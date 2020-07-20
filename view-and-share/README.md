@@ -35,5 +35,10 @@ The weight of the baby and the blood pressure are presented along with the time 
 
 ## Data sharing
 
-Either one of the streams "Baby-Body" or "Heart", or both streams, can be shared with third-parties. The sharing consists in a link that can be communicated directly to the third party of the user's choice or by email.
-When opened, it displays the data within the scope of the sharing.
+Either one of the streams "Baby-Body" or "Heart", or both streams, can be shared with third-parties. This translates into a 'read' access to the shared stream. The sharing consists in a link that can be communicated directly to the third party of the user's choice or by email.
+When opened, it displays the data within the scope of the sharing. 
+
+## Next steps
+
+You can check out the tutorial to view and share data with third parties :
+- [View and Share Tutorial](tutorial.md)
