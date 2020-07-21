@@ -224,11 +224,10 @@ Following our [app guidelines](https://api.pryv.com/guides/app-guidelines/), we 
 ```javascript
 const serviceInfoUrl = Pryv.Browser.serviceInfoFromUrl() || 'https://reg.pryv.me/service/info';
 ```
-
 To set a custom Pryv.io platform, provide the service information URL as shown here for the Pryv Lab:
 
-[https://pryv.github.io/app-web-examples/view-and-share/?pryvServiceInfoUrl=https://reg.pryv.me/service/info](https://pryv.github.io/app-web-examples/view-and-share/?pryvServiceInfoUrl=https://reg.pryv.me/service/info)
+[https://pryv.github.io/app-web-examples/view-and-share/?pryvServiceInfoUrl="https://reg.pryv.me/service/info"](https://pryv.github.io/app-web-examples/view-and-share/?pryvServiceInfoUrl=%22https://reg.pryv.me/service/info%22)
 
  To launch this app on your [local Open Pryv.io platform](https://github.com/pryv/open-pryv.io#development) use (the link requires to have a running Open Pryv.io with the rec-la SSL proxy):
 
-[https://pryv.github.io/app-web-examples/view-and-share/?pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info](https://pryv.github.io/app-web-examples/view-and-share/?pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info).
+[https://pryv.github.io/app-web-examples/view-and-share/?pryvServiceInfoUrl="https://my-computer.rec.la:4443/reg/service/info"](https://pryv.github.io/app-web-examples/view-and-share/?pryvServiceInfoUrl=%22https://my-computer.rec.la:4443/reg/service/info%22). 
