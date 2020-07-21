@@ -4,24 +4,23 @@ var authSettings = {
   spanButtonID: 'pryv-button', // span id the DOM that will be replaced by the Service specific button
   onStateChange: pryvAuthStateChange, // event Listener for Authentication steps
   authRequest: { // See: https://api.pryv.com/reference/#auth-request
-    requestingAppId: 'pryv-example-view-and-share',
-    languageCode: 'en', // optional (default english)
+    requestingAppId: 'pryv-example-view-and-share', // to customize for your own app
     requestedPermissions: [
       {
         streamId: 'body',
         defaultName: 'Body',
-        level: 'read'
+        level: 'read' // permissions for the app to read data in stream 'Body'
       },
       {
         streamId: 'baby',
         defaultName: 'Baby',
-        level: 'read'
+        level: 'read' // permissions for the app to read data in stream 'Baby'
       }
     ],
     clientData: {
       'app-web-auth:description': {
         'type': 'note/txt',
-        'content': 'This sample app demonstrates how you can visualize and share data with an app token.'
+        'content': 'This sample app demonstrates how you can visualize and share data with an app token.' // to customize according to your own use case
       }
     },
   }
@@ -34,7 +33,7 @@ function pryvAuthStateChange(state) { // called each time the authentication sta
     document.getElementById('please-login').style.visibility = 'hidden';
     document.getElementById('data-view').style.visibility = 'visible';
     document.getElementById('sharing-view').style.visibility = 'visible';
-    username = state.displayName; // (will be probably changed by username property)
+    username = state.displayName; 
     connection = new Pryv.Connection(state.apiEndpoint);
     loadData();
   }
@@ -48,14 +47,12 @@ function pryvAuthStateChange(state) { // called each time the authentication sta
 }
 
 // following the APP GUIDELINES: https://api.pryv.com/guides/app-guidelines/
-// there are two options for this app : if we have the apiEndpoint provided in the parameters, 
-// then we do not propose to login but directly display the data 
 const urlParams = new URLSearchParams(window.location.search);
 const apiEndpoint = urlParams.get('pryvApiEndpoint');
 const serviceInfoUrl = urlParams.get('pryvServiceInfoURL') || 'https://reg.pryv.me/service/info';
 
 var service = null; // will be initialized after setupAuth;
-var username = null; // will be inialized after AUTHORIZED auth State is recieved
+var username = null; // will be inialized after AUTHORIZED auth State is received
 window.onload = async (event) => {
   
   if (apiEndpoint) { // if apiEndpoint then we are in "View only mode"
@@ -87,7 +84,7 @@ function resetData() {
 }
 
 async function loadData() {
-  const result = await connection.api([{method: 'events.get', params: {limit: 40}}]);
+  const result = await connection.api([{method: 'events.get', params: {limit: 40}}]); // get events from the Pryv.io account
   const events = result[0].events;
   if (! events || events.length === 0) {
     alert('There is no data to show. Use the example "simple-form" first');
@@ -97,10 +94,10 @@ async function loadData() {
   const babyDataTable = document.getElementById('baby-weight-table');
   const heartDataTable = document.getElementById('blood-pressure-table');
   for (const event of events) {
-    if (event.streamIds.includes('baby-body') && event.type === 'mass/kg') {
+    if (event.streamIds.includes('baby-body') && event.type === 'mass/kg') { // get 'mass/kg' events from the stream 'Baby-Body'
       addTableEvent(babyDataTable, event, [event.content + ' Kg']);
     }
-    if (event.streamIds.includes('heart') && event.type === 'blood-pressure/mmhg-bpm') {
+    if (event.streamIds.includes('heart') && event.type === 'blood-pressure/mmhg-bpm') { // get 'blood-pressure/mmhg-bpm' events from the stream 'Heart'
 
       addTableEvent(heartDataTable, event, 
         [event.content.systolic + 'mmHg', event.content.diastolic + 'mmHg']);
@@ -110,7 +107,7 @@ async function loadData() {
     updateSharings();
 }
 function addTableEvent(table, event, items) {
-  const date = new Date(event.time * 1000);
+  const date = new Date(event.time * 1000); // add date of the fetched events
   const dateText = date.getFullYear() + '/' + date.getMonth() + '/' + date.getDay() + ' ' + date.getHours() + ':' + date.getMinutes();
 
   const row = table.insertRow(-1);
@@ -124,12 +121,16 @@ function addTableEvent(table, event, items) {
 // ----- Sharings
 
 async function updateSharings() {
-  const result = await connection.api([{ method: 'accesses.get', params: {}}]);
+  const result = await connection.api([ // https://github.com/pryv/lib-js#api-calls
+    { 
+      method: 'accesses.get', // get accesses of the data: https://api.pryv.com/reference/#get-accesses
+      params: {}
+    }
+  ]); 
   const sharingTable = document.getElementById('sharings-table');
   console.log(result);
   const accesses = result[0].accesses;
   if (! accesses || accesses.length === 0) {
-    //sharingList.innerHTML = '<small>No sharings, add one</small>'; 
     return;
   }
   resetTable('sharings-table'); // empty list
@@ -155,9 +156,9 @@ async function createSharing() {
   if (checkBaby) permissions.push({streamId: 'baby-body', level: 'read'});
   if (checkBP) permissions.push({ streamId: 'heart', level: 'read' });
 
-  const res = await connection.api([
+  const res = await connection.api([ // https://github.com/pryv/lib-js#api-calls
     { 
-      method: 'accesses.create', 
+      method: 'accesses.create', // creates the selected access: https://api.pryv.com/reference/#create-access
       params: {
         name: name,
         permissions: permissions
@@ -170,7 +171,7 @@ async function createSharing() {
   updateSharings();
 }
 
-async function addListAccess(table, access) {
+async function addListAccess(table, access) { // add permissions to the sharings table
   
   const permissions = [];
   for (const permission of access.permissions) permissions.push(permission.streamId);
@@ -195,6 +196,11 @@ async function addListAccess(table, access) {
 
 async function deleteSharing(accessId) {
   if (! confirm('delete?')) return;
-  await connection.api([{method: 'accesses.delete', params: {id: accessId}}]);
+  await connection.api([ // https://github.com/pryv/lib-js#api-calls
+    {
+      method: 'accesses.delete', // deletes the selected access: https://api.pryv.com/reference/#delete-access 
+      params: {id: accessId}
+  }
+]); 
   updateSharings();
 }

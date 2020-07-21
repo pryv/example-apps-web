@@ -3,14 +3,18 @@
 
 All you need to run this app is to download [index.html](index.html) and [script.js](script.js) files and open **index.html** with your browser.
 
-This is a visualization and sharing web app that first displays a welcome message and a button to initiate the authentication process. With click on the login button, a popup opens in your browser where you can either authenticate or create a new account. 
+This is a visualization and sharing web app that first displays a welcome message and a button to initiate the authentication process.
+<p align="center">
+<img src="images/login.png" alt="login" width="300"/>
+</p>
 
-<img src="images/login.png" alt="login" style="zoom:50%;" />
+
+With click on the login button, a popup opens in your browser where you can either authenticate or create a new account. 
 
 When signed in, you can consent to give the app access to the streams "Baby-Body" and "Heart" where the data from the form (see tutorial on form creation and data collection [here](collect-survey-data/tutorial.md)) is stored.
-
+<p align="center">
 <img src="images/request-permissions.png" alt="request-permissions" width=300 />
-
+</p>
 Once you have accepted, it displays the saved data of your baby's weight and your own blood pressure.
 
 You can choose to share this data by creating a new sharing at the bottom of the page. This will generate a URL link that contains the shared streams ("Baby-Body", "Heart" or both).
@@ -86,7 +90,7 @@ function pryvAuthStateChange(state) {
 }
 ```
 
-If the streams of the `requestedPermissions` array do not exist in the user's account upon authentication, they are created, the `defaultName` field serving as `name` for the [data structure](https://api.pryv.com/reference/#stream).
+The streams of the `requestedPermissions` array are created in the [Collect survey data tutorial](collect-survey-data/tutorial.md).
 
 The auth request is done on page load, except when the shared data is loaded by a third-party:
 
@@ -107,7 +111,7 @@ window.onload = async (event) => {
 
 ## Load data
 
-Once the user is signed in, data from his Pryv.io account is fetched. If there is no data, a warning is displayed to invite the user to fill in the form from the previous [tutorial](collect-survey-data/tutorial.md) on **Simple Form** creation.
+Once the user is signed in, data from his Pryv.io account is fetched. If there is no data, a warning is displayed to invite the user to fill in the form from the previous [tutorial](collect-survey-data/tutorial.md) on **Survey data collection**.
 
 ```javascript
 async function loadData() {
@@ -137,7 +141,7 @@ Data from both "Baby-Body" and "Heart" streams is presented in a tabular form:
     updateSharings();
 }
 ```
-The sharings of the user are also displayed using the function **updateSharings()** that performs a **get.accesses** API call:
+The sharings of the user are also displayed using the function **updateSharings()** that performs a [get.accesses](https://api.pryv.com/reference/#get-accesses) API call:
 
 ```javascript
 async function updateSharings() {
@@ -197,7 +201,7 @@ It will package those values into an [accesses.create](https://api.pryv.com/refe
 
 This call is made using [Connection.api()](https://github.com/pryv/lib-js#api-calls) method.
 
-Similarly, 
+Similarly, the function **deleteSharing()** enables to delete the selected access by the user by performing an [accesses.delete](https://api.pryv.com/reference/#delete-access) API call.
 
 ```javascript
 
@@ -207,13 +211,6 @@ async function deleteSharing(accessId) {
   updateSharings();
 }
 ```
-
-
-
-
-
-
-------------------
 
 ## App guidelines
 
@@ -225,8 +222,8 @@ const serviceInfoUrl = Pryv.Browser.serviceInfoFromUrl() || 'https://reg.pryv.m
 
 To set a custom Pryv.io platform, provide the service information URL as shown here for the Pryv Lab:
 
-[https://pryv.github.io/app-web-examples/collect-survey-data/?pryvServiceInfoUrl=https://reg.pryv.me/service/info](https://pryv.github.io/app-web-examples/collect-survey-data/?pryvServiceInfoUrl=https://reg.pryv.me/service/info)
+[https://pryv.github.io/app-web-examples/view-and-share/?pryvServiceInfoUrl=https://reg.pryv.me/service/info](https://pryv.github.io/app-web-examples/view-and-share/?pryvServiceInfoUrl=https://reg.pryv.me/service/info)
 
  To launch this app on your [local Open Pryv.io platform](https://github.com/pryv/open-pryv.io#development) use (the link requires to have a running Open Pryv.io with the rec-la SSL proxy):
 
-[https://pryv.github.io/app-web-examples/collect-survey-data/?pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info](https://pryv.github.io/app-web-examples/collect-survey-data/?pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info).
+[https://pryv.github.io/app-web-examples/view-and-share/?pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info](https://pryv.github.io/app-web-examples/view-and-share/?pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info).
