@@ -5,7 +5,7 @@ All you need to run this app is to download [index.html](index.html) and [script
 
 This is a visualization and sharing web app that first displays a welcome message and a button to initiate the authentication process.
 <p align="center">
-<img src="images/login.png" alt="login" width="700"/>
+<img src="images/login.png" alt="login" />
 </p>
 
 
@@ -20,7 +20,7 @@ Once you have accepted, it displays the saved data of your baby's weight and you
 You can choose to share this data by creating a new sharing at the bottom of the page. This will generate a URL link that contains the shared streams ("Baby-Body", "Heart" or both).
 
 <p align="center">
-<img src="images/new-sharing.png" alt="new-sharing" width=600 />
+<img src="images/new-sharing.png" alt="new-sharing" />
 </p>
 
 
