@@ -22,7 +22,7 @@ In this web app, you provide her with a tool to visualize data from her account 
 
 ## Data structure
 
-This use case implies the stream structure from the example "Collect Survey Data" as illustrated below.
+This use case implies the stream structure from the example [Collect Survey Data](collect-survey-data/README.md) as illustrated below.
 
 The app "pryv-example-view-and-share" first requests an access on the streams "Baby" and "Body" with a "read" level in order to be able to display the events contained in these streams:
 

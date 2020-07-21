@@ -5,19 +5,24 @@ All you need to run this app is to download [index.html](index.html) and [script
 
 This is a visualization and sharing web app that first displays a welcome message and a button to initiate the authentication process.
 <p align="center">
-<img src="images/login.png" alt="login" width="300"/>
+<img src="images/login.png" alt="login" width="700"/>
 </p>
 
 
 With click on the login button, a popup opens in your browser where you can either authenticate or create a new account. 
 
-When signed in, you can consent to give the app access to the streams "Baby-Body" and "Heart" where the data from the form (see tutorial on form creation and data collection [here](collect-survey-data/tutorial.md)) is stored.
+When signed in, you can consent to give the app access to the streams "Body" and "Baby" where the data from the form (see [tutorial "Collect survey data"](collect-survey-data/tutorial.md)) is stored.
 <p align="center">
-<img src="images/request-permissions.png" alt="request-permissions" width=300 />
+<img src="images/request-permissions.png" alt="request-permissions" width=250 />
 </p>
 Once you have accepted, it displays the saved data of your baby's weight and your own blood pressure.
 
 You can choose to share this data by creating a new sharing at the bottom of the page. This will generate a URL link that contains the shared streams ("Baby-Body", "Heart" or both).
+
+<p align="center">
+<img src="images/new-sharing.png" alt="new-sharing" width=600 />
+</p>
+
 
 ## Customize the display of the data
 
