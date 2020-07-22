@@ -93,14 +93,16 @@ async function loadData() {
   // grab data lists
   const babyDataTable = document.getElementById('baby-weight-table');
   const heartDataTable = document.getElementById('blood-pressure-table');
+  babyDataTable.style.visibility = 'collapse';
+  heartDataTable.style.visibility = 'collapse';
   for (const event of events) {
     if (event.streamIds.includes('baby-body') && event.type === 'mass/kg') { // get 'mass/kg' events from the stream 'Baby-Body'
       addTableEvent(babyDataTable, event, [event.content + ' Kg']);
+      babyDataTable.style.visibility = 'visible';
     }
     if (event.streamIds.includes('heart') && event.type === 'blood-pressure/mmhg-bpm') { // get 'blood-pressure/mmhg-bpm' events from the stream 'Heart'
-
-      addTableEvent(heartDataTable, event, 
-        [event.content.systolic + 'mmHg', event.content.diastolic + 'mmHg']);
+      addTableEvent(heartDataTable, event, [event.content.systolic + 'mmHg', event.content.diastolic + 'mmHg']);
+      heartDataTable.style.visibility = 'visible';
     }
   }
   if (! apiEndpoint) // display sharings only when logged-in
