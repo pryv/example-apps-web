@@ -196,10 +196,6 @@ It will package those values into an [accesses.create](https://api.pryv.com/refe
         permissions: permissions
       }
   }]);
-  if (res[0].error) {
-    alert(JSON.stringify(res[0].error, null, 2));
-    return;
-  }
   updateSharings();
 }
 ```
@@ -212,7 +208,13 @@ Similarly, the function **deleteSharing()** enables to delete the selected acces
 
 async function deleteSharing(accessId) {
   if (! confirm('delete?')) return;
-  await connection.api([{method: 'accesses.delete', params: {id: accessId}}]);
+  await connection.api([
+    {
+      method: 'accesses.delete', 
+      params: {
+        id: accessId}
+    }
+  ]);
   updateSharings();
 }
 ```
@@ -224,7 +226,6 @@ Following our [app guidelines](https://api.pryv.com/guides/app-guidelines/), we 
 ```javascript
 const serviceInfoUrl = Pryv.Browser.serviceInfoFromUrl() || 'https://reg.pryv.me/service/info';
 ```
-
 To set a custom Pryv.io platform, provide the service information URL as shown here for the Pryv Lab:
 
 [https://pryv.github.io/app-web-examples/view-and-share/?pryvServiceInfoUrl="https://reg.pryv.me/service/info"](https://pryv.github.io/app-web-examples/view-and-share/?pryvServiceInfoUrl=%22https://reg.pryv.me/service/info%22)
