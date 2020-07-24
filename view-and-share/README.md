@@ -4,7 +4,7 @@ Web app for data visualization & sharing with third parties.
 
 ## Story
 
-In the previous tutorial [Collect Survey Data](https://github.com/pryv/app-web-examples/tree/master/collect-survey-data), you have collected and stored data from the mother in her Pryv.io account when she answered the example survey.
+In the previous tutorial [Collect Survey Data](https://github.com/pryv/app-web-examples/tree/master/collect-survey-data/), you have collected and stored data from the mother in her Pryv.io account when she answered the example survey.
 
 In this web app, you provide her with a tool to visualize data from her account and to share it with third parties.
 
