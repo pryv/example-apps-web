@@ -75,7 +75,9 @@ window.onload = async (event) => {
     let displayUsername = apiEndpoint.split('@')[1];
     if (displayUsername[displayUsername.length - 1] == '/') displayUsername = displayUsername.slice(0,-1);
     document.getElementById('username').innerText = displayUsername;
-    showData();  
+    showData();
+    document.getElementById('sharing-view').style.display = 'none';
+    document.getElementById('sharing-view').style.visibility = 'hidden';
   } else { // we propose a login
     service = await Pryv.Browser.setupAuth(authSettings, serviceInfoUrl);
 
