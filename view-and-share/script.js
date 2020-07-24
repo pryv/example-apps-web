@@ -70,8 +70,11 @@ window.onload = async (event) => {
   
   if (apiEndpoint != null) { // if apiEndpoint then we are in "View only mode"
     document.getElementById('welcome-message-mme').style.visibility = 'hidden';
+    document.getElementById('welcome-message-viewer').style.visibility = 'visible';
     connection = new Pryv.Connection(apiEndpoint);
-    document.getElementById('username').innerText = apiEndpoint.split('@')[1].slice(0,-1);
+    let displayUsername = apiEndpoint.split('@')[1];
+    if (displayUsername[displayUsername.length - 1] == '/') displayUsername = displayUsername.slice(0,-1);
+    document.getElementById('username').innerText = displayUsername;
     showData();  
   } else { // we propose a login
     service = await Pryv.Browser.setupAuth(authSettings, serviceInfoUrl);
