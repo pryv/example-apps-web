@@ -17,6 +17,10 @@ When signed in, you can consent to give the app access to the streams "Body" and
 </p>
 Once you have accepted, it displays the saved data of your baby's weight and your own blood pressure.
 
+<p align="center">
+<img src="images/babydata.png" alt="babydata" />
+</p>
+
 You can choose to share this data by creating a new sharing at the bottom of the page. This will generate a URL link that contains the shared streams ("Baby-Body", "Heart" or both).
 
 <p align="center">

@@ -17,7 +17,7 @@ In this web app, you provide her with a tool to visualize data from her account 
 - Ask for login
 - Request access for the app "pryv-example-view-and-share" to read the streams "Baby" and "Body"
 - Display the data
-- Create or delete a sharing (URL or email) to a third party
+- Create or delete a sharing to a third party
 - Display shared data 
 
 ## Data structure
