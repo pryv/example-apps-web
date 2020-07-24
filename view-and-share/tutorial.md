@@ -3,15 +3,15 @@
 
 All you need to run this app is to download [index.html](index.html) and [script.js](script.js) files and open **index.html** with your browser.
 
-This is a visualization and sharing web app that first displays a welcome message and a button to initiate the authentication process.
+This is a data visualization and sharing web app that first displays a welcome message and a button to initiate the authentication process.
 <p align="center">
 <img src="images/login.png" alt="login" />
 </p>
 
 
-With click on the login button, a popup opens in your browser where you can either authenticate or create a new account. 
+With a click on the login button, a popup opens in your browser where you can either authenticate or create a new account. 
 
-When signed in, you can consent to give the app access to the streams "Body" and "Baby" where the data from the form (see [tutorial "Collect survey data"](collect-survey-data/tutorial.md)) is stored.
+When signed in, you can consent to give the app access to the streams "Body" and "Baby" where the data from the form (see ["Collect survey data"](collect-survey-data) example) is stored.
 <p align="center">
 <img src="images/request-permissions.png" alt="request-permissions" width=250 />
 </p>
@@ -78,56 +78,60 @@ var authSettings = {
   }
 };
 
-function pryvAuthStateChange(state) { 
+function pryvAuthStateChange(state) {
   console.log('##pryvAuthStateChange', state);
   if (state.id === Pryv.Browser.AuthStates.AUTHORIZED) {
-    resetData();
-    document.getElementById('please-login').style.visibility = 'hidden';
-    document.getElementById('data-view').style.visibility = 'visible';
-    document.getElementById('sharing-view').style.visibility = 'visible';
-    username = state.displayName; 
     connection = new Pryv.Connection(state.apiEndpoint);
-    loadData();
+    username = state.displayName; 
+    showData();
   }
   if (state.id === Pryv.Browser.AuthStates.INITIALIZED) {
-    document.getElementById('please-login').style.visibility = 'visible';
-    document.getElementById('data-view').style.visibility = 'hidden';
-    document.getElementById('sharing-view').style.visibility = 'hidden';
     connection = null;
-    resetData();
+    showLoginMessage();
   }
+}
+
+async function showData() {
+  resetData();
+  document.getElementById('please-login').style.visibility = 'hidden';
+  document.getElementById('data-view').style.display = '';
+  document.getElementById('data-view').style.visibility = 'visible';
+  document.getElementById('sharing-view').style.display = '';
+  document.getElementById('sharing-view').style.visibility = 'visible';
+  await loadData();
+}
+
+function showLoginMessage() {
+  resetData();
+  document.getElementById('please-login').style.visibility = 'visible';
+  document.getElementById('data-view').style.display = 'none';
+  document.getElementById('data-view').style.visibility = 'hidden';
+  document.getElementById('sharing-view').style.display = 'none';
+  document.getElementById('sharing-view').style.visibility = 'hidden';
 }
 ```
 
-The streams of the `requestedPermissions` array are created in the [Collect survey data tutorial](collect-survey-data/tutorial.md).
+The root streams of the `requestedPermissions` array are created if they don't exist yet. They will already be populated with events data if you ran the [Collect survey data example](collect-survey-data) previously.
 
 The auth request is done on page load, except when the shared data is loaded by a third-party:
 
 ```javascript
 window.onload = async (event) => {
-  if (apiEndpoint) {
-    document.getElementById('welcome-message-mme').style.visibility = 'hidden';
-    document.getElementById('please-login').style.visibility = 'hidden';
-    document.getElementById('data-view').style.visibility = 'visible';
-    document.getElementById('welcome-message-viewer').style.visibility = 'visible';
-    document.getElementById('username').innerText = apiEndpoint.split('@')[1].slice(0,-1);
-    connection = new Pryv.Connection(apiEndpoint);
-    loadData();
-  } else { 
-    service = await Pryv.Browser.setupAuth(authSettings, serviceInfoUrl);
+  // ...	
+  service = await Pryv.Browser.setupAuth(authSettings, serviceInfoUrl);
 };
 ```
 
 ## Load data
 
-Once the user is signed in, data from his Pryv.io account is fetched. If there is no data, a warning is displayed to invite the user to fill in the form from the previous [tutorial](collect-survey-data/tutorial.md) on **Survey data collection**.
+Once the user is signed in, data from his Pryv.io account is fetched. If there is no data, a warning is displayed to invite the user to fill in the form from the previous [example](collect-survey-data) on **Survey data collection**.
 
 ```javascript
 async function loadData() {
   const result = await connection.api([{method: 'events.get', params: {limit: 40}}]);
   const events = result[0].events;
   if (! events || events.length === 0) {
-    alert('There is no data to show. Use the example "simple-form" first');
+    alert('There is no data to show. Use the Collect survey data example first');
     return;
   }
 ```
@@ -141,12 +145,11 @@ Data from both "Baby-Body" and "Heart" streams is presented in a tabular form:
       addTableEvent(babyDataTable, event, [event.content + ' Kg']);
     }
     if (event.streamIds.includes('heart') && event.type === 'blood-pressure/mmhg-bpm') {
-
       addTableEvent(heartDataTable, event, 
         [event.content.systolic + 'mmHg', event.content.diastolic + 'mmHg']);
     }
   }
-  if (! apiEndpoint)
+	if (apiEndpoint == null)
     updateSharings();
 }
 ```
@@ -156,7 +159,6 @@ The sharings of the user are also displayed using the function **updateSharings(
 async function updateSharings() {
   const result = await connection.api([{ method: 'accesses.get', params: {}}]);
   const sharingTable = document.getElementById('sharings-table');
-  console.log(result);
   const accesses = result[0].accesses;
   if (! accesses || accesses.length === 0) {
     return;
@@ -179,7 +181,7 @@ window.onload = (event) => {
 };
 ```
 
-This will fetch values for the scope of the sharing ('streamId' and 'level' for permissions):
+This will fetch values for the scope of the sharing ('streamId' for permissions):
 
 ```javascript
 const checkBaby = document.getElementById('check-baby').checked;
@@ -206,7 +208,7 @@ It will package those values into an [accesses.create](https://api.pryv.com/refe
 
 This call is made using [Connection.api()](https://github.com/pryv/lib-js#api-calls) method.
 
-Similarly, the function **deleteSharing()** enables to delete the selected access by the user by performing an [accesses.delete](https://api.pryv.com/reference/#delete-access) API call.
+In the same way, the function **deleteSharing()** enables to delete the selected access by the user by performing an [accesses.delete](https://api.pryv.com/reference/#delete-access) API call.
 
 ```javascript
 
@@ -225,6 +227,8 @@ async function deleteSharing(accessId) {
 
 ## App guidelines
 
+### Custom service info
+
 Following our [app guidelines](https://api.pryv.com/guides/app-guidelines/), we build apps that can work for multiple Pryv.io platforms providing a `serviceInfoUrl` query parameter:
 
 ```javascript
@@ -237,3 +241,22 @@ To set a custom Pryv.io platform, provide the service information URL as shown h
  To launch this app on your [local Open Pryv.io platform](https://github.com/pryv/open-pryv.io#development) use (the link requires to have a running Open Pryv.io with the rec-la SSL proxy):
 
 [https://api.pryv.com/app-web-examples/view-and-share/?pryvServiceInfoUrl="https://my-computer.rec.la:4443/reg/service/info"](https://api.pryv.com/app-web-examples/view-and-share/?pryvServiceInfoUrl=%22https://my-computer.rec.la:4443/reg/service/info%22). 
+
+### Authenticated API endpoint
+
+You can also load the app already authenticated, by providing the `pryvApiEndpoint` query parameter. For example:
+
+[https://api.pryv.com/app-web-examples/view-and-share/?pryvApiEndpoint=https://ckbry9n6h009o1od3qiv3qz7u@mariana.pryv.me/](https://api.pryv.com/app-web-examples/view-and-share/?pryvApiEndpoint=https://ckbry9n6h009o1od3qiv3qz7u@mariana.pryv.me/)
+
+```javascript
+window.onload = async (event) => {
+  if (apiEndpoint != null) {
+    document.getElementById('welcome-message-mme').style.visibility = 'hidden';
+    connection = new Pryv.Connection(apiEndpoint);
+    document.getElementById('username').innerText = apiEndpoint.split('@')[1].slice(0,-1);
+    showData();  
+  }
+  // ...
+};
+```
+

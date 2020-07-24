@@ -29,22 +29,35 @@ var authSettings = {
 function pryvAuthStateChange(state) { // called each time the authentication state changes
   console.log('##pryvAuthStateChange', state);
   if (state.id === Pryv.Browser.AuthStates.AUTHORIZED) {
-    resetData();
-    document.getElementById('please-login').style.visibility = 'hidden';
-    document.getElementById('data-view').style.visibility = 'visible';
-    document.getElementById('sharing-view').style.visibility = 'visible';
-    username = state.displayName; 
     connection = new Pryv.Connection(state.apiEndpoint);
-    loadData();
+    username = state.displayName; 
+    showData();
   }
   if (state.id === Pryv.Browser.AuthStates.INITIALIZED) {
-    document.getElementById('please-login').style.visibility = 'visible';
-    document.getElementById('data-view').style.visibility = 'hidden';
-    document.getElementById('sharing-view').style.visibility = 'hidden';
     connection = null;
-    resetData();
+    showLoginMessage();
   }
 }
+
+async function showData() {
+  resetData();
+  document.getElementById('please-login').style.visibility = 'hidden';
+  document.getElementById('data-view').style.display = '';
+  document.getElementById('data-view').style.visibility = 'visible';
+  document.getElementById('sharing-view').style.display = '';
+  document.getElementById('sharing-view').style.visibility = 'visible';
+  await loadData();
+}
+
+function showLoginMessage() {
+  resetData();
+  document.getElementById('please-login').style.visibility = 'visible';
+  document.getElementById('data-view').style.display = 'none';
+  document.getElementById('data-view').style.visibility = 'hidden';
+  document.getElementById('sharing-view').style.display = 'none';
+  document.getElementById('sharing-view').style.visibility = 'hidden';
+}
+
 
 // following the APP GUIDELINES: https://api.pryv.com/guides/app-guidelines/
 const urlParams = new URLSearchParams(window.location.search);
@@ -55,14 +68,16 @@ var service = null; // will be initialized after setupAuth;
 var username = null; // will be inialized after AUTHORIZED auth State is received
 window.onload = async (event) => {
   
-  if (apiEndpoint) { // if apiEndpoint then we are in "View only mode"
+  if (apiEndpoint != null) { // if apiEndpoint then we are in "View only mode"
     document.getElementById('welcome-message-mme').style.visibility = 'hidden';
-    document.getElementById('please-login').style.visibility = 'hidden';
-    document.getElementById('data-view').style.visibility = 'visible';
     document.getElementById('welcome-message-viewer').style.visibility = 'visible';
-    document.getElementById('username').innerText = apiEndpoint.split('@')[1].slice(0,-1);
     connection = new Pryv.Connection(apiEndpoint);
-    loadData();
+    let displayUsername = apiEndpoint.split('@')[1];
+    if (displayUsername[displayUsername.length - 1] == '/') displayUsername = displayUsername.slice(0,-1);
+    document.getElementById('username').innerText = displayUsername;
+    showData();
+    document.getElementById('sharing-view').style.display = 'none';
+    document.getElementById('sharing-view').style.visibility = 'hidden';
   } else { // we propose a login
     service = await Pryv.Browser.setupAuth(authSettings, serviceInfoUrl);
 
@@ -87,7 +102,7 @@ async function loadData() {
   const result = await connection.api([{method: 'events.get', params: {limit: 40}}]); // get events from the Pryv.io account
   const events = result[0].events;
   if (! events || events.length === 0) {
-    alert('There is no data to show. Use the example "simple-form" first');
+    alert('There is no data to show. Use the Collect survey data example first');
     return;
   }
   // grab data lists
@@ -105,7 +120,7 @@ async function loadData() {
       heartDataTable.style.visibility = 'visible';
     }
   }
-  if (! apiEndpoint) // display sharings only when logged-in
+  if (apiEndpoint == null) // display sharings only when logged-in
     updateSharings();
 }
 function addTableEvent(table, event, items) {
@@ -130,7 +145,6 @@ async function updateSharings() {
     }
   ]); 
   const sharingTable = document.getElementById('sharings-table');
-  console.log(result);
   const accesses = result[0].accesses;
   if (! accesses || accesses.length === 0) {
     return;
@@ -142,9 +156,9 @@ async function updateSharings() {
 }
 
 async function createSharing() {
-  const checkBaby = document.getElementById('check-baby').checked;
-  const checkBP = document.getElementById('check-bp').checked;
-  if (! checkBP && ! checkBaby) { 
+  const isBabyChecked = document.getElementById('check-baby').checked;
+  const isBPChecked = document.getElementById('check-bp').checked;
+  if (! isBPChecked && ! isBabyChecked) { 
     alert('Check at least one of the streams "Baby-Body" or "Heart"');
     return;
   }
@@ -155,8 +169,8 @@ async function createSharing() {
   }
   // set permissions
   const permissions = [];
-  if (checkBaby) permissions.push({streamId: 'baby-body', level: 'read'});
-  if (checkBP) permissions.push({ streamId: 'heart', level: 'read' });
+  if (isBabyChecked) permissions.push({streamId: 'baby-body', level: 'read'});
+  if (isBPChecked) permissions.push({ streamId: 'heart', level: 'read' });
 
   const res = await connection.api([ // https://github.com/pryv/lib-js#api-calls
     { 
@@ -166,11 +180,20 @@ async function createSharing() {
         permissions: permissions
       }
   }]);
-  if (res[0].error) {
-    alert(JSON.stringify(res[0].error, null, 2));
+  const error = res[0].error;
+  if (error != null) {
+    displayError(error);
     return;
   }
   updateSharings();
+
+  function displayError(error) {
+    let message = error.message;
+    if (error.id.includes('forbidden')) {
+      message = `${error.message} Please use the Collect survey data example first.`
+    }
+    alert(JSON.stringify(message, null, 2));
+  }
 }
 
 async function addListAccess(table, access) { // add permissions to the sharings table

@@ -4,7 +4,7 @@ Web app for data visualization & sharing with third parties.
 
 ## Story
 
-In the previous tutorial [Collect Survey Data](https://github.com/pryv/app-web-examples/tree/master/collect-survey-data/), you have collected and stored data from the mother in her Pryv.io account when she answered the example survey.
+In the previous tutorial [Collect Survey Data](https://github.com/pryv/app-web-examples/tree/master/collect-survey-data), you have collected and stored data from the mother in her Pryv.io account when she took the example survey.
 
 In this web app, you provide her with a tool to visualize data from her account and to share it with third parties.
 
@@ -31,14 +31,15 @@ The app "pryv-example-view-and-share" first requests an access on the streams "B
 ## Display data
 
 Data from the streams "Baby-Body" and "Heart" is fetched by the app and displayed in a table form.
-The weight of the baby and the blood pressure are presented along with the time and date of the measurement, that is converted from milliseconds to ISO 8601 format.
+The weight of the baby and the blood pressure are presented along with the time and date of the measurement, that is converted from Unix Epoch to ISO 8601 format.
 
 ## Data sharing
 
-Either one of the streams "Baby-Body" or "Heart", or both streams, can be shared with third-parties. This translates into a 'read' access to the shared stream. The sharing consists in a link that can be communicated directly to the third party of the user's choice or by email.
+Either one of the streams "Baby-Body" or "Heart", or both streams, can be shared with third-parties. This translates into a 'read' access to the shared stream. The sharing consists in a link that can be communicated directly or by email to a third party.
 When opened, it displays the data within the scope of the sharing. 
 
 ## Next steps
 
 You can check out the tutorial to view and share data with third parties :
+
 - [View and Share Tutorial](tutorial.md)
