@@ -124,8 +124,9 @@ async function loadData() {
     updateSharings();
 }
 function addTableEvent(table, event, items) {
+  function pad(n) { return n < 10 ? '0' + n : n }
   const date = new Date(event.time * 1000); // add date of the fetched events
-  const dateText = date.getFullYear() + '/' + date.getMonth() + '/' + date.getDay() + ' ' + date.getHours() + ':' + date.getMinutes();
+  const dateText = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + ' ' + pad(date.getHours()) + ':' + pad(date.getMinutes());
 
   const row = table.insertRow(-1);
   row.insertCell(-1).innerHTML = dateText;
