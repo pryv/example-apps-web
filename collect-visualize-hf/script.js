@@ -10,12 +10,14 @@ let drawingField,
     drawingCanvas,
     drawingCtx,
     hiddenCanvas,
-    hiddenCtx;
+    hiddenCtx,
+    frequencyMouse;
 
 let accelerometerCanvas,
     accelerometerRecordCounter,
     accelerometerButtonShow,
-    recordSelect;
+    recordSelect,
+    frequencyAccelerometer;
 
 let rendererCollect,
     cubeCollect,
@@ -68,11 +70,15 @@ var pryvHF = {
 
 let fromTime = 0;
 let samplePostMs = 100;
-let pullSerieFrequencyMs = 1000;
+let delayIfEmptyBatch = 1000;
 let images = [];
+let recordings = [];
 let image_index = -1;
 let isMobile = 0;
 let is_recording;
+let length_last_batch;
+let pointsSecondMouse = 0;
+let pointsSecondAccelerometer = 0;
 
 const samplingAccRate = 30;
 
@@ -91,6 +97,16 @@ window.onload = (event) => {
     accelerometerCollector = document.getElementById('accelerometer-collect');
     accelerometerVisu = document.getElementById('accelerometer-visualization');
 
+    frequency();
+    let queryString = window.location.search;
+    if (queryString) {
+        const urlParams = new URLSearchParams(queryString);
+        const apiEndpoint = urlParams.get('apiEndpoint');
+        if (apiEndpoint) {
+            buildVisualizationOnly(apiEndpoint, urlParams);
+            return;
+        }
+    }
     buildServiceInfo();
 
     if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent) ||
@@ -107,6 +123,7 @@ window.onload = (event) => {
         accelerometerVisu.style.display = "none";
         buildDesktop();
     }
+    fetchServiceInfo();
     samplePost();
     fetch();
 };
@@ -187,12 +204,27 @@ function buildDesktop() {
 
     button_current = document.getElementById('current');
     button_current.addEventListener('click', current_context);
+    changeColorCurrentButton();
 
     button_previous = document.getElementById('previous');
     button_previous.addEventListener('click', previousImage);
 
     button_next = document.getElementById('next');
     button_next.addEventListener('click', nextImage);
+
+    frequencyMouse = document.getElementById('frequency-mouse');
+
+}
+
+function changeColorCurrentButton() {
+    if (is_display_current_canvas) {
+        button_current.style.backgroundColor = "grey";
+        button_current.style.color = "black";
+    } else {
+        button_current.style.backgroundColor = "#F0F0F0";
+        button_current.style.color = "black";
+    }
+
 
 }
 
@@ -274,6 +306,7 @@ function createCanvas(width, height) {
 
 function current_context() {
     is_display_current_canvas = true;
+    changeColorCurrentButton();
     clearCtx(renderCtx);
     renderCtx.drawImage(hiddenCanvas, 0, 0);
 }
@@ -295,6 +328,7 @@ function nextImage() {
 
 function displayImage(is_previous) {
     is_display_current_canvas = false;
+    changeColorCurrentButton();
     index(is_previous);
     clearCtx(renderCtx);
     if (image_index >= 0) {
@@ -340,6 +374,8 @@ function buildMobile() {
     accelerometerButtonShow.addEventListener('click', showRecording);
 
     recordSelect = document.getElementById('recording-select');
+
+    frequencyAccelerometer = document.getElementById('frequency-accelerometer');
 }
 
 function samplingButton(e) {
@@ -379,7 +415,7 @@ function create3DCanvas(canvasProperty) {
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(
         75,
-        window.innerWidth / window.innerHeight,
+        0.5349182763744428,
         0.1,
         1000
     );
@@ -428,15 +464,15 @@ function recordAccelerometer(pointsAlpha, pointsBeta, pointsGamma, l) {
             currentRecording = [];
         } else if (pointsAlpha[i] == IMAGE_END) {
             //Add option to the select
-            let index = images.length;
+            let index = recordings.length;
             let opt = document.createElement('option');
             opt.appendChild(document.createTextNode('Recording ' + index));
             opt.value = index;
             recordSelect.appendChild(opt);
 
             // Push new recording in images
-            images.push(currentRecording);
-            accelerometerRecordCounter.innerHTML = 'Number of stored recordings: ' + images.length;
+            recordings.push(currentRecording);
+            accelerometerRecordCounter.innerHTML = 'Number of stored recordings: ' + recordings.length;
         }
     }
 }
@@ -448,7 +484,7 @@ function showRecording() {
         return;
     }
     let time = 0;
-    let recording = images[selected];
+    let recording = recordings[selected];
     for (let i = 0; i < recording.length; i++) {
         let point = recording[i];
         time = samplingAccRate * i;
@@ -458,6 +494,47 @@ function showRecording() {
             cubeGammaVisu = point[2];
         }, time);
     }
+}
+
+/* Visualization only */
+function buildVisualizationOnly(apiEndpoint, urlParams) {
+    pryvHF.pryvConn = new Pryv.Connection(apiEndpoint);
+    const eventId_mouseX = urlParams.get('posXEventId');
+    const eventId_mouseY = urlParams.get('posYEventId');
+
+    if (eventId_mouseX && eventId_mouseY) {
+        pryvHF.measures.mouseX.event = {
+            "id": eventId_mouseX
+        };
+        pryvHF.measures.mouseY.event = {
+            "id": eventId_mouseY
+        };
+        buildDesktop();
+    } else {
+        mouseVisu.style.display = "none";
+    }
+    const eventId_alpha = urlParams.get('angleAEventId');
+    const eventId_beta = urlParams.get('angleBEventId');
+    const eventId_gamma = urlParams.get('angleYEventId');
+    if (eventId_alpha && eventId_beta && eventId_gamma) {
+        pryvHF.measures.orientationAlpha.event = {
+            "id": eventId_alpha
+        };
+        pryvHF.measures.orientationBeta.event = {
+            "id": eventId_beta
+        };
+        pryvHF.measures.orientationGamma.event = {
+            "id": eventId_gamma
+        };
+        buildMobile();
+    } else {
+        accelerometerVisu.style.display = "none";
+    }
+    document.getElementById('service').style.display = "none";
+    mouseTracker.style.display = "none";
+    accelerometerCollector.style.display = "none";
+    fetch();
+
 }
 
 
@@ -643,6 +720,7 @@ function setupConnection(connection) {
             null,
             function handleCreateEventX(result) {
                 pryvHF.measures.mouseX.event = result.event;
+
                 console.log('handle xEvent set', result.event);
             },
             null,
@@ -705,16 +783,22 @@ function postBatch(connection, measures) {
 }
 
 /* Pull info from Pryv */
-function fetch() {
+async function fetch() {
+    length_last_batch = 0;
     if (pryvHF.measures.mouseX.event) {
-        fetchSerieMouse();
-    } else if (pryvHF.measures.orientationGamma.event) {
-        fetchSerieAccelerometer();
+        await fetchSerieMouse();
     }
-    setTimeout(fetch, pullSerieFrequencyMs);
+    if (pryvHF.measures.orientationGamma.event) {
+        await fetchSerieAccelerometer();
+    }
+    if (length_last_batch) {
+        fetch()
+    } else {
+        setTimeout(fetch, delayIfEmptyBatch);
+    }
 }
 
-function fetchSerieMouse() {
+async function fetchSerieMouse() {
     let queryParams = {
         fromDeltaTime: (fromTime + 0.0001)
     }
@@ -722,17 +806,23 @@ function fetchSerieMouse() {
     let pathY = 'events/' + pryvHF.measures.mouseY.event.id + '/series';
     let resultX = pryvHF.pryvConn.get(pathX, queryParams);
     let resultY = pryvHF.pryvConn.get(pathY, queryParams);
-    Promise.all([resultX, resultY]).then(([pointsX, pointsY]) => {
-        l = Math.min(pointsX.points.length, pointsY.points.length);
-        let lastValue = pointsX.points[l - 1];
-        if (lastValue) {
-            fromTime = pointsX.points[l - 1][0];
-            draw(pointsX.points, pointsY.points, l);
-        }
-    })
+    try {
+        await Promise.all([resultX, resultY]).then(([pointsX, pointsY]) => {
+            let l = Math.min(pointsX.points.length, pointsY.points.length);
+            length_last_batch += l;
+            pointsSecondMouse += l;
+            let lastValue = pointsX.points[l - 1];
+            if (lastValue) {
+                fromTime = pointsX.points[l - 1][0];
+                draw(pointsX.points, pointsY.points, l);
+            }
+        });
+    } catch (error) {
+        alert("Error to fetch data");
+    }
 }
 
-function fetchSerieAccelerometer() {
+async function fetchSerieAccelerometer() {
     let queryParams = {
         fromDeltaTime: (fromTime + 0.0001)
     }
@@ -742,29 +832,49 @@ function fetchSerieAccelerometer() {
     let resultGamma = pryvHF.pryvConn.get(pathGamma, queryParams);
     let resultBeta = pryvHF.pryvConn.get(pathBeta, queryParams);
     let resultAlpha = pryvHF.pryvConn.get(pathAlpha, queryParams);
-    Promise.all([resultGamma, resultBeta, resultAlpha]).then(([pointsGamma, pointsBeta, pointsAlpha]) => {
-        l = Math.min(pointsGamma.points.length, pointsBeta.points.length, pointsAlpha.points.length);
-        if (l) {
-            fromTime = pointsGamma.points[l - 1][0];
-            pointsGamma = pointsGamma.points.map(([timestamp, x]) => {
-                if (x == IMAGE_START || x == IMAGE_END) {
-                    return x;
-                }
-                return THREE.Math.degToRad(x)
-            });
-            pointsBeta = pointsBeta.points.map(([timestamp, x]) => {
-                if (x == IMAGE_START || x == IMAGE_END) {
-                    return x;
-                }
-                return THREE.Math.degToRad(x)
-            });
-            pointsAlpha = pointsAlpha.points.map(([timestamp, x]) => {
-                if (x == IMAGE_START || x == IMAGE_END) {
-                    return x;
-                }
-                return THREE.Math.degToRad(x);
-            });
-            recordAccelerometer(pointsAlpha, pointsBeta, pointsGamma, l);
+    try {
+        await Promise.all([resultGamma, resultBeta, resultAlpha]).then(([pointsGamma, pointsBeta, pointsAlpha]) => {
+            let l = Math.min(pointsGamma.points.length, pointsBeta.points.length, pointsAlpha.points.length);
+            length_last_batch += l;
+            pointsSecondAccelerometer += l;
+            if (l) {
+                fromTime = pointsGamma.points[l - 1][0];
+                pointsGamma = pointsGamma.points.map(([timestamp, x]) => {
+                    if (x == IMAGE_START || x == IMAGE_END) {
+                        return x;
+                    }
+                    return THREE.Math.degToRad(x)
+                });
+                pointsBeta = pointsBeta.points.map(([timestamp, x]) => {
+                    if (x == IMAGE_START || x == IMAGE_END) {
+                        return x;
+                    }
+                    return THREE.Math.degToRad(x)
+                });
+                pointsAlpha = pointsAlpha.points.map(([timestamp, x]) => {
+                    if (x == IMAGE_START || x == IMAGE_END) {
+                        return x;
+                    }
+                    return THREE.Math.degToRad(x);
+                });
+                recordAccelerometer(pointsAlpha, pointsBeta, pointsGamma, l);
+            }
+        });
+    } catch (error) {
+        alert("Error to fetch data");
+    }
+}
+
+function frequency() {
+    if (pryvHF.pryvConn) {
+        if (pryvHF.measures.mouseX.event) {
+            frequencyMouse.innerHTML = "Fetch frequency: " + pointsSecondMouse + " points/s"
         }
-    })
+        if (pryvHF.measures.orientationGamma.event) {
+            frequencyAccelerometer.innerHTML = "Fetch frequency: " + pointsSecondAccelerometer + " points/s"
+        }
+        pointsSecondMouse = 0;
+        pointsSecondAccelerometer = 0;
+    }
+    setTimeout(frequency, 1000);
 }

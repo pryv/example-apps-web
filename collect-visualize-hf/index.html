@@ -28,7 +28,7 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card" id="service">
                 <div class="card-body">
                     <button class="collapsible">
             Service information
@@ -90,6 +90,8 @@
                     <br />
                     <p>Click on previous/next to see the saved images. Click on current to see the current drawing.</p>
                     <br />
+                    <span id="frequency-mouse"></span>
+                    <br/>
                     <div id="canvas-container">
                         <canvas class="canvas" id="render-canvas" height="400px" width="600px"></canvas>
                         <div id="image-button">
@@ -117,6 +119,8 @@
                     <h2 class="card-title">Accelerometer Visualization</h2>
                     <br />
                     <span id="counter-accelerometer">Number of stored recordings: 0</span>
+                    <br/>
+                    <span id="frequency-accelerometer"></span>
                     <br/>
                     <div class="spaced" id="record-div">
                         <select name="recording-select" id="recording-select">
