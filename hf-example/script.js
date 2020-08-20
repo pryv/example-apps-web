@@ -1,6 +1,7 @@
 let serviceInfoSelect,
     serviceInfoInput,
-    serviceInfo;
+    serviceInfo,
+    service;
 
 let drawingField,
     mouseTracker,
@@ -11,7 +12,8 @@ let drawingField,
     drawingCtx,
     hiddenCanvas,
     hiddenCtx,
-    frequencyMouse;
+    frequencyMouse,
+    mouseImagesCounter;
 
 let accelerometerCanvas,
     accelerometerRecordCounter,
@@ -30,6 +32,9 @@ let rendererVisu,
     edgesVisu,
     sceneVisu,
     cameraVisu;
+
+let sharing,
+    selectionData;
 
 var cubeAlphaCollect = 0;
 var cubeGammaCollect = 0;
@@ -96,6 +101,9 @@ window.onload = (event) => {
     mouseVisu = document.getElementById('mouse-visualization');
     accelerometerCollector = document.getElementById('accelerometer-collect');
     accelerometerVisu = document.getElementById('accelerometer-visualization');
+    sharing = document.getElementById('create-sharing');
+    selectionData = document.getElementById('selection-data');
+
 
     frequency();
     let queryString = window.location.search;
@@ -123,9 +131,11 @@ window.onload = (event) => {
         accelerometerVisu.style.display = "none";
         buildDesktop();
     }
+    selectionData.style.display = "none";
+    sharing.addEventListener("click", createSharing);
+    fetch();
     fetchServiceInfo();
     samplePost();
-    fetch();
 };
 
 /* Connect to the service */
@@ -143,7 +153,7 @@ function setServiceInfo() {
 
 async function fetchServiceInfo() {
     service = new Pryv.Service(serviceInfoInput.value);
-    service = await service.info();
+    serviceInfo = await service.info();
     authRequest()
 }
 
@@ -158,20 +168,26 @@ const authSettings = {
         requestingAppId: 'app-web-hfdemo', // to customize for your own app
         languageCode: 'en', // optional (default english)
         requestedPermissions: [{
-            streamId: '*',
+            streamId: 'body',
+            defaultName: 'HF Demo',
             level: 'manage' // permission for the app to manage data in the stream 'Health'
         }],
         requestingAppId: 'app-web-hfdemo',
     }
 };
 
-function pryvAuthStateChange(state) { // called each time the authentication state changes
+async function pryvAuthStateChange(state) { // called each time the authentication state changes
     console.log('##pryvAuthStateChange', state);
     if (state.id === Pryv.Browser.AuthStates.AUTHORIZED) {
+        console.log(state);
         var connection = new Pryv.Connection(state.apiEndpoint);
-        setupConnection(connection)
+
+        await setupConnection(connection);
+        updateSharings();
+        document.getElementById('sharing-view').style.display = '';
     }
     if (state.id === Pryv.Browser.AuthStates.INITIALIZED) {
+        pryvHF.pryvConn = null;
         connection = null;
     }
 }
@@ -213,6 +229,7 @@ function buildDesktop() {
     button_next.addEventListener('click', nextImage);
 
     frequencyMouse = document.getElementById('frequency-mouse');
+    mouseImagesCounter = document.getElementById('counter-mouse');
 
 }
 
@@ -224,8 +241,6 @@ function changeColorCurrentButton() {
         button_current.style.backgroundColor = "#F0F0F0";
         button_current.style.color = "black";
     }
-
-
 }
 
 function setBackgroundImage() {
@@ -316,6 +331,7 @@ function createNewImage() {
     var img = new Image();
     img.src = i;
     images.push(img);
+    mouseImagesCounter.innerHTML = 'Number of stored images: ' + images.length;
 }
 
 function previousImage() {
@@ -497,11 +513,14 @@ function showRecording() {
 }
 
 /* Visualization only */
-function buildVisualizationOnly(apiEndpoint, urlParams) {
+async function buildVisualizationOnly(apiEndpoint, urlParams) {
     pryvHF.pryvConn = new Pryv.Connection(apiEndpoint);
+    let eventsList = await getEventList();
+    populateCollectionTable(eventsList);
+    const username = await pryvHF.pryvConn.username();
+    document.getElementById("name-selection").innerHTML = "Data Collection Of " + username;
     const eventId_mouseX = urlParams.get('posXEventId');
     const eventId_mouseY = urlParams.get('posYEventId');
-
     if (eventId_mouseX && eventId_mouseY) {
         pryvHF.measures.mouseX.event = {
             "id": eventId_mouseX
@@ -533,203 +552,305 @@ function buildVisualizationOnly(apiEndpoint, urlParams) {
     document.getElementById('service').style.display = "none";
     mouseTracker.style.display = "none";
     accelerometerCollector.style.display = "none";
+    sharing.style.display = "none";
     fetch();
 
+
+    async function getEventList() {
+        let eventsList = [];
+        const params = {
+            fromTime: 0
+        }
+        let events = (await pryvHF.pryvConn.get('events', params)).events;
+        for (let i = 0; i < events.length; i++) {
+            if (events[i].streamId == "hfdemo-mouse-y") {
+                eventsList.push({
+                    date: events[i].created,
+                    mouseX: events[i + 1].id,
+                    mouseY: events[i].id
+                });
+                i += 1;
+            }
+            else {
+                eventsList.push({
+                    date: events[i].created,
+                    alpha: events[i].id,
+                    beta: events[i + 1].id,
+                    gamma: events[i + 2].id
+                });
+
+                i += 2;
+            }
+        }
+        return eventsList;
+    }
 }
 
 
 /* Handle connection with Pryv */
-function setupConnection(connection) {
+async function setupConnection(connection) {
     // A- retrieve previously created events or create events holders
     var postData;
-    var resultTreatment;
+    var resultTreatment = [];
+    var postData = [];
+    var streams = (await connection.get('streams', null)).streams;
+    let [hasHF, hasDesktop, hasMobile] = isInStreams(streams, "HF Demo");
+    if (!hasHF)
+        postData.push({
+            method: 'streams.create',
+            params: {
+                id: 'hfdemo',
+                name: 'HF Demo',
+                parentId: 'body'
+            }
+        });
+        resultTreatment.push(null);
     if (isMobile) {
-        postData = [{
-                method: 'streams.create',
-                params: {
-                    id: 'hfdemo',
-                    name: 'HF Demo',
-                    parentId: null
-                }
-            },
-            // Accelerometer
-            {
-                method: 'streams.create',
-                params: {
-                    id: 'hfdemo-orientation-gamma',
-                    name: 'Orientation-Gamma',
-                    parentId: 'hfdemo'
-                }
-            },
-            {
-                method: 'streams.update',
-                params: {
-                    id: 'hfdemo-orientation-gamma',
-                    update: {
-                        clientData: stdPlotly('Orientation', 'angle/deg', 'Gamma')
+        if (!hasMobile) {
+            postData.push(
+                // Accelerometer
+                {
+                    method: 'streams.create',
+                    params: {
+                        id: 'hfdemo-orientation-gamma',
+                        name: 'Orientation-Gamma',
+                        parentId: 'hfdemo'
+                    }
+                },
+                {
+                    method: 'streams.update',
+                    params: {
+                        id: 'hfdemo-orientation-gamma',
+                        update: {
+                            clientData: stdPlotly('Orientation', 'angle/deg', 'Gamma')
+                        }
+                    }
+                },
+                {
+                    method: 'events.create',
+                    params: {
+                        streamId: 'hfdemo-orientation-gamma',
+                        type: 'series:angle/deg',
+                        description: 'Holder for device gamma'
+                    }
+                },
+                {
+                    method: 'streams.create',
+                    params: {
+                        id: 'hfdemo-orientation-beta',
+                        name: 'Orientation-Beta',
+                        parentId: 'hfdemo'
+                    }
+                },
+                {
+                    method: 'streams.update',
+                    params: {
+                        id: 'hfdemo-orientation-beta',
+                        update: {
+                            clientData: stdPlotly('Orientation', 'angle/deg', 'Beta')
+                        }
+                    }
+                },
+                {
+                    method: 'events.create',
+                    params: {
+                        streamId: 'hfdemo-orientation-beta',
+                        type: 'series:angle/deg',
+                        description: 'Holder for device beta'
+                    }
+                },
+                {
+                    method: 'streams.create',
+                    params: {
+                        id: 'hfdemo-orientation-alpha',
+                        name: 'Orientation-Alpha',
+                        parentId: 'hfdemo'
+                    }
+                },
+                {
+                    method: 'streams.update',
+                    params: {
+                        id: 'hfdemo-orientation-alpha',
+                        update: {
+                            clientData: stdPlotly('Orientation', 'angle/deg', 'Alpha')
+                        }
+                    }
+                },
+                {
+                    method: 'events.create',
+                    params: {
+                        streamId: 'hfdemo-orientation-alpha',
+                        type: 'series:angle/deg',
+                        description: 'Holder for device alpha'
                     }
                 }
-            },
-            {
-                method: 'events.create',
-                params: {
-                    streamId: 'hfdemo-orientation-gamma',
-                    type: 'series:angle/deg',
-                    description: 'Holder for device gamma'
-                }
-            },
-            {
-                method: 'streams.create',
-                params: {
-                    id: 'hfdemo-orientation-beta',
-                    name: 'Orientation-Beta',
-                    parentId: 'hfdemo'
-                }
-            },
-            {
-                method: 'streams.update',
-                params: {
-                    id: 'hfdemo-orientation-beta',
-                    update: {
-                        clientData: stdPlotly('Orientation', 'angle/deg', 'Beta')
-                    }
-                }
-            },
-            {
-                method: 'events.create',
-                params: {
-                    streamId: 'hfdemo-orientation-beta',
-                    type: 'series:angle/deg',
-                    description: 'Holder for device beta'
-                }
-            },
-            {
-                method: 'streams.create',
-                params: {
-                    id: 'hfdemo-orientation-alpha',
-                    name: 'Orientation-Alpha',
-                    parentId: 'hfdemo'
-                }
-            },
-            {
-                method: 'streams.update',
-                params: {
-                    id: 'hfdemo-orientation-alpha',
-                    update: {
-                        clientData: stdPlotly('Orientation', 'angle/deg', 'Alpha')
-                    }
-                }
-            },
-            {
-                method: 'events.create',
-                params: {
-                    streamId: 'hfdemo-orientation-alpha',
-                    type: 'series:angle/deg',
-                    description: 'Holder for device alpha'
-                }
-            }
-        ];
+            );
 
-        resultTreatment = [
-            null,
-            null,
-            null,
-            function handleCreateEventGamma(result) {
-                pryvHF.measures.orientationGamma.event = result.event;
-                console.log('handle gammaEvent set', result.event);
-            },
-            null,
-            null,
-            function handleCreateEventBeta(result) {
-                pryvHF.measures.orientationBeta.event = result.event;
-                console.log('handle betaEvent set', result.event);
-            },
-            null,
-            null,
-            function handleCreateEventAlpha(result) {
-                pryvHF.measures.orientationAlpha.event = result.event;
-                console.log('handle alphaEvent set', result.event);
-            }
-        ];
+            resultTreatment.push(
+                null,
+                null,
+                function handleCreateEventGamma(result) {
+                    pryvHF.measures.orientationGamma.event = result.event;
+                    console.log('handle gammaEvent set', result.event);
+                },
+                null,
+                null,
+                function handleCreateEventBeta(result) {
+                    pryvHF.measures.orientationBeta.event = result.event;
+                    console.log('handle betaEvent set', result.event);
+                },
+                null,
+                null,
+                function handleCreateEventAlpha(result) {
+                    pryvHF.measures.orientationAlpha.event = result.event;
+                    console.log('handle alphaEvent set', result.event);
+                }
+            );
+        } else {
+            postData.push(
+                {
+                    method: 'events.create',
+                    params: {
+                        streamId: 'hfdemo-orientation-gamma',
+                        type: 'series:angle/deg',
+                        description: 'Holder for device gamma'
+                    }
+                },
+                {
+                    method: 'events.create',
+                    params: {
+                        streamId: 'hfdemo-orientation-beta',
+                        type: 'series:angle/deg',
+                        description: 'Holder for device beta'
+                    }
+                },
+                {
+                    method: 'events.create',
+                    params: {
+                        streamId: 'hfdemo-orientation-alpha',
+                        type: 'series:angle/deg',
+                        description: 'Holder for device alpha'
+                    }
+                }
+            );
+            resultTreatment.push(
+                function handleCreateEventGamma(result) {
+                    pryvHF.measures.orientationGamma.event = result.event;
+                    console.log('handle gammaEvent set', result.event);
+                },
+                function handleCreateEventBeta(result) {
+                    pryvHF.measures.orientationBeta.event = result.event;
+                    console.log('handle betaEvent set', result.event);
+                },
+                function handleCreateEventAlpha(result) {
+                    pryvHF.measures.orientationAlpha.event = result.event;
+                    console.log('handle alphaEvent set', result.event);
+                }
+            );
+        }
 
     } else {
-        postData = [{
-                method: 'streams.create',
-                params: {
-                    id: 'hfdemo',
-                    name: 'HF Demo',
-                    parentId: null
-                }
-            },
-            // MOUSE
-            {
-                method: 'streams.create',
-                params: {
-                    id: 'hfdemo-mouse-x',
-                    name: 'Mouse-X',
-                    parentId: 'hfdemo'
-                }
-            },
-            {
-                method: 'streams.update',
-                params: {
-                    id: 'hfdemo-mouse-x',
-                    update: {
-                        clientData: stdPlotly('Mouse', 'count/generic', 'X')
+        if (!hasDesktop) {
+            postData.push(
+                // MOUSE
+                {
+                    method: 'streams.create',
+                    params: {
+                        id: 'hfdemo-mouse-x',
+                        name: 'Mouse-X',
+                        parentId: 'hfdemo'
+                    }
+                },
+                {
+                    method: 'streams.update',
+                    params: {
+                        id: 'hfdemo-mouse-x',
+                        update: {
+                            clientData: stdPlotly('Mouse', 'count/generic', 'X')
+                        }
+                    }
+                },
+                {
+                    method: 'events.create',
+                    params: {
+                        streamId: 'hfdemo-mouse-x',
+                        type: 'series:count/generic',
+                        description: 'Holder for x mouse position',
+                    }
+                },
+                {
+                    method: 'streams.create',
+                    params: {
+                        id: 'hfdemo-mouse-y',
+                        name: 'Mouse-Y',
+                        parentId: 'hfdemo'
+                    }
+                },
+                {
+                    method: 'streams.update',
+                    params: {
+                        id: 'hfdemo-mouse-y',
+                        update: {
+                            clientData: stdPlotly('Mouse', 'count/generic', 'Y')
+                        }
+                    }
+                },
+                {
+                    method: 'events.create',
+                    params: {
+                        streamId: 'hfdemo-mouse-y',
+                        type: 'series:count/generic',
+                        description: 'Holder for y mouse position',
                     }
                 }
-            },
-            {
-                method: 'events.create',
-                params: {
-                    streamId: 'hfdemo-mouse-x',
-                    type: 'series:count/generic',
-                    description: 'Holder for x mouse position',
+            );
+
+            resultTreatment.push(
+                null,
+                null,
+                function handleCreateEventX(result) {
+                    pryvHF.measures.mouseX.event = result.event;
+
+                    console.log('handle xEvent set', result.event);
+                },
+                null,
+                null,
+                function handleCreateEventY(result) {
+                    pryvHF.measures.mouseY.event = result.event;
+                    console.log('handle yEvent set', result.event);
                 }
-            },
-            {
-                method: 'streams.create',
-                params: {
-                    id: 'hfdemo-mouse-y',
-                    name: 'Mouse-Y',
-                    parentId: 'hfdemo'
-                }
-            },
-            {
-                method: 'streams.update',
-                params: {
-                    id: 'hfdemo-mouse-y',
-                    update: {
-                        clientData: stdPlotly('Mouse', 'count/generic', 'Y')
+            );
+        } else {
+            postData.push(
+                {
+                    method: 'events.create',
+                    params: {
+                        streamId: 'hfdemo-mouse-x',
+                        type: 'series:count/generic',
+                        description: 'Holder for x mouse position',
+                    }
+                },
+                {
+                    method: 'events.create',
+                    params: {
+                        streamId: 'hfdemo-mouse-y',
+                        type: 'series:count/generic',
+                        description: 'Holder for y mouse position',
                     }
                 }
-            },
-            {
-                method: 'events.create',
-                params: {
-                    streamId: 'hfdemo-mouse-y',
-                    type: 'series:count/generic',
-                    description: 'Holder for y mouse position',
+            );
+            resultTreatment.push(
+                function handleCreateEventX(result) {
+                    pryvHF.measures.mouseX.event = result.event;
+
+                    console.log('handle xEvent set', result.event);
+                },
+                function handleCreateEventY(result) {
+                    pryvHF.measures.mouseY.event = result.event;
+                    console.log('handle yEvent set', result.event);
                 }
-            }
-        ];
-
-        resultTreatment = [
-            null,
-            null,
-            null,
-            function handleCreateEventX(result) {
-                pryvHF.measures.mouseX.event = result.event;
-
-                console.log('handle xEvent set', result.event);
-            },
-            null,
-            null,
-            function handleCreateEventY(result) {
-                pryvHF.measures.mouseY.event = result.event;
-                console.log('handle yEvent set', result.event);
-            }
-        ];
+            );
+        }
     }
 
     const result = connection.api(postData);
@@ -747,6 +868,21 @@ function setupConnection(connection) {
         }
     });
     pryvHF.pryvConn = connection;
+
+    function isInStreams(streams, value) {
+        let isInStream = false;
+        let hasDesktop = false;
+        let hasMobile = false;
+        for (let element of streams)
+            if (element.name == value) {
+                isInStream = true;
+                if (element.children) {
+                    [hasDesktop, tmp1, tmp2] = isInStreams(element.children, "Mouse-X");
+                    [hasMobile, tmp1, tmp2] = isInStreams(element.children, "Orientation-Alpha");
+                }
+            }
+        return [isInStream, hasDesktop, hasMobile];
+    }
 }
 
 function stdPlotly(key, type, name) {
@@ -784,18 +920,20 @@ function postBatch(connection, measures) {
 
 /* Pull info from Pryv */
 async function fetch() {
-    length_last_batch = 0;
-    if (pryvHF.measures.mouseX.event) {
-        await fetchSerieMouse();
+    if(pryvHF.pryvConn){
+        length_last_batch = 0;
+        if (pryvHF.measures.mouseX.event) {
+            await fetchSerieMouse();
+        }
+        if (pryvHF.measures.orientationGamma.event) {
+            await fetchSerieAccelerometer();
+        }
     }
-    if (pryvHF.measures.orientationGamma.event) {
-        await fetchSerieAccelerometer();
-    }
-    if (length_last_batch) {
-        fetch()
-    } else {
-        setTimeout(fetch, delayIfEmptyBatch);
-    }
+        if (length_last_batch) {
+            fetch()
+        } else {
+            setTimeout(fetch, delayIfEmptyBatch);
+        }
 }
 
 async function fetchSerieMouse() {
@@ -877,4 +1015,119 @@ function frequency() {
         pointsSecondAccelerometer = 0;
     }
     setTimeout(frequency, 1000);
+}
+
+// ----- Sharings
+
+async function updateSharings() {
+    const result = await pryvHF.pryvConn.api([ // https://github.com/pryv/lib-js#api-calls
+        {
+            method: 'accesses.get', // get accesses of the data: https://api.pryv.com/reference/#get-accesses
+            params: {}
+        }
+    ]);
+    const sharingTable = document.getElementById('sharings-table');
+    const accesses = result[0].accesses;
+    if (!accesses || accesses.length === 0) {
+        return;
+    }
+    resetTable('sharings-table'); // empty list
+    for (const access of accesses) {
+        await addListAccess(sharingTable, access);
+    }
+}
+
+async function createSharing() {
+    const name = document.getElementById('sharing-name').value.trim();
+    if (!name || name === '') {
+        alert('Enter a name for your sharing');
+        return;
+    }
+    // set permissions
+    const permissions = [];
+    permissions.push({ streamId: 'hfdemo', level: 'read' });
+
+    const res = await pryvHF.pryvConn.api([ // https://github.com/pryv/lib-js#api-calls
+        {
+            method: 'accesses.create', // creates the selected access: https://api.pryv.com/reference/#create-access
+            params: {
+                name: name,
+                permissions: permissions
+            }
+        }]);
+    const error = res[0].error;
+    if (error != null) {
+        displayError(error);
+        return;
+    }
+    updateSharings();
+
+    function displayError(error) {
+        let message = error.message;
+        if (error.id.includes('forbidden')) {
+            message = `${error.message} Please use the Collect survey data example first.`
+        }
+        alert(JSON.stringify(message, null, 2));
+    }
+}
+
+async function addListAccess(table, access) { // add permissions to the sharings table
+
+    const permissions = [];
+    for (const permission of access.permissions) permissions.push(permission.streamId);
+    const username = await pryvHF.pryvConn.username();
+    const apiEndpoint = await service.apiEndpointFor(username, access.token);
+
+    const sharingURL = window.location.href.split('?')[0] + '?apiEndpoint=' + apiEndpoint;
+    const sharingLink = '<a href="' + sharingURL + '" target="_new"> open </a>';
+
+    const emailSubject = encodeURIComponent('Access my ' + permissions.join(', ') + ' data');
+    const emailBody = encodeURIComponent('Hello,\n\nClick on the following link ' + sharingURL);
+
+    const emailLink = '<a href="mailto:?subject=' + emailSubject + '&body=' + emailBody + '"> email </a>';
+
+    const deleteLink = '<a href="" onclick="javascript:deleteSharing(\'' + access.id + '\');return false;">' + access.name + '</a>';
+
+    const row = table.insertRow(-1);
+    row.insertCell(-1).innerHTML = deleteLink;
+    row.insertCell(-1).innerHTML = sharingLink;
+    row.insertCell(-1).innerHTML = emailLink;
+};
+
+async function deleteSharing(accessId) {
+    if (!confirm('delete?')) return;
+    await pryvHF.pryvConn.api([ // https://github.com/pryv/lib-js#api-calls
+        {
+            method: 'accesses.delete', // deletes the selected access: https://api.pryv.com/reference/#delete-access 
+            params: { id: accessId }
+        }
+    ]);
+    resetTable('sharings-table')
+    updateSharings();
+}
+function resetTable(tableId) {
+    const html = '<thead><tr><th scope="col">Name</th><th scope="col">Link</th><th scope="col">Mail</th></tr></thead>';
+    var table = document.getElementById(tableId);
+    table.innerHTML = html;
+}
+
+function populateCollectionTable(events){
+    const table = document.getElementById('data-collection');
+    for (const event of events) {
+        addListEvent(table, event);
+    }
+}
+
+function addListEvent(table, event){
+    let link;
+    const baseUrl = window.location.href.split('&')[0];
+    if(event.mouseX){
+        link = '<a href="'+baseUrl + '&posXEventId=' + event.mouseX + '&posYEventId=' + event.mouseY + '">Desktop</a>';
+    }else{
+        link = '<a href="'+baseUrl + '&angleAEventId=' + event.alpha + '&angleBEventId=' + event.beta + '&angleYEventId=' + event.gamma + '">Mobile</a>';
+    }
+    const date = new Date(event.date * 1000);
+    const row = table.insertRow(-1);
+    row.insertCell(-1).innerHTML = date.toUTCString();
+    row.insertCell(-1).innerHTML = link;
 }
