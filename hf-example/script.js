@@ -1,3 +1,4 @@
+let container;
 let serviceInfoSelect,
     serviceInfoInput,
     serviceInfo,
@@ -103,13 +104,14 @@ window.onload = (event) => {
     accelerometerVisu = document.getElementById('accelerometer-visualization');
     sharing = document.getElementById('create-sharing');
     selectionData = document.getElementById('selection-data');
-
+    container = document.getElementById('container');
 
     frequency();
     let queryString = window.location.search;
     if (queryString) {
         const urlParams = new URLSearchParams(queryString);
         const apiEndpoint = urlParams.get('apiEndpoint');
+        console.log(apiEndpoint);
         if (apiEndpoint) {
             buildVisualizationOnly(apiEndpoint, urlParams);
             return;
@@ -168,7 +170,7 @@ const authSettings = {
         requestingAppId: 'app-web-hfdemo', // to customize for your own app
         languageCode: 'en', // optional (default english)
         requestedPermissions: [{
-            streamId: 'body',
+            streamId: 'diary',
             defaultName: 'HF Demo',
             level: 'manage' // permission for the app to manage data in the stream 'Health'
         }],
@@ -440,13 +442,12 @@ function create3DCanvas(canvasProperty) {
     var geometry = new THREE.BoxGeometry(3, 1.5, 0.5);
     var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
     var cube = new THREE.Mesh(geometry, material);
-    var edges = new THREE.EdgesHelper(cube, 0x0000ff);
-    edges.material.linewidth = 2;
     scene.add(cube);
+
+    var edges = new THREE.EdgesGeometry(geometry);
+    edges = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0x0000ff } ) );
     scene.add(edges);
-
     camera.position.z = 5;
-
     return [scene, camera, renderer, cube, edges];
 }
 
@@ -515,6 +516,7 @@ function showRecording() {
 /* Visualization only */
 async function buildVisualizationOnly(apiEndpoint, urlParams) {
     pryvHF.pryvConn = new Pryv.Connection(apiEndpoint);
+    console.log(pryvHF.pryvConn);
     let eventsList = await getEventList();
     populateCollectionTable(eventsList);
     const username = await pryvHF.pryvConn.username();
@@ -561,7 +563,14 @@ async function buildVisualizationOnly(apiEndpoint, urlParams) {
         const params = {
             fromTime: 0
         }
-        let events = (await pryvHF.pryvConn.get('events', params)).events;
+        let events;
+        try{
+            events = (await pryvHF.pryvConn.get('events', params)).events;
+        }catch(e){
+            container.style.display = "none";
+            alert('Endpoint incorrect')
+            return;
+        }
         for (let i = 0; i < events.length; i++) {
             if (events[i].streamId == "hfdemo-mouse-y") {
                 eventsList.push({
@@ -594,17 +603,19 @@ async function setupConnection(connection) {
     var resultTreatment = [];
     var postData = [];
     var streams = (await connection.get('streams', null)).streams;
-    let [hasHF, hasDesktop, hasMobile] = isInStreams(streams, "HF Demo");
-    if (!hasHF)
+    let [hasHF, hasDesktop, hasMobile] = isInStreams(streams);
+
+    if (!hasHF) {
         postData.push({
             method: 'streams.create',
             params: {
                 id: 'hfdemo',
                 name: 'HF Demo',
-                parentId: 'body'
+                parentId: 'diary'
             }
         });
         resultTreatment.push(null);
+    }
     if (isMobile) {
         if (!hasMobile) {
             postData.push(
@@ -842,7 +853,6 @@ async function setupConnection(connection) {
             resultTreatment.push(
                 function handleCreateEventX(result) {
                     pryvHF.measures.mouseX.event = result.event;
-
                     console.log('handle xEvent set', result.event);
                 },
                 function handleCreateEventY(result) {
@@ -869,18 +879,21 @@ async function setupConnection(connection) {
     });
     pryvHF.pryvConn = connection;
 
-    function isInStreams(streams, value) {
+    function isInStreams(streams) {
         let isInStream = false;
         let hasDesktop = false;
         let hasMobile = false;
-        for (let element of streams)
-            if (element.name == value) {
-                isInStream = true;
-                if (element.children) {
-                    [hasDesktop, tmp1, tmp2] = isInStreams(element.children, "Mouse-X");
-                    [hasMobile, tmp1, tmp2] = isInStreams(element.children, "Orientation-Alpha");
-                }
-            }
+        streams = streams.filter(x => x.id == "diary");
+        if (streams.length == 0) {
+            return [isInStream, hasDesktop, hasMobile];
+        }
+        streams = streams[0].children.filter(x => x.name == "HF Demo");
+        if (streams.length == 0) {
+            return [isInStream, hasDesktop, hasMobile];
+        }
+        isInStream = true;
+        hasDesktop = streams[0].children.filter(x => x.name == "Mouse-X").length;
+        hasMobile = streams[0].children.filter(x => x.name == "Orientation-Alpha").length;
         return [isInStream, hasDesktop, hasMobile];
     }
 }
@@ -920,7 +933,7 @@ function postBatch(connection, measures) {
 
 /* Pull info from Pryv */
 async function fetch() {
-    if(pryvHF.pryvConn){
+    if (pryvHF.pryvConn) {
         length_last_batch = 0;
         if (pryvHF.measures.mouseX.event) {
             await fetchSerieMouse();
@@ -929,11 +942,11 @@ async function fetch() {
             await fetchSerieAccelerometer();
         }
     }
-        if (length_last_batch) {
-            fetch()
-        } else {
-            setTimeout(fetch, delayIfEmptyBatch);
-        }
+    if (length_last_batch) {
+        fetch()
+    } else {
+        setTimeout(fetch, delayIfEmptyBatch);
+    }
 }
 
 async function fetchSerieMouse() {
@@ -956,6 +969,7 @@ async function fetchSerieMouse() {
             }
         });
     } catch (error) {
+        container.style.display = "none";
         alert("Error to fetch data");
     }
 }
@@ -999,6 +1013,7 @@ async function fetchSerieAccelerometer() {
             }
         });
     } catch (error) {
+        container.style.display = "none";
         alert("Error to fetch data");
     }
 }
@@ -1111,20 +1126,20 @@ function resetTable(tableId) {
     table.innerHTML = html;
 }
 
-function populateCollectionTable(events){
+function populateCollectionTable(events) {
     const table = document.getElementById('data-collection');
     for (const event of events) {
         addListEvent(table, event);
     }
 }
 
-function addListEvent(table, event){
+function addListEvent(table, event) {
     let link;
     const baseUrl = window.location.href.split('&')[0];
-    if(event.mouseX){
-        link = '<a href="'+baseUrl + '&posXEventId=' + event.mouseX + '&posYEventId=' + event.mouseY + '">Desktop</a>';
-    }else{
-        link = '<a href="'+baseUrl + '&angleAEventId=' + event.alpha + '&angleBEventId=' + event.beta + '&angleYEventId=' + event.gamma + '">Mobile</a>';
+    if (event.mouseX) {
+        link = '<a href="' + baseUrl + '&posXEventId=' + event.mouseX + '&posYEventId=' + event.mouseY + '">Desktop</a>';
+    } else {
+        link = '<a href="' + baseUrl + '&angleAEventId=' + event.alpha + '&angleBEventId=' + event.beta + '&angleYEventId=' + event.gamma + '">Mobile</a>';
     }
     const date = new Date(event.date * 1000);
     const row = table.insertRow(-1);
