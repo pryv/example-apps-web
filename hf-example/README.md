@@ -1,6 +1,6 @@
 ## Pryv collect and view HF data
 
-Web app for high-frequency data collection, visualization & sharing with third parties. The goal of this sample app is to help you get familiar with high-frequency data and how to use it within your apps to collect, display and share HF data.
+Web app for high-frequency data collection, visualization & sharing with third parties. The goal of this sample app is to help you get familiar with [high-frequency data](https://api.pryv.com/reference/#hf-series) and how to use it within your apps to collect, display and share HF data.
 
 ## Story
 
@@ -24,6 +24,7 @@ In this web app, you provide the user with a tool to evaluate possible tremor by
 ## Project Specifications
 
 - Ask for login
+- Request access for the app "app-web-hfdemo" to manage the stream "HF Demo"
 - Collect high-frequency data resulting from mouse motion (web version) or phone's accelerometer (mobile version)
 - Display the data
 - Create or delete a sharing to a third party
