@@ -16,7 +16,7 @@
     </head>
 
     <body>
-        <div class="container">
+        <div class="container" id="container">
             <h1>Pryv.io collect and visualize HF Data</h1>
 
             <div class="card">
@@ -65,6 +65,22 @@
                 </div>
             </div>
 
+            <div class="card" id="selection-data">
+                <div class="card-body">
+                    <h2 class="card-title" id="name-selection"></h2>
+                    <table id='data-collection' class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Tracking method</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+
             <div class="card" id="mouse-tracker">
                 <div class="card-body">
                     <h2 class="card-title">Mouse Tracker</h2>
@@ -89,6 +105,8 @@
                     <h2 class="card-title">Mouse Visualization</h2>
                     <br />
                     <p>Click on previous/next to see the saved images. Click on current to see the current drawing.</p>
+                    <br/>
+                    <span id="counter-mouse">Number of stored images: 0</span>
                     <br />
                     <span id="frequency-mouse"></span>
                     <br/>
@@ -135,6 +153,30 @@
 
                 </div>
             </div>
+            <div class="card" id="sharing-view" style="display: none;">
+                <div class="card-body">
+                  <h2 class="card-title">Sharings</h2>
+                  <form class="form-inline">
+          
+                    <button type="button" id="create-sharing" class="btn btn-primary btn-sm">Create</button>
+                    &nbsp;
+                    <input type="text" id="sharing-name" placeholder="name of the sharing">
+          
+                  </form>
+                  <table id='sharings-table' class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Link</th>
+                        <th scope="col">Mail</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                  <small id='sharing-delete-message'>Click on the name of a sharing to delete it.</small>
+                </div>
+              </div>
             <div class="next-example">
                 Next example: <a href="../view-and-share/index.html">View and share data</a>
               </div>
