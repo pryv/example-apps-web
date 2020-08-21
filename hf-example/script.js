@@ -168,10 +168,9 @@ const authSettings = {
     onStateChange: pryvAuthStateChange, // event Listener for Authentication steps
     authRequest: { // See: https://api.pryv.com/reference/#auth-request
         requestingAppId: 'app-web-hfdemo', // to customize for your own app
-        languageCode: 'en', // optional (default english)
         requestedPermissions: [{
-            streamId: 'diary',
-            defaultName: 'HF Demo',
+            streamId: 'hf',
+            defaultName: 'HF',
             level: 'manage' // permission for the app to manage data in the stream 'Health'
         }],
         requestingAppId: 'app-web-hfdemo',
@@ -444,6 +443,7 @@ function create3DCanvas(canvasProperty) {
     var cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
 
+
     var edges = new THREE.EdgesGeometry(geometry);
     edges = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0x0000ff } ) );
     scene.add(edges);
@@ -603,17 +603,18 @@ async function setupConnection(connection) {
     var resultTreatment = [];
     var postData = [];
     var streams = (await connection.get('streams', null)).streams;
-    let [hasHF, hasDesktop, hasMobile] = isInStreams(streams);
-
-    if (!hasHF) {
-        postData.push({
-            method: 'streams.create',
-            params: {
-                id: 'hfdemo',
-                name: 'HF Demo',
-                parentId: 'diary'
-            }
-        });
+    let [hasHF,hasDesktop, hasMobile] = isInStreams(streams);
+    if(!hasHF){
+        postData.push(
+            {
+                method: 'streams.create',
+                params: {
+                    id: 'hfdemo',
+                    name: 'HF Demo',
+                    parentId: 'hf'
+                }
+            },  
+        );
         resultTreatment.push(null);
     }
     if (isMobile) {
@@ -880,21 +881,22 @@ async function setupConnection(connection) {
     pryvHF.pryvConn = connection;
 
     function isInStreams(streams) {
-        let isInStream = false;
         let hasDesktop = false;
         let hasMobile = false;
-        streams = streams.filter(x => x.id == "diary");
-        if (streams.length == 0) {
-            return [isInStream, hasDesktop, hasMobile];
+        let hasTop = false;
+        if(streams.length == 0){
+            return [hasTop,hasDesktop, hasMobile];
         }
-        streams = streams[0].children.filter(x => x.name == "HF Demo");
-        if (streams.length == 0) {
-            return [isInStream, hasDesktop, hasMobile];
+        console.log(streams)
+        streams = streams[0].children.filter(x => x.id == "hfdemo");
+        if(streams.length == 0){
+            return [hasTop,hasDesktop, hasMobile];
         }
-        isInStream = true;
+        hasTop = true;
+        console.log(streams)
         hasDesktop = streams[0].children.filter(x => x.name == "Mouse-X").length;
         hasMobile = streams[0].children.filter(x => x.name == "Orientation-Alpha").length;
-        return [isInStream, hasDesktop, hasMobile];
+        return [hasTop,hasDesktop, hasMobile];
     }
 }
 
