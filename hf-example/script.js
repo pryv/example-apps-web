@@ -556,6 +556,7 @@ async function buildVisualizationOnly(apiEndpoint, urlParams) {
         buildMobile();
         accelerometerVisu.style.display = "";
     }
+    document.getElementById('welcome').style.display = "none";
     document.getElementById('service').style.display = "none";
     mouseTracker.style.display = "none";
     accelerometerCollector.style.display = "none";
