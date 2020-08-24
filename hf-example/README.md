@@ -19,12 +19,12 @@ In this web app, you provide the user with a tool to evaluate possible tremor by
 
 | Sign in                                                 | Collect HF data                                                  | Share results                                                      |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| <img src="images/1-login.png" alt="login" style="zoom:33%;" /> | <img src="images/visualization-1.png" alt="visualization" style="zoom:33%;" /> | <img src="images/visualization-1.png" alt="visualization" style="zoom:33%;" /> |
+| <img src="images/app-login.png" alt="login" style="zoom:33%;" /> | <img src="images/tracker-1.png" alt="tracker" style="zoom:33%;" /> | <img src="images/created-sharing.png" alt="share" style="zoom:33%;" /> |
 
 ## Project Specifications
 
 - Ask for login
-- Request access for the app "app-web-hfdemo" to manage the stream "HF Demo"
+- Request access for the app "app-web-hfdemo" to manage the stream "HF"
 - Collect high-frequency data resulting from mouse motion (web version) or phone's accelerometer (mobile version)
 - Display the data
 - Create or delete a sharing to a third party
@@ -45,13 +45,18 @@ The mouse position according to the X and Y axis is collected and stored in HF s
 Collected HF data from mouse or phone is displayed in real time to the user, along with the previous recordings and the fetch frequency (in points/s):
 
 <p align="center">
-<img src="images/visualization-1.png" alt="visualization" width=850 />
+<img src="images/visualization-2.png" alt="visualization" width=850 />
 </p>
 
 ## Data sharing
 
-Data visualization from both tests can be shared with third-parties. This translates into a 'read' access to the shared stream in which the data from the test is stored. The sharing consists in a link that can be communicated directly or by email to a third party.
-When opened, it displays either the drawing from the mouse test or the phone orientation from the desktop test.
+Data visualization from both tests can be shared with third-parties. This translates into a 'read' access to the shared stream "HF" in which the data from the test is stored. The sharing consists in a link that can be communicated directly or by email to a third party.
+When opened, it displays either the drawing from the mouse test or the phone orientation from the desktop test:
+
+<p align="center">
+<img src="images/created-sharing.png" alt="visualization" width=850 />
+</p>
+
 
 ## Next steps
 
