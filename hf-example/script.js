@@ -125,12 +125,8 @@ window.onload = (event) => {
     }
 
     if (isMobile) {
-        mouseTracker.style.display = "none";
-        mouseVisu.style.display = "none";
         buildMobile();
     } else {
-        accelerometerCollector.style.display = "none";
-        accelerometerVisu.style.display = "none";
         buildDesktop();
     }
     selectionData.style.display = "none";
@@ -185,11 +181,24 @@ async function pryvAuthStateChange(state) { // called each time the authenticati
 
         await setupConnection(connection);
         updateSharings();
-        document.getElementById('sharing-view').style.display = '';
+        displayDiv(true);
     }
     if (state.id === Pryv.Browser.AuthStates.INITIALIZED) {
         pryvHF.pryvConn = null;
         connection = null;
+        displayDiv(false);
+    }
+    function displayDiv(isDisplay) {
+        let display = isDisplay ? "" : "none";
+        if (isMobile) {
+            accelerometerCollector.style.display = display;
+            accelerometerVisu.style.display = display;
+        }
+        else {
+            mouseTracker.style.display = display;
+            mouseVisu.style.display = display;
+        }
+        document.getElementById('sharing-view').style.display = display;
     }
 }
 
@@ -445,7 +454,7 @@ function create3DCanvas(canvasProperty) {
 
 
     var edges = new THREE.EdgesGeometry(geometry);
-    edges = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0x0000ff } ) );
+    edges = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x0000ff }));
     scene.add(edges);
     camera.position.z = 5;
     return [scene, camera, renderer, cube, edges];
@@ -531,8 +540,7 @@ async function buildVisualizationOnly(apiEndpoint, urlParams) {
             "id": eventId_mouseY
         };
         buildDesktop();
-    } else {
-        mouseVisu.style.display = "none";
+        mouseVisu.style.display = "";
     }
     const eventId_alpha = urlParams.get('angleAEventId');
     const eventId_beta = urlParams.get('angleBEventId');
@@ -548,8 +556,7 @@ async function buildVisualizationOnly(apiEndpoint, urlParams) {
             "id": eventId_gamma
         };
         buildMobile();
-    } else {
-        accelerometerVisu.style.display = "none";
+        accelerometerVisu.style.display = "";
     }
     document.getElementById('service').style.display = "none";
     mouseTracker.style.display = "none";
@@ -564,9 +571,9 @@ async function buildVisualizationOnly(apiEndpoint, urlParams) {
             fromTime: 0
         }
         let events;
-        try{
+        try {
             events = (await pryvHF.pryvConn.get('events', params)).events;
-        }catch(e){
+        } catch (e) {
             container.style.display = "none";
             alert('Endpoint incorrect')
             return;
@@ -603,8 +610,8 @@ async function setupConnection(connection) {
     var resultTreatment = [];
     var postData = [];
     var streams = (await connection.get('streams', null)).streams;
-    let [hasHF,hasDesktop, hasMobile] = isInStreams(streams);
-    if(!hasHF){
+    let [hasHF, hasDesktop, hasMobile] = isInStreams(streams);
+    if (!hasHF) {
         postData.push(
             {
                 method: 'streams.create',
@@ -613,7 +620,7 @@ async function setupConnection(connection) {
                     name: 'HF Demo',
                     parentId: 'hf'
                 }
-            },  
+            },
         );
         resultTreatment.push(null);
     }
@@ -884,19 +891,19 @@ async function setupConnection(connection) {
         let hasDesktop = false;
         let hasMobile = false;
         let hasTop = false;
-        if(streams.length == 0){
-            return [hasTop,hasDesktop, hasMobile];
+        if (streams.length == 0) {
+            return [hasTop, hasDesktop, hasMobile];
         }
         console.log(streams)
         streams = streams[0].children.filter(x => x.id == "hfdemo");
-        if(streams.length == 0){
-            return [hasTop,hasDesktop, hasMobile];
+        if (streams.length == 0) {
+            return [hasTop, hasDesktop, hasMobile];
         }
         hasTop = true;
         console.log(streams)
         hasDesktop = streams[0].children.filter(x => x.name == "Mouse-X").length;
         hasMobile = streams[0].children.filter(x => x.name == "Orientation-Alpha").length;
-        return [hasTop,hasDesktop, hasMobile];
+        return [hasTop, hasDesktop, hasMobile];
     }
 }
 
