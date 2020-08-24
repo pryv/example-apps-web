@@ -111,7 +111,6 @@ window.onload = (event) => {
     if (queryString) {
         const urlParams = new URLSearchParams(queryString);
         const apiEndpoint = urlParams.get('apiEndpoint');
-        console.log(apiEndpoint);
         if (apiEndpoint) {
             buildVisualizationOnly(apiEndpoint, urlParams);
             return;
@@ -525,7 +524,6 @@ function showRecording() {
 /* Visualization only */
 async function buildVisualizationOnly(apiEndpoint, urlParams) {
     pryvHF.pryvConn = new Pryv.Connection(apiEndpoint);
-    console.log(pryvHF.pryvConn);
     let eventsList = await getEventList();
     populateCollectionTable(eventsList);
     const username = await pryvHF.pryvConn.username();
@@ -894,13 +892,11 @@ async function setupConnection(connection) {
         if (streams.length == 0) {
             return [hasTop, hasDesktop, hasMobile];
         }
-        console.log(streams)
         streams = streams[0].children.filter(x => x.id == "hfdemo");
         if (streams.length == 0) {
             return [hasTop, hasDesktop, hasMobile];
         }
         hasTop = true;
-        console.log(streams)
         hasDesktop = streams[0].children.filter(x => x.name == "Mouse-X").length;
         hasMobile = streams[0].children.filter(x => x.name == "Orientation-Alpha").length;
         return [hasTop, hasDesktop, hasMobile];
