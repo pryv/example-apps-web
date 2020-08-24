@@ -40,13 +40,15 @@ The phone's orientation in three dimensional space according to alpha, beta and 
 
 The mouse position according to the X and Y axis is collected and stored in HF series for the type `series:count/generic`.
 
-## Data visualization 
+## Data collection and visualization 
 
-Collected HF data from mouse or phone is displayed in real time to the user, along with the previous recordings and the fetch frequency (in points/s):
+The user can select an image to draw for the Desktop tracking task (kinetic tremor test), or hold his phone still for at least 10 seconds for the Mobile tracking task (postural tremor test).
 
 <p align="center">
 <img src="images/tracker-1.png" alt="tracker" width=600 />
 </p>
+
+Collected HF data from mouse or phone is displayed in real time to the user, along with the previous recordings and the fetch frequency (in points/s).
 
 ## Data sharing
 
