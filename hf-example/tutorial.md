@@ -7,26 +7,26 @@ All you need to run this app is to download [index.html](index.html) and [script
 
 This is a data collection and sharing web app that first displays a welcome message and a button to initiate the authentication process.
 <p align="center">
-<img src="images/1-login.png" alt="login" width=400/>
+<img src="images/1-login.png" alt="login"/>
 </p>
 
 With a click on the login button, a popup opens in your browser where you can either authenticate or create a new account. 
 
 When signed in, you can consent to give the app "app-web-hfdemo" permission to manage the stream "**HF**" where the data from the tracker is stored.
 <p align="center">
-<img src="images/2-request-permission.png" alt="request-permissions" width=250 />
+<img src="images/2-request-permission.png" alt="request-permissions" />
 </p>
 
 Once you have accepted, you can start the tracking task using the accelerometer or the mouse.
 
 <p align="center">
-<img src="images/tracker-2.png" alt="tracker" width=400/>
+<img src="images/tracker-2.png" alt="tracker"/>
 </p>
 
 You can visualize your data in the "Visualization" section of the app:
 
 <p align="center">
-<img src="images/visualization-1.png" alt="visualization" width=400/>
+<img src="images/visualization-1.png" alt="visualization"/>
 </p>
 
 You can then share your data by creating a new sharing at the bottom of the page. This will generate a URL link that contains your tracking visualization from the stream "**HF**".
