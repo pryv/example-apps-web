@@ -1,6 +1,7 @@
 ## Pryv collect and view HF data
 
-Web app for high-frequency data collection, visualization & sharing with third parties. The goal of this sample app is to help you get familiar with [high-frequency data](https://api.pryv.com/reference/#hf-series) and how to use it within your apps to collect, display and share HF data.
+Web app for high-frequency data collection, visualization & sharing with third parties.   
+The goal of this sample app is to help you get familiar with [high-frequency data](https://api.pryv.com/reference/#hf-series) and how to use it within your apps to collect, display and share HF data.
 
 ## Story
 
@@ -19,12 +20,12 @@ In this web app, you provide the user with a tool to evaluate possible tremor by
 
 | Sign in                                                 | Collect HF data                                                  | Share results                                                      |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| <img src="images/1-login.png" alt="login" style="zoom:33%;" /> | <img src="images/visualization-1.png" alt="visualization" style="zoom:33%;" /> | <img src="images/visualization-1.png" alt="visualization" style="zoom:33%;" /> |
+| <img src="images/welcome-only.png" alt="welcome" style="zoom:33%;" /> | <img src="images/tracker-1.png" alt="tracker" style="zoom:33%;" /> | <img src="images/visualization-2.png" alt="share" style="zoom:33%;" /> |
 
 ## Project Specifications
 
 - Ask for login
-- Request access for the app "app-web-hfdemo" to manage the stream "HF Demo"
+- Request access for the app "app-web-hfdemo" to manage the stream "HF"
 - Collect high-frequency data resulting from mouse motion (web version) or phone's accelerometer (mobile version)
 - Display the data
 - Create or delete a sharing to a third party
@@ -40,18 +41,30 @@ The phone's orientation in three dimensional space according to alpha, beta and 
 
 The mouse position according to the X and Y axis is collected and stored in HF series for the type `series:count/generic`.
 
-## Data visualization 
+## Data collection and visualization 
 
-Collected HF data from mouse or phone is displayed in real time to the user, along with the previous recordings and the fetch frequency (in points/s):
+The user can select an image to draw for the **Desktop tracking task** (kinetic tremor test), or hold his phone still for at least 10 seconds for the **Mobile tracking task** (postural tremor test).
 
-<p align="center">
-<img src="images/visualization-1.png" alt="visualization" width=850 />
-</p>
+|Desktop                                                 | Mobile                                                  |
+| -------------------------------------------------------|---------------------------------------------------------| 
+| <img src="images/tracker-1.png" alt="tracker" style="zoom:50%;" /> | <img src="images/acc-collect.png" alt="collect" style="zoom:50%;" /> |
+
+
+Collected HF data from mouse or phone is displayed in real time to the user, along with the previous recordings and the fetch frequency (in points/s).
+
+|Desktop                                                 | Mobile                                                  |
+| -------------------------------------------------------|---------------------------------------------------------| 
+| <img src="images/visualization-2.png" alt="view" style="zoom:50%;" /> | <img src="images/acc-view.png" alt="view" style="zoom:50%;" /> |
 
 ## Data sharing
 
-Data visualization from both tests can be shared with third-parties. This translates into a 'read' access to the shared stream in which the data from the test is stored. The sharing consists in a link that can be communicated directly or by email to a third party.
-When opened, it displays either the drawing from the mouse test or the phone orientation from the desktop test.
+Data visualization from both tests can be shared with third-parties. This translates into a 'read' access to the shared stream "HF" in which the data from the test is stored. The sharing consists in a link that can be communicated directly or by email to a third party.
+When opened, it displays either the drawing from the mouse test or the phone orientation from the desktop test:
+
+<p align="center">
+<img src="images/created-sharing.png" alt="visualization" width=700 />
+</p>
+
 
 ## Next steps
 
