@@ -19,7 +19,7 @@ In this web app, you provide the user with a tool to evaluate possible tremor by
 
 | Sign in                                                 | Collect HF data                                                  | Share results                                                      |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| <img src="images/app-login.png" alt="login" style="zoom:33%;" /> | <img src="images/tracker-1.png" alt="tracker" style="zoom:33%;" /> | <img src="images/created-sharing.png" alt="share" style="zoom:33%;" /> |
+| <img src="images/app-web-auth3.png" alt="login" style="zoom:33%;" /> | <img src="images/tracker-1.png" alt="tracker" style="zoom:33%;" /> | <img src="images/visualization-2.png" alt="share" style="zoom:33%;" /> |
 
 ## Project Specifications
 
@@ -45,7 +45,7 @@ The mouse position according to the X and Y axis is collected and stored in HF s
 Collected HF data from mouse or phone is displayed in real time to the user, along with the previous recordings and the fetch frequency (in points/s):
 
 <p align="center">
-<img src="images/visualization-2.png" alt="visualization" width=850 />
+<img src="images/visualization-2.png" alt="visualization" width=600 />
 </p>
 
 ## Data sharing
@@ -54,7 +54,7 @@ Data visualization from both tests can be shared with third-parties. This transl
 When opened, it displays either the drawing from the mouse test or the phone orientation from the desktop test:
 
 <p align="center">
-<img src="images/created-sharing.png" alt="visualization" width=850 />
+<img src="images/created-sharing.png" alt="visualization" width=700 />
 </p>
 
 
