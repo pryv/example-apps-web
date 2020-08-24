@@ -1,6 +1,7 @@
 ## Pryv collect and view HF data
 
-Web app for high-frequency data collection, visualization & sharing with third parties. The goal of this sample app is to help you get familiar with [high-frequency data](https://api.pryv.com/reference/#hf-series) and how to use it within your apps to collect, display and share HF data.
+Web app for high-frequency data collection, visualization & sharing with third parties.   
+The goal of this sample app is to help you get familiar with [high-frequency data](https://api.pryv.com/reference/#hf-series) and how to use it within your apps to collect, display and share HF data.
 
 ## Story
 
@@ -42,13 +43,18 @@ The mouse position according to the X and Y axis is collected and stored in HF s
 
 ## Data collection and visualization 
 
-The user can select an image to draw for the Desktop tracking task (kinetic tremor test), or hold his phone still for at least 10 seconds for the Mobile tracking task (postural tremor test).
+The user can select an image to draw for the **Desktop tracking task** (kinetic tremor test), or hold his phone still for at least 10 seconds for the **Mobile tracking task** (postural tremor test).
 
-<p align="center">
-<img src="images/tracker-1.png" alt="tracker" width=600 />
-</p>
+|Desktop                                                 | Mobile                                                  |
+| -------------------------------------------------------|---------------------------------------------------------| 
+| <img src="images/tracker-1.png" alt="tracker" style="zoom:50%;" /> | <img src="images/acc-collect.png" alt="collect" style="zoom:50%;" /> |
+
 
 Collected HF data from mouse or phone is displayed in real time to the user, along with the previous recordings and the fetch frequency (in points/s).
+
+|Desktop                                                 | Mobile                                                  |
+| -------------------------------------------------------|---------------------------------------------------------| 
+| <img src="images/visualization-2.png" alt="view" style="zoom:50%;" /> | <img src="images/acc-view.png" alt="view" style="zoom:50%;" /> |
 
 ## Data sharing
 
