@@ -59,7 +59,7 @@ Collected HF data from mouse or phone is displayed in real time to the user, alo
 ## Data sharing
 
 Data visualization from both tests can be shared with third-parties. This translates into a 'read' access to the shared stream "HF" in which the data from the test is stored. The sharing consists in a link that can be communicated directly or by email to a third party.
-When opened, it displays either the drawing from the mouse test or the phone orientation from the desktop test:
+When opened, it displays either the drawing from the desktop version or the phone orientation from the mobile version:
 
 <p align="center">
 <img src="images/created-sharing.png" alt="visualization" width=700 />

@@ -7,40 +7,40 @@ All you need to run this app is to download [index.html](index.html) and [script
 
 This is a data collection and sharing web app that first displays a welcome message and a button to initiate the authentication process.
 <p align="center">
-<img src="images/1-login.png" alt="login"/>
+<img src="images/1-login.png" alt="login" width="600"/>
 </p>
 
 With a click on the login button, a popup opens in your browser where you can either authenticate or create a new account. 
 
 When signed in, you can consent to give the app "app-web-hfdemo" permission to manage the stream "**HF**" where the data from the tracker is stored.
 <p align="center">
-<img src="images/2-request-permission.png" alt="request-permissions" />
+<img src="images/2-request-permission.png" alt="request-permissions" width="600"/>
 </p>
 
 Once you have accepted, you can start the tracking task using the accelerometer or the mouse.
 
-<p align="center">
-<img src="images/tracker-2.png" alt="tracker"/>
-</p>
+|Desktop                                                 | Mobile                                                  |
+| -------------------------------------------------------|---------------------------------------------------------| 
+| <img src="images/tracker-1.png" alt="tracker" style="zoom:50%;" /> | <img src="images/acc-collect.png" alt="collect" style="zoom:50%;" /> |
 
 You can visualize your data in the "Visualization" section of the app:
 
-<p align="center">
-<img src="images/visualization-1.png" alt="visualization"/>
-</p>
+|Desktop                                                 | Mobile                                                  |
+| -------------------------------------------------------|---------------------------------------------------------| 
+| <img src="images/visualization-2.png" alt="view" style="zoom:50%;" /> | <img src="images/acc-view.png" alt="view" style="zoom:50%;" /> |
 
 You can then share your data by creating a new sharing at the bottom of the page. This will generate a URL link that contains your tracking visualization from the stream "**HF**".
 
 <p align="center">
-<img src="images/new-sharing.png" alt="new-sharing" />
+<img src="images/sharing.png" alt="new-sharing" width="400"/>
 </p>
 
-## Customize the display of the data
+The sharing link enables the recipient to consult the list of trackings, along with the tracking method (desktop or mobile), and to click on a tracking to visualize it on the screen:
 
+|Desktop                                                 | Mobile                                                  |
+| -------------------------------------------------------|---------------------------------------------------------| 
+| <img src="images/share-desktop.png" alt="view" style="zoom:50%;" /> | <img src="images/share-acc.png" alt="view" style="zoom:50%;" /> |
 
-## Customize the sharing of the data
-
-The sharings are put into tabular form. You will find the code related to the data display in the [index.html](index.html) file. We invite you to customize it with your own message and headings, and adapt the data display according to your needs.
 
 ## Authenticate your app
 
@@ -59,92 +59,374 @@ For authentication, we will use the [Pryv.io consent process](https://github.com
 The [auth request parameters](https://api.pryv.com/reference/#auth-request) and callback are defined in the separate [script.js](script.js) file:
 
 ```javascript
-var connection = null;
+async function authRequest() {
+    Pryv.Browser.setupAuth(authSettings, serviceInfoInput.value);
+}
 
-var authSettings = {
-  spanButtonID: 'pryv-button', 
-  onStateChange: pryvAuthStateChange,
-  authRequest: { 
-    requestingAppId: 'pryv-example-view-and-share',
-    languageCode: 'en', 
-    requestedPermissions: [
+const authSettings = {
+    spanButtonID: 'pryv-button', 
+    onStateChange: pryvAuthStateChange, 
+    authRequest: {
+        requestingAppId: 'app-web-hfdemo',
+        requestedPermissions: [{
+            streamId: 'hf',
+            defaultName: 'HF',
+            level: 'manage' 
+        }],
+        requestingAppId: 'app-web-hfdemo',
+    }
+};
+
+async function pryvAuthStateChange(state) {
+    console.log('##pryvAuthStateChange', state);
+    if (state.id === Pryv.Browser.AuthStates.AUTHORIZED) {
+        console.log(state);
+        var connection = new Pryv.Connection(state.apiEndpoint);
+        await setupConnection(connection);
+        updateSharings();
+        displayDiv(true);
+    }
+    if (state.id === Pryv.Browser.AuthStates.INITIALIZED) {
+        pryvHF.pryvConn = null;
+        connection = null;
+        displayDiv(false);
+    }
+}
+```
+
+The root stream of the `requestedPermissions` array is created if it doesn't exist yet. It will then be populated with events data from the tracking test.
+
+The auth request is done on page load, except when the shared data is loaded by a third-party.
+
+## Collect HF data
+
+Data collected from the mouse movement (desktop version) or device orientation (accelerometer version) will be stored in the form of [HF series](https://api.pryv.com/reference/#data-structure-high-frequency-series) which are collections of homogenous data points in Pryv.io.
+
+```javascript
+var pryvHF = {
+    pryvConn: null,
+    measures: {
+        mouseX: {
+            event: null,
+            buffer: []
+        },
+        mouseY: {
+            event: null,
+            buffer: []
+        },
+        orientationGamma: {
+            event: null,
+            buffer: []
+        },
+        orientationBeta: {
+            event: null,
+            buffer: []
+        },
+        orientationAlpha: {
+            event: null,
+            buffer: []
+        }
+    }
+
+};
+
+let fromTime = 0;
+let samplePostMs = 100;
+```
+
+### Collect HF data using the Desktop version
+
+Once the user is signed in (Desktop version), he can perform the test using the mouse tracker. The code for the mouse tracker is contained in the section "**Build Desktop version**" of the file [script.js](script.js).  
+
+Data collected from the mouse movement (X and Y positions) will be stored in the form of [HF series](https://api.pryv.com/reference/#data-structure-high-frequency-series) in a dedicated stream.  
+Connection with Pryv is established to store collected data in the stream "**HF demo**":
+```javascript
+async function setupConnection(connection) {
+    var postData;
+    var resultTreatment = [];
+    var postData = [];
+    var streams = (await connection.get('streams', null)).streams;
+    let [hasHF, hasDesktop, hasMobile] = isInStreams(streams);
+    if (!hasHF) {
+        postData.push(
+            {
+                method: 'streams.create',
+                params: {
+                    id: 'hfdemo',
+                    name: 'HF Demo',
+                    parentId: 'hf'
+                }
+            },
+        );
+        resultTreatment.push(null);
+    }
+```
+
+[HF events](https://api.pryv.com/reference/#create-hf-event) are created to hold X and Y series data of the mouse position:
+```javascript
+if (!hasDesktop) {
+        postData.push(
+            // MOUSE
+            {
+                method: 'streams.create',
+                params: {
+                    id: 'hfdemo-mouse-x',
+                    name: 'Mouse-X',
+                    parentId: 'hfdemo'
+                }
+            },
+            {
+                method: 'streams.update',
+                params: {
+                    id: 'hfdemo-mouse-x',
+                    update: {
+                        clientData: stdPlotly('Mouse', 'count/generic', 'X')
+                    }
+                }
+            },
+            {
+                method: 'events.create',
+                params: {
+                    streamId: 'hfdemo-mouse-x',
+                    type: 'series:count/generic',
+                    description: 'Holder for x mouse position',
+                }
+            },
+            {
+                method: 'streams.create',
+                params: {
+                    id: 'hfdemo-mouse-y',
+                    name: 'Mouse-Y',
+                    parentId: 'hfdemo'
+                }
+            },
+            {
+                method: 'streams.update',
+                params: {
+                    id: 'hfdemo-mouse-y',
+                    update: {
+                        clientData: stdPlotly('Mouse', 'count/generic', 'Y')
+                    }
+                }
+            },
+            {
+                method: 'events.create',
+                params: {
+                    streamId: 'hfdemo-mouse-y',
+                    type: 'series:count/generic',
+                    description: 'Holder for y mouse position',
+                }
+            }
+        );
+```
+
+These events are populated with the X and Y positions of the mouse:
+```javascript
+resultTreatment.push(
+    null,
+    null,
+    function handleCreateEventX(result) {
+        pryvHF.measures.mouseX.event = result.event;
+
+        console.log('handle xEvent set', result.event);
+    },
+    null,
+    null,
+    function handleCreateEventY(result) {
+        pryvHF.measures.mouseY.event = result.event;
+        console.log('handle yEvent set', result.event);
+    }
+    );
+} else {
+    postData.push(
+        {
+            method: 'events.create',
+            params: {
+                streamId: 'hfdemo-mouse-x',
+                type: 'series:count/generic',
+                description: 'Holder for x mouse position',
+            }
+        },
+        {
+            method: 'events.create',
+            params: {
+                streamId: 'hfdemo-mouse-y',
+                type: 'series:count/generic',
+                description: 'Holder for y mouse position',
+            }
+        }
+    );
+    resultTreatment.push(
+        function handleCreateEventX(result) {
+            pryvHF.measures.mouseX.event = result.event;
+            console.log('handle xEvent set', result.event);
+        },
+        function handleCreateEventY(result) {
+            pryvHF.measures.mouseY.event = result.event;
+            console.log('handle yEvent set', result.event);
+        }
+    );
+}
+```
+
+### Collect HF data using the mobile version
+
+The tracking task is also available in a mobile version that allows to collect the device orientation in three dimensions. The code for the accelerometer collector is contained in the section "**Build mobile version**" of the file [script.js](script.js).
+
+Similarly as for the [Desktop version](#collect-hf-data-using-the-desktop-version), data is stored in the dedicated stream "**HF demo**".  
+
+This stream is populated with HF events that will hold data collected from the accelerometer (*alpha*, *beta* and *gamma* orientation angles) of the device:
+```javascript
+if (!hasMobile) {
+  postData.push(
+      // Accelerometer
       {
-        streamId: 'body',
-        defaultName: 'Body',
-        level: 'read'
+          method: 'streams.create',
+          params: {
+              id: 'hfdemo-orientation-gamma',
+              name: 'Orientation-Gamma',
+              parentId: 'hfdemo'
+          }
       },
       {
-        streamId: 'baby',
-        defaultName: 'Baby',
-        level: 'read'
+          method: 'streams.update',
+          params: {
+              id: 'hfdemo-orientation-gamma',
+              update: {
+                  clientData: stdPlotly('Orientation', 'angle/deg', 'Gamma')
+              }
+          }
+      },
+      {
+          method: 'events.create',
+          params: {
+              streamId: 'hfdemo-orientation-gamma',
+              type: 'series:angle/deg',
+              description: 'Holder for device gamma'
+          }
+      },
+      {
+          method: 'streams.create',
+          params: {
+              id: 'hfdemo-orientation-beta',
+              name: 'Orientation-Beta',
+              parentId: 'hfdemo'
+          }
+      },
+      {
+          method: 'streams.update',
+          params: {
+              id: 'hfdemo-orientation-beta',
+              update: {
+                  clientData: stdPlotly('Orientation', 'angle/deg', 'Beta')
+              }
+          }
+      },
+      {
+          method: 'events.create',
+          params: {
+              streamId: 'hfdemo-orientation-beta',
+              type: 'series:angle/deg',
+              description: 'Holder for device beta'
+          }
+      },
+      {
+          method: 'streams.create',
+          params: {
+              id: 'hfdemo-orientation-alpha',
+              name: 'Orientation-Alpha',
+              parentId: 'hfdemo'
+          }
+      },
+      {
+          method: 'streams.update',
+          params: {
+              id: 'hfdemo-orientation-alpha',
+              update: {
+                  clientData: stdPlotly('Orientation', 'angle/deg', 'Alpha')
+              }
+          }
+      },
+      {
+          method: 'events.create',
+          params: {
+              streamId: 'hfdemo-orientation-alpha',
+              type: 'series:angle/deg',
+              description: 'Holder for device alpha'
+          }
       }
-    ],
-    clientData: {
-      'app-web-auth:description': {
-        'type': 'note/txt',
-        'content': 'This sample app demonstrates how you can visualize and share data with an app token.'
-      }
+  );
+```
+
+Collected data from the accelerometer orientation is then inserted in the previously created HF events:
+```javascript
+resultTreatment.push(
+  null,
+  null,
+  function handleCreateEventGamma(result) {
+      pryvHF.measures.orientationGamma.event = result.event;
+      console.log('handle gammaEvent set', result.event);
+  },
+  null,
+  null,
+  function handleCreateEventBeta(result) {
+      pryvHF.measures.orientationBeta.event = result.event;
+      console.log('handle betaEvent set', result.event);
+  },
+  null,
+  null,
+  function handleCreateEventAlpha(result) {
+      pryvHF.measures.orientationAlpha.event = result.event;
+      console.log('handle alphaEvent set', result.event);
+  }
+);
+    } else {
+        postData.push(
+            {
+                method: 'events.create',
+                params: {
+                    streamId: 'hfdemo-orientation-gamma',
+                    type: 'series:angle/deg',
+                    description: 'Holder for device gamma'
+                }
+            },
+            {
+                method: 'events.create',
+                params: {
+                    streamId: 'hfdemo-orientation-beta',
+                    type: 'series:angle/deg',
+                    description: 'Holder for device beta'
+                }
+            },
+            {
+                method: 'events.create',
+                params: {
+                    streamId: 'hfdemo-orientation-alpha',
+                    type: 'series:angle/deg',
+                    description: 'Holder for device alpha'
+                }
+            }
+        );
+resultTreatment.push(
+    function handleCreateEventGamma(result) {
+        pryvHF.measures.orientationGamma.event = result.event;
+        console.log('handle gammaEvent set', result.event);
     },
-  }
-};
-
-function pryvAuthStateChange(state) {
-  console.log('##pryvAuthStateChange', state);
-  if (state.id === Pryv.Browser.AuthStates.AUTHORIZED) {
-    connection = new Pryv.Connection(state.apiEndpoint);
-    username = state.displayName; 
-    showData();
-  }
-  if (state.id === Pryv.Browser.AuthStates.INITIALIZED) {
-    connection = null;
-    showLoginMessage();
-  }
-}
-
-async function showData() {
-  resetData();
-  document.getElementById('please-login').style.visibility = 'hidden';
-  document.getElementById('data-view').style.display = '';
-  document.getElementById('data-view').style.visibility = 'visible';
-  document.getElementById('sharing-view').style.display = '';
-  document.getElementById('sharing-view').style.visibility = 'visible';
-  await loadData();
-}
-
-function showLoginMessage() {
-  resetData();
-  document.getElementById('please-login').style.visibility = 'visible';
-  document.getElementById('data-view').style.display = 'none';
-  document.getElementById('data-view').style.visibility = 'hidden';
-  document.getElementById('sharing-view').style.display = 'none';
-  document.getElementById('sharing-view').style.visibility = 'hidden';
+    function handleCreateEventBeta(result) {
+        pryvHF.measures.orientationBeta.event = result.event;
+        console.log('handle betaEvent set', result.event);
+    },
+    function handleCreateEventAlpha(result) {
+        pryvHF.measures.orientationAlpha.event = result.event;
+        console.log('handle alphaEvent set', result.event);
+    }
+);
 }
 ```
 
-The root streams of the `requestedPermissions` array are created if they don't exist yet. They will already be populated with events data if you ran the [Collect survey data example](collect-survey-data) previously.
+## Create a sharing
 
-The auth request is done on page load, except when the shared data is loaded by a third-party:
 
-```javascript
-window.onload = async (event) => {
-  // ...	
-  service = await Pryv.Browser.setupAuth(authSettings, serviceInfoUrl);
-};
-```
-
-## Load data
-
-Once the user is signed in, data from his Pryv.io account is fetched. If there is no data, a warning is displayed to invite the user to fill in the form from the previous [example](collect-survey-data) on **Survey data collection**.
-
-```javascript
-async function loadData() {
-  const result = await connection.api([{method: 'events.get', params: {limit: 40}}]);
-  const events = result[0].events;
-  if (! events || events.length === 0) {
-    alert('There is no data to show. Use the Collect survey data example first');
-    return;
-  }
-```
 Data from both "Baby-Body" and "Heart" streams is presented in a tabular form:
 
 ```javascript
@@ -235,6 +517,11 @@ async function deleteSharing(accessId) {
 }
 ```
 
+## Display the sharing (view-only mode)
+
+
+kljgkjghligluig
+
 ## App guidelines
 
 ### Custom service info
@@ -270,3 +557,7 @@ window.onload = async (event) => {
 };
 ```
 
+
+## Customize the visuals 
+
+You will find the code related to the display of the data in the [index.html](index.html) file. We invite you to customize it with your own message and headings, and adapt the data display according to your needs.
