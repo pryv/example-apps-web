@@ -32,14 +32,14 @@ You can visualize your data in the "Visualization" section of the app:
 You can then share your data by creating a new sharing at the bottom of the page. This will generate a URL link that contains your tracking visualization from the stream "**HF**".
 
 <p align="center">
-<img src="images/sharing.png" alt="new-sharing" width="400"/>
+<img src="images/sharing.png" alt="new-sharing" width="700"/>
 </p>
 
 The sharing link enables the recipient to consult the list of trackings, along with the tracking method (desktop or mobile), and to click on a tracking to visualize it on the screen:
 
 |Desktop                                                 | Mobile                                                  |
 | -------------------------------------------------------|---------------------------------------------------------|
-| <img src="images/share-desktop.png" alt="view" style="zoom:50%;" /> | <img src="images/share-acc-1.png" alt="view" style="zoom:50%;" /> |
+| <img src="images/share-desktop.png" alt="view" style="zoom:50%;" /> | <img src="images/share-acc.png" alt="view" style="zoom:50%;" /> |
 
 
 ## Authenticate your app
