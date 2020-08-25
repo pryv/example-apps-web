@@ -7,14 +7,14 @@ The goal of this sample app is to help you get familiar with [high-frequency dat
 
 You are developing a tracking app to analyse both postural and kinetic tremor for Parkinson's disease diagnosis.    
 
-The desktop version of the app allows to evaluate the kinetic tremor that occurs with voluntary movement, e.g drawing in our case. The mobile version is intended to track patient's arm movement when holding his mobile phone still to test for postural tremor in Parkinson's disease.  
-Both results from the task can be combined and presented to the clinician or any competent person in order to evaluate the degree of severity of the symptoms.  
+The desktop version of the app allows to evaluate the kinetic tremor that occurs with voluntary movement, e.g drawing in our case. The mobile version is intended to track the patient's arm movement when holding his mobile phone still to test for postural tremor in Parkinson's disease.  
+Both results from the task can be combined and presented to a clinician or any competent person in order to evaluate the degree of severity of the symptoms.  
 
 When the patient logs in to his Pryv.io account, he is asked to perform a tracking task:
-- **Web version**: Click on to draw the shape of either a heart or a house with the mouse
+- **Web version**: Draw the shape of either a heart or a house with the mouse
 - **Mobile version**: Keep the phone horizontally with the arm stretched for at least 10 seconds
 
-Results from the tests are saved in the Pryv.io account of the patient, and can be shared through an URL link to a third-party.  
+Results from the tests are saved in the Pryv.io account of the patient, and can be shared through a URL link to a third-party.  
 
 In this web app, you provide the user with a tool to evaluate possible tremor by collecting high frequency data (mouse motion or arm motion) and sharing it with third parties.
 
@@ -50,7 +50,7 @@ The user can select an image to draw for the **Desktop tracking task** (kinetic 
 | <img src="images/tracker-1.png" alt="tracker" style="zoom:50%;" /> | <img src="images/acc-collect.png" alt="collect" style="zoom:50%;" /> |
 
 
-Collected HF data from mouse or phone is displayed in real time to the user, along with the previous recordings and the fetch frequency (in points/s).
+Collected HF data from mouse or phone motion is displayed in real time to the user, along with the previous recordings and the fetch frequency (in points/s).
 
 |Desktop                                                 | Mobile                                                  |
 | -------------------------------------------------------|---------------------------------------------------------| 
