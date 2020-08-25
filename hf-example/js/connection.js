@@ -105,11 +105,11 @@ function displayDiv(isDisplay) {
 async function setupConnection(connection) {
     // A- retrieve previously created events or create events holders
     let resultTreatment = [];
-    let postData = [];
+    let apiCalls = [];
     let streams = (await connection.get('streams', null)).streams;
-    let [hasHF, hasDesktop, hasMobile] = isInStreams(streams);
-    if (!hasHF) {
-        postData.push(
+    let [hasRootStream, hasDesktopStream, hasMobileStream] = isInStreams(streams);
+    if (!hasRootStream) {
+        apiCalls.push(
             {
                 method: 'streams.create',
                 params: {
@@ -123,8 +123,8 @@ async function setupConnection(connection) {
     }
     if (isMobile) {
         /* If streams for mobile devices do not exist */
-        if (!hasMobile) {
-            postData.push(
+        if (!hasMobileStream) {
+            apiCalls.push(
                 // Accelerometer
                 {
                     method: 'streams.create',
@@ -188,7 +188,7 @@ async function setupConnection(connection) {
                 null,
             );
         }
-        postData.push(
+        apiCalls.push(
             {
                 method: 'events.create',
                 params: {
@@ -232,8 +232,8 @@ async function setupConnection(connection) {
 
     } else {
         /* If streams for desktop devices do not exist */
-        if (!hasDesktop) {
-            postData.push(
+        if (!hasDesktopStream) {
+            apiCalls.push(
                 // MOUSE
                 {
                     method: 'streams.create',
@@ -278,7 +278,7 @@ async function setupConnection(connection) {
                 null
             );
         }
-        postData.push(
+        apiCalls.push(
             {
                 method: 'events.create',
                 params: {
@@ -309,7 +309,7 @@ async function setupConnection(connection) {
 
     }
 
-    const result = connection.api(postData);
+    const result = connection.api(apiCalls);
     result.then((result, err, resultInfo) => {
         if (err) { return console.log('...error: ' + JSON.stringify([err, result])); }
         console.log('...event created: ' + JSON.stringify(result));
@@ -333,25 +333,25 @@ async function setupConnection(connection) {
     pryvHF.pryvConn = connection;
 
     /**
-     * @returns hasTop: True if streams hfdemo exists
-     * @returns hasDesktop: True if streams for desktop devices exist
-     * @returns hasMobile: True if streams for mobile devices exist
+     * @returns hasRootStream: True if streams hfdemo exists
+     * @returns hasDesktopStream: True if streams for desktop devices exist
+     * @returns hasMobileStream: True if streams for mobile devices exist
      */
     function isInStreams(streams) {
-        let hasDesktop = false;
-        let hasMobile = false;
-        let hasTop = false;
+        let hasDesktopStream = false;
+        let hasMobileStream = false;
+        let hasRootStream = false;
         if (streams.length == 0) {
-            return [hasTop, hasDesktop, hasMobile];
+            return [hasRootStream, hasDesktopStream, hasMobileStream];
         }
         streams = streams[0].children.filter(x => x.id == "hfdemo");
         if (streams.length == 0) {
-            return [hasTop, hasDesktop, hasMobile];
+            return [hasRootStream, hasDesktopStream, hasMobileStream];
         }
-        hasTop = true;
-        hasDesktop = streams[0].children.filter(x => x.name == "Mouse-X").length;
-        hasMobile = streams[0].children.filter(x => x.name == "Orientation-Alpha").length;
-        return [hasTop, hasDesktop, hasMobile];
+        hasRootStream = true;
+        hasDesktopStream = streams[0].children.filter(x => x.name == "Mouse-X").length;
+        hasMobileStream = streams[0].children.filter(x => x.name == "Orientation-Alpha").length;
+        return [hasRootStream, hasDesktopStream, hasMobileStream];
     }
 }
 

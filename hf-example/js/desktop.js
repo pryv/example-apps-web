@@ -2,7 +2,7 @@ let drawingCtx, renderCtx, hiddenCtx, drawingField;
 let button_current, is_display_current_canvas;
 let mouseImagesCounter;
 
-let images = [];
+const images = [];
 let image_index = -1;
 
 const SIZE_DOT = 3;
@@ -179,10 +179,10 @@ function index(is_previous) {
             image_index = 0;
         }
         if (is_previous) {
-            let tmp = image_index - 1;
+            const tmp = image_index - 1;
             image_index = tmp < 0 ? images.length - 1 : tmp;
         } else {
-            let tmp = image_index + 1;
+            const tmp = image_index + 1;
             image_index = tmp >= images.length ? 0 : tmp;
         }
     }
