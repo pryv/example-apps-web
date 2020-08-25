@@ -81,19 +81,19 @@ async function pryvAuthStateChange(state) {
   if (state.id === Pryv.Browser.AuthStates.AUTHORIZED) {
     console.log(state);
     let connection = new Pryv.Connection(state.apiEndpoint);
-    displayDiv(true);
+    showCollectAndVisualize(true);
     await setupStreamStructure(connection);
     updateSharings();
   }
   if (state.id === Pryv.Browser.AuthStates.INITIALIZED) {
     pryvHF.pryvConn = null;
     connection = null;
-    displayDiv(false);
+    showCollectAndVisualize(false);
   }
 }
 
 /* Show collection and visualization div when the user is connected */
-function displayDiv(isDisplay) {
+function showCollectAndVisualize(isDisplay) {
   let display = isDisplay ? '' : 'none';
   if (isMobile) {
     document.getElementById('accelerometer-collect').style.display = display;
@@ -276,7 +276,7 @@ async function setupStreamStructure(connection) {
   } catch (error) {
     console.error('...error: ', error);
     alert(error);
-    displayDiv(false);
+    showCollectAndVisualize(false);
   }
   pryvHF.pryvConn = connection;
 

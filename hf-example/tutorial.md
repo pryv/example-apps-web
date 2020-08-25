@@ -84,12 +84,12 @@ async function pryvAuthStateChange(state) {
         var connection = new Pryv.Connection(state.apiEndpoint);
         await setupStreamStructure(connection);
         updateSharings();
-        displayDiv(true);
+        showCollectAndVisualize(true);
     }
     if (state.id === Pryv.Browser.AuthStates.INITIALIZED) {
         pryvHF.pryvConn = null;
         connection = null;
-        displayDiv(false);
+        showCollectAndVisualize(false);
     }
 }
 ```
