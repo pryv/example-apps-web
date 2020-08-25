@@ -20,13 +20,13 @@ When signed in, you can consent to give the app "app-web-hfdemo" permission to m
 Once you have accepted, you can start the tracking task using the accelerometer or the mouse.
 
 |Desktop                                                 | Mobile                                                  |
-| -------------------------------------------------------|---------------------------------------------------------| 
+| -------------------------------------------------------|---------------------------------------------------------|
 | <img src="images/tracker-1.png" alt="tracker" style="zoom:50%;" /> | <img src="images/acc-collect.png" alt="collect" style="zoom:50%;" /> |
 
 You can visualize your data in the "Visualization" section of the app:
 
 |Desktop                                                 | Mobile                                                  |
-| -------------------------------------------------------|---------------------------------------------------------| 
+| -------------------------------------------------------|---------------------------------------------------------|
 | <img src="images/visualization-2.png" alt="view" style="zoom:50%;" /> | <img src="images/acc-view.png" alt="view" style="zoom:50%;" /> |
 
 You can then share your data by creating a new sharing at the bottom of the page. This will generate a URL link that contains your tracking visualization from the stream "**HF**".
@@ -38,7 +38,7 @@ You can then share your data by creating a new sharing at the bottom of the page
 The sharing link enables the recipient to consult the list of trackings, along with the tracking method (desktop or mobile), and to click on a tracking to visualize it on the screen:
 
 |Desktop                                                 | Mobile                                                  |
-| -------------------------------------------------------|---------------------------------------------------------| 
+| -------------------------------------------------------|---------------------------------------------------------|
 | <img src="images/share-desktop.png" alt="view" style="zoom:50%;" /> | <img src="images/share-acc.png" alt="view" style="zoom:50%;" /> |
 
 
@@ -129,9 +129,6 @@ var pryvHF = {
     }
 
 };
-
-let fromTime = 0;
-let samplePostMs = 100;
 ```
 
 ### Collect HF data using the Desktop version
@@ -139,7 +136,7 @@ let samplePostMs = 100;
 Once the user is signed in (Desktop version), he can perform the test using the mouse tracker. The code for the mouse tracker is contained in the section "**Build Desktop version**" of the file [script.js](script.js).  
 
 Data collected from the mouse movement (X and Y positions) will be stored in the form of [HF series](https://api.pryv.com/reference/#data-structure-high-frequency-series) in a dedicated stream.  
-Connection with Pryv is established to store collected data in the stream "**HF demo**":
+Connection with Pryv is established to store collected measures in the stream "**HF demo**":
 ```javascript
 async function setupConnection(connection) {
     var postData;
@@ -162,11 +159,10 @@ async function setupConnection(connection) {
     }
 ```
 
-[HF events](https://api.pryv.com/reference/#create-hf-event) are created to hold X and Y series data of the mouse position:
+[HF events](https://api.pryv.com/reference/#create-hf-event) need to be created to hold the mouse position, which will be consisting of points along the x and y-axis of type `count/generic` (see [Event Types Reference](https://api.pryv.com/event-types/)):
 ```javascript
 if (!hasDesktop) {
         postData.push(
-            // MOUSE
             {
                 method: 'streams.create',
                 params: {
@@ -275,7 +271,7 @@ The tracking task is also available in a mobile version that allows to collect t
 
 Similarly as for the [Desktop version](#collect-hf-data-using-the-desktop-version), data is stored in the dedicated stream "**HF demo**".  
 
-This stream is populated with HF events that will hold data collected from the accelerometer (*alpha*, *beta* and *gamma* orientation angles) of the device:
+This stream is populated with HF events that will hold data collected from the accelerometer (*alpha*, *beta* and *gamma* orientation angles, thus events of [type](https://api.pryv.com/event-types/) `angle/deg`) of the device:
 ```javascript
 if (!hasMobile) {
   postData.push(
@@ -426,137 +422,172 @@ resultTreatment.push(
 
 ## Create a sharing
 
-
-Data from both "Baby-Body" and "Heart" streams is presented in a tabular form:
-
-```javascript
-  const babyDataTable = document.getElementById('baby-weight-table');
-  const heartDataTable = document.getElementById('blood-pressure-table');
-  for (const event of events) {
-    if (event.streamIds.includes('baby-body') && event.type === 'mass/kg') {
-      addTableEvent(babyDataTable, event, [event.content + ' Kg']);
-    }
-    if (event.streamIds.includes('heart') && event.type === 'blood-pressure/mmhg-bpm') {
-      addTableEvent(heartDataTable, event, 
-        [event.content.systolic + 'mmHg', event.content.diastolic + 'mmHg']);
-    }
-  }
-	if (apiEndpoint == null)
-    updateSharings();
-}
-```
-The sharings of the user are also displayed using the function **updateSharings()** that performs a [get.accesses](https://api.pryv.com/reference/#get-accesses) API call:
-
-```javascript
-async function updateSharings() {
-  const result = await connection.api([{ method: 'accesses.get', params: {}}]);
-  const sharingTable = document.getElementById('sharings-table');
-  const accesses = result[0].accesses;
-  if (! accesses || accesses.length === 0) {
-    return;
-  }
-  resetTable('sharings-table');
-  for (const access of accesses) {
-    await addListAccess(sharingTable, access);
-  }
-}
-```
-
-## Create a sharing
-
+Once data from the tracking task has been collected, the app is designed to allow the user to share his data with a third-party.
+The section "**Sharings**" enables the user to create a sharing that consists of an URL link with a Pryv apiEndpoint that displays the visualization from the tracking test. The code for the sharing creation is contained in the section **Sharings** of the file [script.js](script.js).  
 In order to create a sharing, we add a listener to the *Create* button:
 
 ```javascript
 window.onload = (event) => {
   document.getElementById('create-sharing').addEventListener("click", createSharing);
   // ...
-};
+}; 
 ```
-
-This will fetch values for the scope of the sharing ('streamId' for permissions):
-
+The function *createSharing()* translates the sharing into the creation of a [shared access](https://api.pryv.com/concepts/#accesses) in Pryv.io. 
 ```javascript
-const checkBaby = document.getElementById('check-baby').checked;
-const checkBP = document.getElementById('check-bp').checked;
-const permissions = [];
-  if (checkBaby) permissions.push({streamId: 'baby-body', level: 'read'});
-  if (checkBP) permissions.push({ streamId: 'heart', level: 'read' });
+async function createSharing() {
+    const name = document.getElementById('sharing-name').value.trim();
+    if (!name || name === '') {
+        alert('Enter a name for your sharing');
+        return;
+    }
+```
+It will first fetch values for the scope of the sharing ('streamId' for permissions), in our case "read" level on the stream "**HF Demo**":
+```javascript
+    const permissions = [];
+    permissions.push({ streamId: 'hfdemo', level: 'read' });
 ```
 
 It will package those values into an [accesses.create](https://api.pryv.com/reference/#create-access) API call.
-
 ```javascript
-  const res = await connection.api([
-    { 
-      method: 'accesses.create', 
-      params: {
-        name: name,
-        permissions: permissions
-      }
-  }]);
-  updateSharings();
+    const res = await pryvHF.pryvConn.api([ 
+        {
+            method: 'accesses.create',
+            params: {
+                name: name,
+                permissions: permissions
+            }
+        }]);
+    const error = res[0].error;
+    if (error != null) {
+        displayError(error);
+        return;
+    }
+    updateSharings();
 }
 ```
 
-This call is made using [Connection.api()](https://github.com/pryv/lib-js#api-calls) method.
+This call is made using [pryConn.api()](https://github.com/pryv/lib-js#api-calls) method.
+
+The sharings of the user are also displayed using the function **updateSharings()** that performs a [get.accesses](https://api.pryv.com/reference/#get-accesses) API call:
+
+```javascript
+async function updateSharings() {
+    const result = await pryvHF.pryvConn.api([ 
+        {
+            method: 'accesses.get', 
+            params: {}
+        }
+    ]);
+    const sharingTable = document.getElementById('sharings-table');
+    const accesses = result[0].accesses;
+    if (!accesses || accesses.length === 0) {
+        return;
+    }
+    resetTable('sharings-table'); 
+    for (const access of accesses) {
+        await addListAccess(sharingTable, access);
+    }
+}
+```
 
 In the same way, the function **deleteSharing()** enables to delete the selected access by the user by performing an [accesses.delete](https://api.pryv.com/reference/#delete-access) API call.
 
 ```javascript
-
 async function deleteSharing(accessId) {
-  if (! confirm('delete?')) return;
-  await connection.api([
-    {
-      method: 'accesses.delete', 
-      params: {
-        id: accessId}
-    }
-  ]);
-  updateSharings();
+    if (!confirm('delete?')) return;
+    await pryvHF.pryvConn.api([ 
+        {
+            method: 'accesses.delete',
+            params: { id: accessId }
+        }
+    ]);
+    resetTable('sharings-table')
+    updateSharings();
 }
 ```
 
 ## Display the sharing (view-only mode)
 
+Once the sharing has been created, it should enable third parties to consult data from the user in a "view-only" mode. In this mode, a table containing all performed tests is displayed, along with the date of the test and the tracking method. For example:
+[https://api.pryv.com/app-web-examples/hf-example/?apiEndpoint=https://cke8hrluz00o31kqod5lcdudm@hf-test.pryv.me/](https://api.pryv.com/app-web-examples/hf-example/?apiEndpoint=https://cke8hrluz00o31kqod5lcdudm@hf-test.pryv.me/)  
 
-kljgkjghligluig
+The recipient of the link can open the data visualization by clicking on the chosen test:
+- the **Desktop version** contains the drawing performed with the mouse tracker
+- the **Mobile version** displays the recording of the phone orientation
+
+The code for the visualization mode is contained in the section **Visualization only** of the file [script.js](script.js). 
+
+This will load the app already authenticated, by passing the `pryvApiEndpoint` parameter in the function *buildVisualizationOnly(apiEndpoint, urlParams)*. 
+
+```javascript
+async function buildVisualizationOnly(apiEndpoint, urlParams) {
+    pryvHF.pryvConn = new Pryv.Connection(apiEndpoint);
+    console.log(pryvHF.pryvConn);
+    let eventsList = await getEventList();
+    populateCollectionTable(eventsList);
+    const username = await pryvHF.pryvConn.username();
+    document.getElementById("name-selection").innerHTML = "Data Collection Of " + username;
+    const eventId_mouseX = urlParams.get('posXEventId');
+    const eventId_mouseY = urlParams.get('posYEventId');
+```
+
+Either the mobile or the desktop versions are displayed depending on the user's available data:
+```javascript
+if (eventId_mouseX && eventId_mouseY) {
+    pryvHF.measures.mouseX.event = {
+        "id": eventId_mouseX
+    };
+    pryvHF.measures.mouseY.event = {
+        "id": eventId_mouseY
+    };
+    buildDesktop();
+    mouseVisu.style.display = "";
+}
+const eventId_alpha = urlParams.get('angleAEventId');
+const eventId_beta = urlParams.get('angleBEventId');
+const eventId_gamma = urlParams.get('angleYEventId');
+if (eventId_alpha && eventId_beta && eventId_gamma) {
+    pryvHF.measures.orientationAlpha.event = {
+        "id": eventId_alpha
+    };
+    pryvHF.measures.orientationBeta.event = {
+        "id": eventId_beta
+    };
+    pryvHF.measures.orientationGamma.event = {
+        "id": eventId_gamma
+    };
+    buildMobile();
+    accelerometerVisu.style.display = "";
+}
+document.getElementById('service').style.display = "none";
+mouseTracker.style.display = "none";
+accelerometerCollector.style.display = "none";
+sharing.style.display = "none";
+fetch(); 
+```
 
 ## App guidelines
 
 ### Custom service info
 
-Following our [app guidelines](https://api.pryv.com/guides/app-guidelines/), we build apps that can work for multiple Pryv.io platforms providing a `serviceInfoUrl` query parameter:
+Following our [app guidelines](https://api.pryv.com/guides/app-guidelines/), we build apps that can work for multiple Pryv.io platforms providing a `serviceInfo` parameter:
 
 ```javascript
-const serviceInfoUrl = Pryv.Browser.serviceInfoFromUrl() || 'https://reg.pryv.me/service/info';
+async function fetchServiceInfo() {
+    service = new Pryv.Service(serviceInfoInput.value);
+    serviceInfo = await service.info();
+    authRequest()
+}
+
+async function authRequest() {
+    Pryv.Browser.setupAuth(authSettings, serviceInfoInput.value);
+}
 ```
-To set a custom Pryv.io platform, provide the service information URL as shown here for the Pryv Lab:
+To set a custom Pryv.io platform, provide the service information URL or use the selector to choose your Pryv.io platform in the **Service information** accordion:
 
-[https://api.pryv.com/app-web-examples/view-and-share/?pryvServiceInfoUrl="https://reg.pryv.me/service/info"](https://api.pryv.com/app-web-examples/view-and-share/?pryvServiceInfoUrl=%22https://reg.pryv.me/service/info%22)
-
- To launch this app on your [local Open Pryv.io platform](https://github.com/pryv/open-pryv.io#development) use (the link requires to have a running Open Pryv.io with the rec-la SSL proxy):
-
-[https://api.pryv.com/app-web-examples/view-and-share/?pryvServiceInfoUrl="https://my-computer.rec.la:4443/reg/service/info"](https://api.pryv.com/app-web-examples/view-and-share/?pryvServiceInfoUrl=%22https://my-computer.rec.la:4443/reg/service/info%22). 
-
-### Authenticated API endpoint
-
-You can also load the app already authenticated, by providing the `pryvApiEndpoint` query parameter. For example:
-
-[https://api.pryv.com/app-web-examples/view-and-share/?pryvApiEndpoint=https://ckbry9n6h009o1od3qiv3qz7u@mariana.pryv.me/](https://api.pryv.com/app-web-examples/view-and-share/?pryvApiEndpoint=https://ckbry9n6h009o1od3qiv3qz7u@mariana.pryv.me/)
-
-```javascript
-window.onload = async (event) => {
-  if (apiEndpoint != null) {
-    document.getElementById('welcome-message-mme').style.visibility = 'hidden';
-    connection = new Pryv.Connection(apiEndpoint);
-    document.getElementById('username').innerText = apiEndpoint.split('@')[1].slice(0,-1);
-    showData();  
-  }
-  // ...
-};
-```
-
+<p align="center">
+<img src="images/service-info.png" alt="service-info" width=700 />
+</p>
 
 ## Customize the visuals 
 
