@@ -39,7 +39,7 @@ The sharing link enables the recipient to consult the list of trackings, along w
 
 |Desktop                                                 | Mobile                                                  |
 | -------------------------------------------------------|---------------------------------------------------------|
-| <img src="images/share-desktop.png" alt="view" style="zoom:50%;" /> | <img src="images/share-acc-2.png" alt="view" style="zoom:50%;" /> |
+| <img src="images/share-desktop.png" alt="view" style="zoom:100%;" /> | <img src="images/share-acc-2.png" alt="view" style="zoom:50%;" /> |
 
 
 ## Authenticate your app
