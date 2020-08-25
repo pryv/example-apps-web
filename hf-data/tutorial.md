@@ -139,129 +139,104 @@ Data collected from the mouse movement (X and Y positions) will be stored in the
 Connection with Pryv is established to store collected measures in the stream "**HF demo**":
 ```javascript
 async function setupStreamStructure(connection) {
-    var postData;
-    var resultTreatment = [];
-    var postData = [];
-    var streams = (await connection.get('streams', null)).streams;
-    let [hasHF, hasDesktop, hasMobile] = hasStreams(streams);
-    if (!hasHF) {
-        postData.push(
-            {
-                method: 'streams.create',
-                params: {
-                    id: 'hfdemo',
-                    name: 'HF Demo',
-                    parentId: 'hf'
-                }
-            },
-        );
-        resultTreatment.push(null);
-    }
+  const resultHandlers = [];
+  const apiCalls = [];
+  const streams = (await connection.get('streams', null)).streams;
+  const [hasRootStream, hasDesktopStream, hasMobileStream] = hasStreams(
+    streams
+  );
+  if (!hasRootStream) {
+    apiCalls.push({
+      method: 'streams.create',
+      params: {
+        id: 'hfdemo',
+        name: 'HF Demo',
+        parentId: 'hf'
+      }
+    });
+    resultHandlers.push(null);
+  }
 ```
 
-[HF events](https://api.pryv.com/reference/#create-hf-event) need to be created to hold the mouse position, which will be consisting of points along the x and y-axis of type `count/generic` (see [Event Types Reference](https://api.pryv.com/event-types/)):
+[HF events](https://api.pryv.com/reference/#create-hf-event) and their streams need to be created to hold the mouse position, which will be consisting of points along the x and y-axis of type `count/generic` (see [Event Types Reference](https://api.pryv.com/event-types/)):
 ```javascript
-if (!hasDesktop) {
-        postData.push(
-            {
-                method: 'streams.create',
-                params: {
-                    id: 'hfdemo-mouse-x',
-                    name: 'Mouse-X',
-                    parentId: 'hfdemo'
-                }
-            },
-            {
-                method: 'streams.update',
-                params: {
-                    id: 'hfdemo-mouse-x',
-                    update: {
-                        clientData: buildPlotlyOptions('Mouse', 'count/generic', 'X')
-                    }
-                }
-            },
-            {
-                method: 'events.create',
-                params: {
-                    streamId: 'hfdemo-mouse-x',
-                    type: 'series:count/generic',
-                    description: 'Holder for x mouse position',
-                }
-            },
-            {
-                method: 'streams.create',
-                params: {
-                    id: 'hfdemo-mouse-y',
-                    name: 'Mouse-Y',
-                    parentId: 'hfdemo'
-                }
-            },
-            {
-                method: 'streams.update',
-                params: {
-                    id: 'hfdemo-mouse-y',
-                    update: {
-                        clientData: buildPlotlyOptions('Mouse', 'count/generic', 'Y')
-                    }
-                }
-            },
-            {
-                method: 'events.create',
-                params: {
-                    streamId: 'hfdemo-mouse-y',
-                    type: 'series:count/generic',
-                    description: 'Holder for y mouse position',
-                }
-            }
-        );
+if (!hasDesktopStream) {
+      apiCalls.push(
+        {
+          method: 'streams.create',
+          params: {
+            id: 'hfdemo-mouse-x',
+            name: 'Mouse-X',
+            parentId: 'hfdemo',
+            clientData: buildPlotlyOptions('Mouse', 'count/generic', 'X')
+          }
+        },
+        {
+          method: 'streams.create',
+          params: {
+            id: 'hfdemo-mouse-y',
+            name: 'Mouse-Y',
+            parentId: 'hfdemo',
+            clientData: buildPlotlyOptions('Mouse', 'count/generic', 'Y')
+          }
+        }
+      );
+
+      resultHandlers.push(null, null, null, null);
+    }
+    apiCalls.push(
+      {
+        method: 'events.create',
+        params: {
+          streamId: 'hfdemo-mouse-x',
+          type: 'series:count/generic',
+          description: 'Holder for x mouse position'
+        }
+      },
+      {
+        method: 'events.create',
+        params: {
+          streamId: 'hfdemo-mouse-y',
+          type: 'series:count/generic',
+          description: 'Holder for y mouse position'
+        }
+      }
+    );
+    // https://github.com/pryv/lib-js#advanced-usage-of-api-calls-with-optional-individual-result-and-progress-callbacks
+    resultHandlers.push(
+      function registerEventX(result) {
+        pryvHF.measures.mouseX.event = result.event;
+        console.log('handle xEvent set', result.event);
+      },
+      function registerEventY(result) {
+        pryvHF.measures.mouseY.event = result.event;
+        console.log('handle yEvent set', result.event);
+      }
+    );
 ```
 
 These events are populated with the X and Y positions of the mouse:
 ```javascript
-resultTreatment.push(
-    null,
-    null,
-    function handleCreateEventX(result) {
-        pryvHF.measures.mouseX.event = result.event;
+function savePoints() {
+  if (pryvHF.pryvConn) {
+    sendHfPoints(pryvHF.pryvConn, pryvHF.measures);
+  }
+  setTimeout(savePoints, SAMPLE_POST_MS);
+}
 
-        console.log('handle xEvent set', result.event);
-    },
-    null,
-    null,
-    function handleCreateEventY(result) {
-        pryvHF.measures.mouseY.event = result.event;
-        console.log('handle yEvent set', result.event);
+function sendHfPoints(connection, measures) {
+  for (let key in measures) {
+    let bufferLength = measures[key].buffer.length;
+    if (measures[key].event && bufferLength > 0) {
+      let points = measures[key].buffer;
+      connection.addPointsToHFEvent(
+        measures[key].event.id,
+        measures[key].event.content.fields,
+        points
+      );
+      measures[key].buffer = [];
     }
-    );
-} else {
-    postData.push(
-        {
-            method: 'events.create',
-            params: {
-                streamId: 'hfdemo-mouse-x',
-                type: 'series:count/generic',
-                description: 'Holder for x mouse position',
-            }
-        },
-        {
-            method: 'events.create',
-            params: {
-                streamId: 'hfdemo-mouse-y',
-                type: 'series:count/generic',
-                description: 'Holder for y mouse position',
-            }
-        }
-    );
-    resultTreatment.push(
-        function handleCreateEventX(result) {
-            pryvHF.measures.mouseX.event = result.event;
-            console.log('handle xEvent set', result.event);
-        },
-        function handleCreateEventY(result) {
-            pryvHF.measures.mouseY.event = result.event;
-            console.log('handle yEvent set', result.event);
-        }
-    );
+  }
 }
 ```
 
