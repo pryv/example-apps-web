@@ -108,13 +108,14 @@ function showCollectAndVisualize(isDisplay) {
 }
 
 async function setupStreamStructure(connection) {
-  // A- retrieve previously created events or create events holders
+  // retrieve existing streams structure
   const resultHandlers = [];
   const apiCalls = [];
   const streams = (await connection.get('streams', null)).streams;
   const [hasRootStream, hasDesktopStream, hasMobileStream] = hasStreams(
     streams
   );
+  // create necessary streams
   if (!hasRootStream) {
     apiCalls.push({
       method: 'streams.create',
@@ -162,6 +163,7 @@ async function setupStreamStructure(connection) {
 
       resultHandlers.push(null, null, null, null, null, null);
     }
+    // https://api.pryv.com/reference/#create-hf-event
     apiCalls.push(
       {
         method: 'events.create',
@@ -188,6 +190,7 @@ async function setupStreamStructure(connection) {
         }
       }
     );
+    // https://github.com/pryv/lib-js#advanced-usage-of-api-calls-with-optional-individual-result-and-progress-callbacks
     resultHandlers.push(
       function handleCreateEventGamma(result) {
         pryvHF.measures.orientationGamma.event = result.event;
@@ -203,7 +206,6 @@ async function setupStreamStructure(connection) {
       }
     );
   } else {
-    /* If streams for desktop devices do not exist */
     if (!hasDesktopStream) {
       apiCalls.push(
         // MOUSE
@@ -229,6 +231,7 @@ async function setupStreamStructure(connection) {
 
       resultHandlers.push(null, null, null, null);
     }
+    // https://api.pryv.com/reference/#create-hf-event
     apiCalls.push(
       {
         method: 'events.create',
@@ -247,6 +250,7 @@ async function setupStreamStructure(connection) {
         }
       }
     );
+    // https://github.com/pryv/lib-js#advanced-usage-of-api-calls-with-optional-individual-result-and-progress-callbacks
     resultHandlers.push(
       function registerEventX(result) {
         pryvHF.measures.mouseX.event = result.event;
