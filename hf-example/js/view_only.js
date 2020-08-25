@@ -3,7 +3,7 @@ async function buildVisualizationOnly(apiEndpoint, urlParams) {
   document.getElementById('selection-data').style.display = '';
   pryvHF.pryvConn = new Pryv.Connection(apiEndpoint);
 
-  let eventsList = await getEventList();
+  const eventsList = await getEventList();
   populateCollectionTable(eventsList);
 
   const username = await pryvHF.pryvConn.username();
@@ -43,7 +43,7 @@ async function buildVisualizationOnly(apiEndpoint, urlParams) {
   /* Aggregate the related events from different streams together */
 
   async function getEventList() {
-    let eventsList = [];
+    const eventsList = [];
     const params = {
       fromTime: 0
     };

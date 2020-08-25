@@ -13,7 +13,7 @@ const ALPHA_COMPONENT = 255;
 
 function buildDesktop() {
   is_display_current_canvas = true;
-  let imageSelector = document.getElementById('image-selector');
+  const imageSelector = document.getElementById('image-selector');
   imageSelector.addEventListener('change', setBackgroundImage);
 
   drawingField = document.getElementById('drawing-field');
@@ -21,7 +21,7 @@ function buildDesktop() {
   drawingField.addEventListener('mousedown', mouseDown, false);
   drawingField.addEventListener('mousemove', mouseMove, false);
 
-  let drawingCanvas = document.getElementById('drawing-canvas');
+  const drawingCanvas = document.getElementById('drawing-canvas');
   if (drawingCanvas.getContext) {
     drawingCtx = drawingCanvas.getContext('2d');
   }
@@ -40,10 +40,10 @@ function buildDesktop() {
   button_current.addEventListener('click', current_context);
   changeColorCurrentButton();
 
-  let button_previous = document.getElementById('previous');
+  const button_previous = document.getElementById('previous');
   button_previous.addEventListener('click', previousImage);
 
-  let button_next = document.getElementById('next');
+  const button_next = document.getElementById('next');
   button_next.addEventListener('click', nextImage);
 
   frequencyMouse = document.getElementById('frequency-mouse');
@@ -153,8 +153,8 @@ function current_context() {
 }
 
 function createNewImage() {
-  let i = hiddenCanvas.toDataURL();
-  let img = new Image();
+  const i = hiddenCanvas.toDataURL();
+  const img = new Image();
   img.src = i;
   images.push(img);
   mouseImagesCounter.innerHTML = 'Number of stored images: ' + images.length;

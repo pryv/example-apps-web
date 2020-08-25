@@ -1,6 +1,6 @@
 // ----- Sharings
 function buildSharing() {
-  let sharing = document.getElementById('create-sharing');
+  const sharing = document.getElementById('create-sharing');
   sharing.addEventListener('click', createSharing);
 }
 
@@ -116,6 +116,6 @@ async function deleteSharing(accessId) {
 function resetTable(tableId) {
   const html =
     '<thead><tr><th scope="col">Name</th><th scope="col">Link</th><th scope="col">Mail</th></tr></thead>';
-  let table = document.getElementById(tableId);
+  const table = document.getElementById(tableId);
   table.innerHTML = html;
 }

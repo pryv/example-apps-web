@@ -43,7 +43,7 @@ function buildMobile() {
   animateVisu();
 
   accelerometerRecordCounter = document.getElementById('counter-accelerometer');
-  let accelerometerButtonShow = document.getElementById('accelerometer-show');
+  const accelerometerButtonShow = document.getElementById('accelerometer-show');
   accelerometerButtonShow.addEventListener('click', showRecording);
 
   recordSelect = document.getElementById('recording-select');
@@ -56,7 +56,7 @@ function samplingButton(e) {
     alert('Please connect first to your Pryv account!');
     return;
   }
-  let now = Date.now() / 1000;
+  const now = Date.now() / 1000;
   if (is_recording) {
     //Add point to indicate the end of a drawing
     pryvHF.measures.orientationGamma.buffer.push([now, IMAGE_END]);
@@ -73,7 +73,7 @@ function samplingButton(e) {
 
 function deviceorientation(event) {
   if (is_recording) {
-    let now = Date.now() / 1000;
+    const now = Date.now() / 1000;
     cubeAlphaCollect = THREE.Math.degToRad(event.alpha);
     cubeGammaCollect = THREE.Math.degToRad(event.gamma);
     cubeBetaCollect = THREE.Math.degToRad(event.beta);
@@ -85,13 +85,13 @@ function deviceorientation(event) {
 
 function create3DCanvas(canvasProperty) {
   // Setting scene for 3D Object
-  let scene = new THREE.Scene();
-  let camera = new THREE.PerspectiveCamera(75, 0.5349182763744428, 0.1, 1000);
-  let renderer = new THREE.WebGLRenderer({ canvas: canvasProperty });
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, 0.5349182763744428, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({ canvas: canvasProperty });
 
-  let geometry = new THREE.BoxGeometry(3, 1.5, 0.5);
-  let material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-  let cube = new THREE.Mesh(geometry, material);
+  const geometry = new THREE.BoxGeometry(3, 1.5, 0.5);
+  const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+  const cube = new THREE.Mesh(geometry, material);
   scene.add(cube);
 
   let edges = new THREE.EdgesGeometry(geometry);
@@ -134,8 +134,8 @@ function recordAccelerometer(pointsAlpha, pointsBeta, pointsGamma, l) {
       currentRecording = [];
     } else if (pointsAlpha[i] == IMAGE_END) {
       //Add option to the select
-      let index = recordings.length;
-      let opt = document.createElement('option');
+      const index = recordings.length;
+      const opt = document.createElement('option');
       opt.appendChild(document.createTextNode('Recording ' + index));
       opt.value = index;
       recordSelect.appendChild(opt);
@@ -149,13 +149,13 @@ function recordAccelerometer(pointsAlpha, pointsBeta, pointsGamma, l) {
 }
 
 function showRecording() {
-  let selected = recordSelect.value;
+  const selected = recordSelect.value;
   if (selected == '') {
     alert('No recording available');
     return;
   }
   let time = 0;
-  let recording = recordings[selected];
+  const recording = recordings[selected];
   for (let i = 0; i < recording.length; i++) {
     let point = recording[i];
     time = samplingAccRate * i;
