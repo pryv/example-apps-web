@@ -54,7 +54,7 @@ async function fetchServiceInfo() {
   performAuthRequest();
 }
 
-async function performAuthRequest() {  
+async function performAuthRequest() {
   const authSettings = {
     spanButtonID: 'pryv-button', // span id the DOM that will be replaced by the Service specific button
     onStateChange: pryvAuthStateChange, // event Listener for Authentication steps
@@ -112,7 +112,9 @@ async function setupStreamStructure(connection) {
   const resultHandlers = [];
   const apiCalls = [];
   const streams = (await connection.get('streams', null)).streams;
-  const [hasRootStream, hasDesktopStream, hasMobileStream] = isInStreams(streams);
+  const [hasRootStream, hasDesktopStream, hasMobileStream] = hasStreams(
+    streams
+  );
   if (!hasRootStream) {
     apiCalls.push({
       method: 'streams.create',
@@ -135,7 +137,7 @@ async function setupStreamStructure(connection) {
             id: 'hfdemo-orientation-gamma',
             name: 'Orientation-Gamma',
             parentId: 'hfdemo',
-            clientData: stdPlotly('Orientation', 'angle/deg', 'Gamma'),
+            clientData: stdPlotly('Orientation', 'angle/deg', 'Gamma')
           }
         },
         {
@@ -144,7 +146,7 @@ async function setupStreamStructure(connection) {
             id: 'hfdemo-orientation-beta',
             name: 'Orientation-Beta',
             parentId: 'hfdemo',
-            clientData: stdPlotly('Orientation', 'angle/deg', 'Beta'),
+            clientData: stdPlotly('Orientation', 'angle/deg', 'Beta')
           }
         },
         {
@@ -153,9 +155,9 @@ async function setupStreamStructure(connection) {
             id: 'hfdemo-orientation-alpha',
             name: 'Orientation-Alpha',
             parentId: 'hfdemo',
-            clientData: stdPlotly('Orientation', 'angle/deg', 'Alpha'),
+            clientData: stdPlotly('Orientation', 'angle/deg', 'Alpha')
           }
-        },
+        }
       );
 
       resultHandlers.push(null, null, null, null, null, null);
@@ -210,16 +212,8 @@ async function setupStreamStructure(connection) {
           params: {
             id: 'hfdemo-mouse-x',
             name: 'Mouse-X',
-            parentId: 'hfdemo'
-          }
-        },
-        {
-          method: 'streams.update',
-          params: {
-            id: 'hfdemo-mouse-x',
-            update: {
-              clientData: stdPlotly('Mouse', 'count/generic', 'X')
-            }
+            parentId: 'hfdemo',
+            clientData: stdPlotly('Mouse', 'count/generic', 'X')
           }
         },
         {
@@ -227,16 +221,8 @@ async function setupStreamStructure(connection) {
           params: {
             id: 'hfdemo-mouse-y',
             name: 'Mouse-Y',
-            parentId: 'hfdemo'
-          }
-        },
-        {
-          method: 'streams.update',
-          params: {
-            id: 'hfdemo-mouse-y',
-            update: {
-              clientData: stdPlotly('Mouse', 'count/generic', 'Y')
-            }
+            parentId: 'hfdemo',
+            clientData: stdPlotly('Mouse', 'count/generic', 'Y')
           }
         }
       );
@@ -262,44 +248,36 @@ async function setupStreamStructure(connection) {
       }
     );
     resultHandlers.push(
-      function handleCreateEventX(result) {
+      function registerEventX(result) {
         pryvHF.measures.mouseX.event = result.event;
         console.log('handle xEvent set', result.event);
       },
-      function handleCreateEventY(result) {
+      function registerEventY(result) {
         pryvHF.measures.mouseY.event = result.event;
         console.log('handle yEvent set', result.event);
       }
     );
   }
 
-  const result = connection.api(apiCalls);
-  result
-    .then((result, err, resultInfo) => {
-      if (err) {
-        return console.log('...error: ' + JSON.stringify([err, result]));
-      }
-      console.log('...event created: ' + JSON.stringify(result));
-      if (result) {
-        for (let i = 0; i < result.length; i++) {
-          if (resultHandlers[i]) {
-            /* If no new event is created => error with token */
-            if (result[i].event == null) {
-              throw new Error(
-                "The given token's access permissions do not allow to create an event. Please suppress the app access before reconnecting"
-              );
-            }
-            resultHandlers[i].call(null, result[i]);
-          }
+  try {
+    const results = await connection.api(apiCalls);
+    console.log('...structure created: ', results);
+    for (let i = 0; i < results.length; i++) {
+      if (resultHandlers[i]) {
+        /* If no new event is created => error with token */
+        if (results[i].event == null) {
+          throw new Error(
+            "The given token's access permissions do not allow to create an event. Please suppress the app access before reconnecting"
+          );
         }
-      } else {
-        console.log(' No result!!', resultInfo);
+        resultHandlers[i].call(null, results[i]);
       }
-    })
-    .catch(error => {
-      alert(error);
-      displayDiv(false);
-    });
+    }
+  } catch (error) {
+    console.error('...error: ', error);
+    alert(error);
+    displayDiv(false);
+  }
   pryvHF.pryvConn = connection;
 
   /**
@@ -307,7 +285,7 @@ async function setupStreamStructure(connection) {
    * @returns hasDesktopStream: True if streams for desktop devices exist
    * @returns hasMobileStream: True if streams for mobile devices exist
    */
-  function isInStreams(streams) {
+  function hasStreams(streams) {
     let hasDesktopStream = false;
     let hasMobileStream = false;
     let hasRootStream = false;

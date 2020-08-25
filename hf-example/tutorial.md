@@ -143,7 +143,7 @@ async function setupStreamStructure(connection) {
     var resultTreatment = [];
     var postData = [];
     var streams = (await connection.get('streams', null)).streams;
-    let [hasHF, hasDesktop, hasMobile] = isInStreams(streams);
+    let [hasHF, hasDesktop, hasMobile] = hasStreams(streams);
     if (!hasHF) {
         postData.push(
             {
