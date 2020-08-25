@@ -7,14 +7,14 @@ All you need to run this app is to download [index.html](index.html) and [script
 
 This is a data collection and sharing web app that first displays a welcome message and a button to initiate the authentication process.
 <p align="center">
-<img src="images/1-login.png" alt="login" width="600"/>
+<img src="images/1-login.png" alt="login" width="700"/>
 </p>
 
 With a click on the login button, a popup opens in your browser where you can either authenticate or create a new account. 
 
 When signed in, you can consent to give the app "app-web-hfdemo" permission to manage the stream "**HF**" where the data from the tracker is stored.
 <p align="center">
-<img src="images/2-request-permission.png" alt="request-permissions" width="600"/>
+<img src="images/2-request-permission.png" alt="request-permissions" width="400"/>
 </p>
 
 Once you have accepted, you can start the tracking task using the accelerometer or the mouse.
@@ -32,14 +32,14 @@ You can visualize your data in the "Visualization" section of the app:
 You can then share your data by creating a new sharing at the bottom of the page. This will generate a URL link that contains your tracking visualization from the stream "**HF**".
 
 <p align="center">
-<img src="images/sharing.png" alt="new-sharing" width="400"/>
+<img src="images/sharing.png" alt="new-sharing" width="700"/>
 </p>
 
 The sharing link enables the recipient to consult the list of trackings, along with the tracking method (desktop or mobile), and to click on a tracking to visualize it on the screen:
 
 |Desktop                                                 | Mobile                                                  |
 | -------------------------------------------------------|---------------------------------------------------------|
-| <img src="images/share-desktop.png" alt="view" style="zoom:50%;" /> | <img src="images/share-acc.png" alt="view" style="zoom:50%;" /> |
+| <img src="images/share-desktop.png" alt="view" style="zoom:60%;" /> | <img src="images/share-acc.png" alt="view" style="zoom:50%;" /> |
 
 
 ## Authenticate your app
@@ -586,7 +586,7 @@ async function authRequest() {
 To set a custom Pryv.io platform, provide the service information URL or use the selector to choose your Pryv.io platform in the **Service information** accordion:
 
 <p align="center">
-<img src="images/service-info.png" alt="service-info" width=700 />
+<img src="images/service-info.png" alt="service-info" width=800 />
 </p>
 
 ## Customize the visuals 
