@@ -455,5 +455,5 @@ function computeFrequency() {
     pointsSecondMouse = 0;
     pointsSecondAccelerometer = 0;
   }
-  setTimeout(frequency, 1000);
+  setTimeout(computeFrequency, 1000);
 }
