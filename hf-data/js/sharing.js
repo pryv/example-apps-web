@@ -30,10 +30,9 @@ async function createSharing() {
     return;
   }
   // set permissions
-  const permissions = [];
-  permissions.push({ streamId: 'hfdemo', level: 'read' });
+  const permissions = [{ streamId: 'hfdemo', level: 'read' }];
 
-  const res = await pryvHF.pryvConn.api([
+  const results = await pryvHF.pryvConn.api([
     // https://github.com/pryv/lib-js#api-calls
     {
       method: 'accesses.create', // creates the selected access: https://api.pryv.com/reference/#create-access
@@ -43,7 +42,7 @@ async function createSharing() {
       }
     }
   ]);
-  const error = res[0].error;
+  const error = results[0].error;
   if (error != null) {
     displayError(error);
     return;

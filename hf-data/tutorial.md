@@ -398,7 +398,7 @@ resultTreatment.push(
 ## Create a sharing
 
 Once data from the tracking task has been collected, the app is designed to allow the user to share his data with a third-party.
-The section "**Sharings**" enables the user to create a sharing that consists of an URL link with a Pryv apiEndpoint that displays the visualization from the tracking test. The code for the sharing creation is contained in the section **Sharings** of the file [script.js](script.js).  
+The section "**Sharings**" enables the user to create a sharing that consists of a URL link with a Pryv apiEndpoint that displays the visualization from the tracking test. The code for the sharing creation is contained in the section **Sharings** of the file [script.js](script.js).  
 In order to create a sharing, we add a listener to the *Create* button:
 
 ```javascript
@@ -418,54 +418,54 @@ async function createSharing() {
 ```
 It will first fetch values for the scope of the sharing ('streamId' for permissions), in our case "read" level on the stream "**HF Demo**":
 ```javascript
-    const permissions = [];
-    permissions.push({ streamId: 'hfdemo', level: 'read' });
+    const permissions = [{ streamId: 'hfdemo', level: 'read' }];
 ```
 
 It will package those values into an [accesses.create](https://api.pryv.com/reference/#create-access) API call.
 ```javascript
-    const res = await pryvHF.pryvConn.api([ 
-        {
-            method: 'accesses.create',
-            params: {
-                name: name,
-                permissions: permissions
-            }
-        }]);
-    const error = res[0].error;
-    if (error != null) {
-        displayError(error);
-        return;
+  const results = await pryvHF.pryvConn.api([
+    // https://github.com/pryv/lib-js#api-calls
+    {
+      method: 'accesses.create', // creates the selected access: https://api.pryv.com/reference/#create-access
+      params: {
+        name: name,
+        permissions: permissions
+      }
     }
-    updateSharings();
-}
+  ]);
+  const error = results[0].error;
+  if (error != null) {
+    displayError(error);
+    return;
+  }
+  updateSharings();
 ```
 
-This call is made using [pryConn.api()](https://github.com/pryv/lib-js#api-calls) method.
+This call is made using [pryvConn.api()](https://github.com/pryv/lib-js#api-calls) method.
 
-The sharings of the user are also displayed using the function **updateSharings()** that performs a [get.accesses](https://api.pryv.com/reference/#get-accesses) API call:
+The sharings of the user are also displayed using the function **updateSharings()** that performs an [accesses.get](https://api.pryv.com/reference/#get-accesses) API call:
 
 ```javascript
 async function updateSharings() {
-    const result = await pryvHF.pryvConn.api([ 
-        {
-            method: 'accesses.get', 
-            params: {}
-        }
-    ]);
-    const sharingTable = document.getElementById('sharings-table');
-    const accesses = result[0].accesses;
-    if (!accesses || accesses.length === 0) {
-        return;
+  const result = await pryvHF.pryvConn.api([
+    {
+      method: 'accesses.get',
+      params: {}
     }
-    resetTable('sharings-table'); 
-    for (const access of accesses) {
-        await addListAccess(sharingTable, access);
-    }
+  ]);
+  const sharingTable = document.getElementById('sharings-table');
+  const accesses = result[0].accesses;
+  if (!accesses || accesses.length === 0) {
+    return;
+  }
+  resetTable('sharings-table');
+  for (const access of accesses) {
+    await addListAccess(sharingTable, access);
+  }
 }
 ```
 
-In the same way, the function **deleteSharing()** enables to delete the selected access by the user by performing an [accesses.delete](https://api.pryv.com/reference/#delete-access) API call.
+In the same way, the function **deleteSharing()** enables to delete the access selected by the user by performing an [accesses.delete](https://api.pryv.com/reference/#delete-access) API call.
 
 ```javascript
 async function deleteSharing(accessId) {
@@ -490,55 +490,54 @@ The recipient of the link can open the data visualization by clicking on the cho
 - the **Desktop version** contains the drawing performed with the mouse tracker
 - the **Mobile version** displays the recording of the phone orientation
 
-The code for the visualization mode is contained in the section **Visualization only** of the file [script.js](script.js). 
+The code for the visualization mode is contained in the [js/view_only.js](js/view_only.js).
 
 This will load the app already authenticated, by passing the `pryvApiEndpoint` parameter in the function *buildVisualizationOnly(apiEndpoint, urlParams)*. 
 
 ```javascript
 async function buildVisualizationOnly(apiEndpoint, urlParams) {
-    pryvHF.pryvConn = new Pryv.Connection(apiEndpoint);
-    console.log(pryvHF.pryvConn);
-    let eventsList = await getEventList();
-    populateCollectionTable(eventsList);
-    const username = await pryvHF.pryvConn.username();
-    document.getElementById("name-selection").innerHTML = "Data Collection Of " + username;
-    const eventId_mouseX = urlParams.get('posXEventId');
-    const eventId_mouseY = urlParams.get('posYEventId');
+  document.getElementById('selection-data').style.display = '';
+  pryvHF.pryvConn = new Pryv.Connection(apiEndpoint);
+
+  const eventsList = await getEventList();
+  populateCollectionTable(eventsList);
+
+  const username = await pryvHF.pryvConn.username();
+  document.getElementById('name-selection').innerHTML =
+    'Data Collection Of ' + username;
+
+  const eventId_mouseX = urlParams.get('posXEventId');
+  const eventId_mouseY = urlParams.get('posYEventId');
 ```
 
 Either the mobile or the desktop versions are displayed depending on the user's available data:
 ```javascript
-if (eventId_mouseX && eventId_mouseY) {
+  if (eventId_mouseX && eventId_mouseY) {
     pryvHF.measures.mouseX.event = {
-        "id": eventId_mouseX
+      id: eventId_mouseX
     };
     pryvHF.measures.mouseY.event = {
-        "id": eventId_mouseY
+      id: eventId_mouseY
     };
     buildDesktop();
-    mouseVisu.style.display = "";
-}
-const eventId_alpha = urlParams.get('angleAEventId');
-const eventId_beta = urlParams.get('angleBEventId');
-const eventId_gamma = urlParams.get('angleYEventId');
-if (eventId_alpha && eventId_beta && eventId_gamma) {
+    document.getElementById('mouse-visualization').style.display = '';
+  }
+
+  const eventId_alpha = urlParams.get('angleAEventId');
+  const eventId_beta = urlParams.get('angleBEventId');
+  const eventId_gamma = urlParams.get('angleYEventId');
+  if (eventId_alpha && eventId_beta && eventId_gamma) {
     pryvHF.measures.orientationAlpha.event = {
-        "id": eventId_alpha
+      id: eventId_alpha
     };
     pryvHF.measures.orientationBeta.event = {
-        "id": eventId_beta
+      id: eventId_beta
     };
     pryvHF.measures.orientationGamma.event = {
-        "id": eventId_gamma
+      id: eventId_gamma
     };
     buildMobile();
-    accelerometerVisu.style.display = "";
-}
-document.getElementById('service').style.display = "none";
-mouseTracker.style.display = "none";
-accelerometerCollector.style.display = "none";
-sharing.style.display = "none";
-fetchPoints(); 
+    document.getElementById('accelerometer-visualization').style.display = '';
 ```
 
 ## App guidelines
