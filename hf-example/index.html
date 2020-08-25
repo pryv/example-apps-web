@@ -8,18 +8,23 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="https://api.pryv.com/style/pryv.min.css">
         <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400">
-        <link href="style.css" rel="stylesheet" type="text/css" />
+        <link href="assets/style.css" rel="stylesheet" type="text/css" />
         <title>Pryv HF</title>
         <script src="https://api.pryv.com/lib-js/pryv.js"></script>
         <script src="https://threejs.org/build/three.js"></script>
-        <script src="script.js"></script>
+        <script src="assets/js/desktop.js"></script>
+        <script src="assets/js/mobile.js"></script>
+        <script src="assets/js/view_only.js"></script>
+        <script src="assets/js/sharing.js"></script>
+        <script src="assets/js/connection.js"></script>
+        <script src="assets/js/script.js"></script>
     </head>
 
     <body>
         <div class="container" id="container">
             <h1>Pryv.io collect and visualize HF Data</h1>
 
-            <div class="card" id="welcome">
+            <div class="card" id="welcome" style="display: none">
                 <div class="card-body">
                     <h2 class="card-title">Welcome</h2>
                     <br />
@@ -28,7 +33,7 @@
                 </div>
             </div>
 
-            <div class="card" id="service">
+            <div class="card" id="service" style="display: none">
                 <div class="card-body">
                     <button class="collapsible">Service information</button>
                     <div class="service_info">
@@ -63,7 +68,7 @@
                 </div>
             </div>
 
-            <div class="card" id="selection-data">
+            <div class="card" id="selection-data" style="display:none">
                 <div class="card-body">
                     <h2 class="card-title" id="name-selection"></h2>
                     <table id='data-collection' class="table">
@@ -86,8 +91,8 @@
                     <p>You can select the image of your choice in the selector, and start drawing by following the image outlines as precisely as possible. If you change the image, it will erase your drawing on the screen. You need to left click to begin and to stop drawing.</p>
                     <br/>
                     <select name="image-selector" id="image-selector">
-                  <option value="images/heart.png">Heart</option>
-                  <option value="images/house.png">House</option>
+                  <option value="assets/images/heart.png">Heart</option>
+                  <option value="assets/images/house.png">House</option>
                 </select>
                     <div id="drawing-field">
                         <canvas class="canvas" id="drawing-canvas" height="400px" width="600px"></canvas>
@@ -154,7 +159,7 @@
 
                 </div>
             </div>
-            <div class="card" id="sharing-view" style="display: none;">
+            <div class="card" id="sharing-view" style="display: none">
                 <div class="card-body">
                   <h2 class="card-title">Sharings</h2>
                   <form class="form-inline">
