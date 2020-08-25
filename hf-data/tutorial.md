@@ -3,7 +3,7 @@
 
 You can try the live version of the app [here](link-to-gh-pages).
 
-All you need to run this app is to download [index.html](index.html) and [script.js](script.js) files and open **index.html** with your browser.
+All you need to run this app is to download [index.html](index.html), [script.js](script.js) files, [js/](js) and [assets](assets) folders and open **index.html** with your browser.
 
 This is a data collection and sharing web app that first displays a welcome message and a button to initiate the authentication process.
 <p align="center">
