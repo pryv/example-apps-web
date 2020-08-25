@@ -134,16 +134,8 @@ async function setupStreamStructure(connection) {
           params: {
             id: 'hfdemo-orientation-gamma',
             name: 'Orientation-Gamma',
-            parentId: 'hfdemo'
-          }
-        },
-        {
-          method: 'streams.update',
-          params: {
-            id: 'hfdemo-orientation-gamma',
-            update: {
-              clientData: stdPlotly('Orientation', 'angle/deg', 'Gamma')
-            }
+            parentId: 'hfdemo',
+            clientData: stdPlotly('Orientation', 'angle/deg', 'Gamma'),
           }
         },
         {
@@ -151,16 +143,8 @@ async function setupStreamStructure(connection) {
           params: {
             id: 'hfdemo-orientation-beta',
             name: 'Orientation-Beta',
-            parentId: 'hfdemo'
-          }
-        },
-        {
-          method: 'streams.update',
-          params: {
-            id: 'hfdemo-orientation-beta',
-            update: {
-              clientData: stdPlotly('Orientation', 'angle/deg', 'Beta')
-            }
+            parentId: 'hfdemo',
+            clientData: stdPlotly('Orientation', 'angle/deg', 'Beta'),
           }
         },
         {
@@ -168,18 +152,10 @@ async function setupStreamStructure(connection) {
           params: {
             id: 'hfdemo-orientation-alpha',
             name: 'Orientation-Alpha',
-            parentId: 'hfdemo'
+            parentId: 'hfdemo',
+            clientData: stdPlotly('Orientation', 'angle/deg', 'Alpha'),
           }
         },
-        {
-          method: 'streams.update',
-          params: {
-            id: 'hfdemo-orientation-alpha',
-            update: {
-              clientData: stdPlotly('Orientation', 'angle/deg', 'Alpha')
-            }
-          }
-        }
       );
 
       resultHandlers.push(null, null, null, null, null, null);
