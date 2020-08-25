@@ -56,7 +56,7 @@ function samplingButton(e) {
         alert("Please connect first to your Pryv account!");
         return;
     }
-    var now = Date.now() / 1000;
+    let now = Date.now() / 1000;
     if (is_recording) {
         //Add point to indicate the end of a drawing
         pryvHF.measures.orientationGamma.buffer.push([now, IMAGE_END]);
@@ -73,7 +73,7 @@ function samplingButton(e) {
 
 function deviceorientation(event) {
     if (is_recording) {
-        var now = Date.now() / 1000;
+        let now = Date.now() / 1000;
         cubeAlphaCollect = THREE.Math.degToRad(event.alpha);
         cubeGammaCollect = THREE.Math.degToRad(event.gamma);
         cubeBetaCollect = THREE.Math.degToRad(event.beta);
@@ -85,22 +85,22 @@ function deviceorientation(event) {
 
 function create3DCanvas(canvasProperty) {
     // Setting scene for 3D Object
-    var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera(
+    let scene = new THREE.Scene();
+    let camera = new THREE.PerspectiveCamera(
         75,
         0.5349182763744428,
         0.1,
         1000
     );
-    var renderer = new THREE.WebGLRenderer({ canvas: canvasProperty });
+    let renderer = new THREE.WebGLRenderer({ canvas: canvasProperty });
 
-    var geometry = new THREE.BoxGeometry(3, 1.5, 0.5);
-    var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    var cube = new THREE.Mesh(geometry, material);
+    let geometry = new THREE.BoxGeometry(3, 1.5, 0.5);
+    let material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    let cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
 
 
-    var edges = new THREE.EdgesGeometry(geometry);
+    let edges = new THREE.EdgesGeometry(geometry);
     edges = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x0000ff }));
     scene.add(edges);
     camera.position.z = 5;

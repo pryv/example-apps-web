@@ -1,7 +1,7 @@
 let serviceInfo,
     service;
 
-var pryvHF = {
+let pryvHF = {
     pryvConn: null,
     measures: {
         mouseX: {
@@ -75,38 +75,38 @@ async function pryvAuthStateChange(state) { // called each time the authenticati
     console.log('##pryvAuthStateChange', state);
     if (state.id === Pryv.Browser.AuthStates.AUTHORIZED) {
         console.log(state);
-        var connection = new Pryv.Connection(state.apiEndpoint);
-
+        let connection = new Pryv.Connection(state.apiEndpoint);
+        displayDiv(true);
         await setupConnection(connection);
         updateSharings();
-        displayDiv(true);
     }
     if (state.id === Pryv.Browser.AuthStates.INITIALIZED) {
         pryvHF.pryvConn = null;
         connection = null;
         displayDiv(false);
     }
-    /* Show collection and visualization div when the user is connected */
-    function displayDiv(isDisplay) {
-        let display = isDisplay ? "" : "none";
-        if (isMobile) {
-            document.getElementById('accelerometer-collect').style.display = display;
-            document.getElementById('accelerometer-visualization').style.display = display;
-        }
-        else {
-            document.getElementById('mouse-tracker').style.display = display;
-            document.getElementById('mouse-visualization').style.display = display;
-        }
-        document.getElementById('sharing-view').style.display = display;
+
+}
+
+/* Show collection and visualization div when the user is connected */
+function displayDiv(isDisplay) {
+    let display = isDisplay ? "" : "none";
+    if (isMobile) {
+        document.getElementById('accelerometer-collect').style.display = display;
+        document.getElementById('accelerometer-visualization').style.display = display;
     }
+    else {
+        document.getElementById('mouse-tracker').style.display = display;
+        document.getElementById('mouse-visualization').style.display = display;
+    }
+    document.getElementById('sharing-view').style.display = display;
 }
 
 async function setupConnection(connection) {
     // A- retrieve previously created events or create events holders
-    var postData;
-    var resultTreatment = [];
-    var postData = [];
-    var streams = (await connection.get('streams', null)).streams;
+    let resultTreatment = [];
+    let postData = [];
+    let streams = (await connection.get('streams', null)).streams;
     let [hasHF, hasDesktop, hasMobile] = isInStreams(streams);
     if (!hasHF) {
         postData.push(
@@ -314,14 +314,21 @@ async function setupConnection(connection) {
         if (err) { return console.log('...error: ' + JSON.stringify([err, result])); }
         console.log('...event created: ' + JSON.stringify(result));
         if (result) {
-            for (var i = 0; i < result.length; i++) {
+            for (let i = 0; i < result.length; i++) {
                 if (resultTreatment[i]) {
+                    /* If no new event is created => error with token */
+                    if(result[i].event == null){
+                        throw new Error("The given token's access permissions do not allow to create an event. Please suppress the app access before reconnecting")
+                    }
                     resultTreatment[i].call(null, result[i]);
                 }
             }
         } else {
             console.log(' No result!!', resultInfo);
         }
+    }).catch(error => {
+        alert(error);
+        displayDiv(false)
     });
     pryvHF.pryvConn = connection;
 
@@ -349,7 +356,7 @@ async function setupConnection(connection) {
 }
 
 function stdPlotly(key, type, name) {
-    var data = {};
+    let data = {};
     data[type] = {
         plotKey: key,
         trace: {
@@ -371,10 +378,10 @@ function samplePost() {
 }
 
 function postBatch(connection, measures) {
-    for (var key in measures) {
+    for (let key in measures) {
         let bufferLength = measures[key].buffer.length;
         if (measures[key].event && bufferLength > 0) {
-            var points = measures[key].buffer;
+            let points = measures[key].buffer;
             connection.addPointsToHFEvent(measures[key].event.id, measures[key].event.content.fields, points);
             // Reset local buffer
             measures[key].buffer = []

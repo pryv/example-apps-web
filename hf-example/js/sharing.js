@@ -50,7 +50,7 @@ async function createSharing() {
     function displayError(error) {
         let message = error.message;
         if (error.id.includes('forbidden')) {
-            message = `${error.message} Please use the Collect survey data example first.`
+            message = `${error.message} Your token does not have enough permission to create a sharing. Try to reconnect.`
         }
         alert(JSON.stringify(message, null, 2));
     }
@@ -62,8 +62,8 @@ async function addListAccess(table, access) { // add permissions to the sharings
     for (const permission of access.permissions) permissions.push(permission.streamId);
     const username = await pryvHF.pryvConn.username();
     const apiEndpoint = await service.apiEndpointFor(username, access.token);
-
-    const sharingURL = window.location.href.split('?')[0] + '?apiEndpoint=' + apiEndpoint;
+    const baseUrl = window.location.href.split('?')[0].replace("#", "");
+    const sharingURL = baseUrl + '?apiEndpoint=' + apiEndpoint;
     const sharingLink = '<a href="' + sharingURL + '" target="_new"> open </a>';
 
     const emailSubject = encodeURIComponent('Access my ' + permissions.join(', ') + ' data');
@@ -93,6 +93,6 @@ async function deleteSharing(accessId) {
 
 function resetTable(tableId) {
     const html = '<thead><tr><th scope="col">Name</th><th scope="col">Link</th><th scope="col">Mail</th></tr></thead>';
-    var table = document.getElementById(tableId);
+    let table = document.getElementById(tableId);
     table.innerHTML = html;
 }

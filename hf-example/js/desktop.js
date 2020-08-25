@@ -72,7 +72,7 @@ function mouseDown(e) {
         alert("Please connect first to your Pryv account!");
         return;
     }
-    var now = Date.now() / 1000;
+    const now = Date.now() / 1000;
     if (is_recording) {
         //Add point to indicate the end of a drawing
         pryvHF.measures.mouseX.buffer.push([now, IMAGE_END]);
@@ -87,7 +87,7 @@ function mouseDown(e) {
 
 function mouseMove(e) {
     if (is_recording) {
-        var now = Date.now() / 1000;
+        const now = Date.now() / 1000;
         pryvHF.measures.mouseX.buffer.push([now, e.offsetX]);
         pryvHF.measures.mouseY.buffer.push([now, e.offsetY]);
         drawDot(drawingCtx, e.offsetX, e.offsetY, SIZE_DOT);
@@ -131,7 +131,7 @@ function clearCtx(ctx) {
 }
 
 function createCanvas(width, height) {
-    var c = document.createElement('canvas');
+    let c = document.createElement('canvas');
     c.setAttribute('width', width);
     c.setAttribute('height', height);
     return c;
@@ -145,8 +145,8 @@ function current_context() {
 }
 
 function createNewImage() {
-    var i = hiddenCanvas.toDataURL();
-    var img = new Image();
+    let i = hiddenCanvas.toDataURL();
+    let img = new Image();
     img.src = i;
     images.push(img);
     mouseImagesCounter.innerHTML = 'Number of stored images: ' + images.length;
