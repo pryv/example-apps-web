@@ -30,10 +30,10 @@ window.onload = event => {
     buildServiceInfo();
     fetchServiceInfo();
     buildSharing();
-    samplePost();
+    savePoints();
   }
   frequency();
-  fetch();
+  fetchPoints();
 };
 
 function isMobileFn() {

@@ -176,7 +176,7 @@ if (!hasDesktop) {
                 params: {
                     id: 'hfdemo-mouse-x',
                     update: {
-                        clientData: stdPlotly('Mouse', 'count/generic', 'X')
+                        clientData: buildPlotlyOptions('Mouse', 'count/generic', 'X')
                     }
                 }
             },
@@ -201,7 +201,7 @@ if (!hasDesktop) {
                 params: {
                     id: 'hfdemo-mouse-y',
                     update: {
-                        clientData: stdPlotly('Mouse', 'count/generic', 'Y')
+                        clientData: buildPlotlyOptions('Mouse', 'count/generic', 'Y')
                     }
                 }
             },
@@ -289,7 +289,7 @@ if (!hasMobile) {
           params: {
               id: 'hfdemo-orientation-gamma',
               update: {
-                  clientData: stdPlotly('Orientation', 'angle/deg', 'Gamma')
+                  clientData: buildPlotlyOptions('Orientation', 'angle/deg', 'Gamma')
               }
           }
       },
@@ -314,7 +314,7 @@ if (!hasMobile) {
           params: {
               id: 'hfdemo-orientation-beta',
               update: {
-                  clientData: stdPlotly('Orientation', 'angle/deg', 'Beta')
+                  clientData: buildPlotlyOptions('Orientation', 'angle/deg', 'Beta')
               }
           }
       },
@@ -339,7 +339,7 @@ if (!hasMobile) {
           params: {
               id: 'hfdemo-orientation-alpha',
               update: {
-                  clientData: stdPlotly('Orientation', 'angle/deg', 'Alpha')
+                  clientData: buildPlotlyOptions('Orientation', 'angle/deg', 'Alpha')
               }
           }
       },
@@ -563,7 +563,7 @@ document.getElementById('service').style.display = "none";
 mouseTracker.style.display = "none";
 accelerometerCollector.style.display = "none";
 sharing.style.display = "none";
-fetch(); 
+fetchPoints(); 
 ```
 
 ## App guidelines

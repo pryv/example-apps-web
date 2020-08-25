@@ -137,7 +137,7 @@ async function setupStreamStructure(connection) {
             id: 'hfdemo-orientation-gamma',
             name: 'Orientation-Gamma',
             parentId: 'hfdemo',
-            clientData: stdPlotly('Orientation', 'angle/deg', 'Gamma')
+            clientData: buildPlotlyOptions('Orientation', 'angle/deg', 'Gamma')
           }
         },
         {
@@ -146,7 +146,7 @@ async function setupStreamStructure(connection) {
             id: 'hfdemo-orientation-beta',
             name: 'Orientation-Beta',
             parentId: 'hfdemo',
-            clientData: stdPlotly('Orientation', 'angle/deg', 'Beta')
+            clientData: buildPlotlyOptions('Orientation', 'angle/deg', 'Beta')
           }
         },
         {
@@ -155,7 +155,7 @@ async function setupStreamStructure(connection) {
             id: 'hfdemo-orientation-alpha',
             name: 'Orientation-Alpha',
             parentId: 'hfdemo',
-            clientData: stdPlotly('Orientation', 'angle/deg', 'Alpha')
+            clientData: buildPlotlyOptions('Orientation', 'angle/deg', 'Alpha')
           }
         }
       );
@@ -213,7 +213,7 @@ async function setupStreamStructure(connection) {
             id: 'hfdemo-mouse-x',
             name: 'Mouse-X',
             parentId: 'hfdemo',
-            clientData: stdPlotly('Mouse', 'count/generic', 'X')
+            clientData: buildPlotlyOptions('Mouse', 'count/generic', 'X')
           }
         },
         {
@@ -222,7 +222,7 @@ async function setupStreamStructure(connection) {
             id: 'hfdemo-mouse-y',
             name: 'Mouse-Y',
             parentId: 'hfdemo',
-            clientData: stdPlotly('Mouse', 'count/generic', 'Y')
+            clientData: buildPlotlyOptions('Mouse', 'count/generic', 'Y')
           }
         }
       );
@@ -306,7 +306,7 @@ async function setupStreamStructure(connection) {
   }
 }
 
-function stdPlotly(key, type, name) {
+function buildPlotlyOptions(key, type, name) {
   let data = {};
   data[type] = {
     plotKey: key,
@@ -321,14 +321,14 @@ function stdPlotly(key, type, name) {
 }
 
 /* Post the HF data every SAMPLE_POST_MS */
-function samplePost() {
+function savePoints() {
   if (pryvHF.pryvConn) {
-    postBatch(pryvHF.pryvConn, pryvHF.measures);
+    sendHfPoints(pryvHF.pryvConn, pryvHF.measures);
   }
-  setTimeout(samplePost, SAMPLE_POST_MS);
+  setTimeout(savePoints, SAMPLE_POST_MS);
 }
 
-function postBatch(connection, measures) {
+function sendHfPoints(connection, measures) {
   for (let key in measures) {
     let bufferLength = measures[key].buffer.length;
     if (measures[key].event && bufferLength > 0) {
@@ -345,7 +345,7 @@ function postBatch(connection, measures) {
 }
 
 /* Pull info from Pryv */
-async function fetch() {
+async function fetchPoints() {
   if (pryvHF.pryvConn) {
     length_last_batch = 0;
     if (pryvHF.measures.mouseX.event) {
@@ -356,9 +356,9 @@ async function fetch() {
     }
   }
   if (length_last_batch) {
-    fetch();
+    fetchPoints();
   } else {
-    setTimeout(fetch, DELAY_IF_EMPTY_BATCH_MS);
+    setTimeout(fetchPoints, DELAY_IF_EMPTY_BATCH_MS);
   }
 }
 
