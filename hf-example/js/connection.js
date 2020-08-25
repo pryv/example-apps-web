@@ -1,6 +1,6 @@
 let serviceInfo, service;
 
-let pryvHF = {
+const pryvHF = {
   pryvConn: null,
   measures: {
     mouseX: {
@@ -26,8 +26,8 @@ let pryvHF = {
   }
 };
 
-let samplePostMs = 100;
-let delayIfEmptyBatch = 1000;
+let SAMPLE_POST_MS = 100;
+let DELAY_IF_EMPTY_BATCH_MS = 1000;
 let length_last_batch;
 
 let pointsSecondMouse = 0;
@@ -51,29 +51,29 @@ function setServiceInfo() {
 async function fetchServiceInfo() {
   service = new Pryv.Service(serviceInfoInput.value);
   serviceInfo = await service.info();
-  authRequest();
+  performAuthRequest();
 }
 
-async function authRequest() {
+async function performAuthRequest() {  
+  const authSettings = {
+    spanButtonID: 'pryv-button', // span id the DOM that will be replaced by the Service specific button
+    onStateChange: pryvAuthStateChange, // event Listener for Authentication steps
+    authRequest: {
+      // See: https://api.pryv.com/reference/#auth-request
+      requestingAppId: 'app-web-hfdemo', // to customize for your own app
+      requestedPermissions: [
+        {
+          streamId: 'hf',
+          defaultName: 'HF',
+          level: 'manage' // permission for the app to manage data in the stream 'Health'
+        }
+      ],
+      requestingAppId: 'app-web-hfdemo'
+    }
+  };
+
   Pryv.Browser.setupAuth(authSettings, serviceInfoInput.value);
 }
-
-const authSettings = {
-  spanButtonID: 'pryv-button', // span id the DOM that will be replaced by the Service specific button
-  onStateChange: pryvAuthStateChange, // event Listener for Authentication steps
-  authRequest: {
-    // See: https://api.pryv.com/reference/#auth-request
-    requestingAppId: 'app-web-hfdemo', // to customize for your own app
-    requestedPermissions: [
-      {
-        streamId: 'hf',
-        defaultName: 'HF',
-        level: 'manage' // permission for the app to manage data in the stream 'Health'
-      }
-    ],
-    requestingAppId: 'app-web-hfdemo'
-  }
-};
 
 async function pryvAuthStateChange(state) {
   // called each time the authentication state changes
@@ -82,7 +82,7 @@ async function pryvAuthStateChange(state) {
     console.log(state);
     let connection = new Pryv.Connection(state.apiEndpoint);
     displayDiv(true);
-    await setupConnection(connection);
+    await setupStreamStructure(connection);
     updateSharings();
   }
   if (state.id === Pryv.Browser.AuthStates.INITIALIZED) {
@@ -107,12 +107,12 @@ function displayDiv(isDisplay) {
   document.getElementById('sharing-view').style.display = display;
 }
 
-async function setupConnection(connection) {
+async function setupStreamStructure(connection) {
   // A- retrieve previously created events or create events holders
-  let resultTreatment = [];
-  let apiCalls = [];
-  let streams = (await connection.get('streams', null)).streams;
-  let [hasRootStream, hasDesktopStream, hasMobileStream] = isInStreams(streams);
+  const resultHandlers = [];
+  const apiCalls = [];
+  const streams = (await connection.get('streams', null)).streams;
+  const [hasRootStream, hasDesktopStream, hasMobileStream] = isInStreams(streams);
   if (!hasRootStream) {
     apiCalls.push({
       method: 'streams.create',
@@ -122,7 +122,7 @@ async function setupConnection(connection) {
         parentId: 'hf'
       }
     });
-    resultTreatment.push(null);
+    resultHandlers.push(null);
   }
   if (isMobile) {
     /* If streams for mobile devices do not exist */
@@ -182,7 +182,7 @@ async function setupConnection(connection) {
         }
       );
 
-      resultTreatment.push(null, null, null, null, null, null);
+      resultHandlers.push(null, null, null, null, null, null);
     }
     apiCalls.push(
       {
@@ -210,7 +210,7 @@ async function setupConnection(connection) {
         }
       }
     );
-    resultTreatment.push(
+    resultHandlers.push(
       function handleCreateEventGamma(result) {
         pryvHF.measures.orientationGamma.event = result.event;
         console.log('handle gammaEvent set', result.event);
@@ -265,7 +265,7 @@ async function setupConnection(connection) {
         }
       );
 
-      resultTreatment.push(null, null, null, null);
+      resultHandlers.push(null, null, null, null);
     }
     apiCalls.push(
       {
@@ -285,7 +285,7 @@ async function setupConnection(connection) {
         }
       }
     );
-    resultTreatment.push(
+    resultHandlers.push(
       function handleCreateEventX(result) {
         pryvHF.measures.mouseX.event = result.event;
         console.log('handle xEvent set', result.event);
@@ -306,14 +306,14 @@ async function setupConnection(connection) {
       console.log('...event created: ' + JSON.stringify(result));
       if (result) {
         for (let i = 0; i < result.length; i++) {
-          if (resultTreatment[i]) {
+          if (resultHandlers[i]) {
             /* If no new event is created => error with token */
             if (result[i].event == null) {
               throw new Error(
                 "The given token's access permissions do not allow to create an event. Please suppress the app access before reconnecting"
               );
             }
-            resultTreatment[i].call(null, result[i]);
+            resultHandlers[i].call(null, result[i]);
           }
         }
       } else {
@@ -366,12 +366,12 @@ function stdPlotly(key, type, name) {
   return { 'app-web-plotly': data };
 }
 
-/* Post the HF data every samplePostMs */
+/* Post the HF data every SAMPLE_POST_MS */
 function samplePost() {
   if (pryvHF.pryvConn) {
     postBatch(pryvHF.pryvConn, pryvHF.measures);
   }
-  setTimeout(samplePost, samplePostMs);
+  setTimeout(samplePost, SAMPLE_POST_MS);
 }
 
 function postBatch(connection, measures) {
@@ -404,7 +404,7 @@ async function fetch() {
   if (length_last_batch) {
     fetch();
   } else {
-    setTimeout(fetch, delayIfEmptyBatch);
+    setTimeout(fetch, DELAY_IF_EMPTY_BATCH_MS);
   }
 }
 

@@ -82,7 +82,7 @@ async function pryvAuthStateChange(state) {
     if (state.id === Pryv.Browser.AuthStates.AUTHORIZED) {
         console.log(state);
         var connection = new Pryv.Connection(state.apiEndpoint);
-        await setupConnection(connection);
+        await setupStreamStructure(connection);
         updateSharings();
         displayDiv(true);
     }
@@ -138,7 +138,7 @@ Once the user is signed in (Desktop version), he can perform the test using the 
 Data collected from the mouse movement (X and Y positions) will be stored in the form of [HF series](https://api.pryv.com/reference/#data-structure-high-frequency-series) in a dedicated stream.  
 Connection with Pryv is established to store collected measures in the stream "**HF demo**":
 ```javascript
-async function setupConnection(connection) {
+async function setupStreamStructure(connection) {
     var postData;
     var resultTreatment = [];
     var postData = [];
