@@ -306,6 +306,7 @@ async function setupStreamStructure(connection) {
   }
 }
 
+// used for https://github.com/pryv/app-web-plotly
 function buildPlotlyOptions(key, type, name) {
   let data = {};
   data[type] = {
@@ -441,7 +442,7 @@ async function fetchSerieAccelerometer() {
 }
 
 /* Calculate the number of points fetched per second */
-function frequency() {
+function computeFrequency() {
   if (pryvHF.pryvConn) {
     if (pryvHF.measures.mouseX.event) {
       frequencyMouse.innerHTML =

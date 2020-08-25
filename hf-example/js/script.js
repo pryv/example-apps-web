@@ -32,7 +32,7 @@ window.onload = event => {
     buildSharing();
     savePoints();
   }
-  frequency();
+  computeFrequency();
   fetchPoints();
 };
 
