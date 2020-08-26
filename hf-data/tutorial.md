@@ -133,10 +133,10 @@ var pryvHF = {
 
 ### Collect HF data using the Desktop version
 
-Once the user is signed in (Desktop version), he can perform the test using the mouse tracker. The code for the mouse tracker is contained in the section "**Build Desktop version**" of the file [script.js](script.js).  
+Once the user is signed in (Desktop version), he can perform the test using the mouse tracker. The code for the mouse tracker is contained in the file [desktop.js](./js/desktop.js).  
 
 Data collected from the mouse movement (X and Y positions) will be stored in the form of [HF series](https://api.pryv.com/reference/#data-structure-high-frequency-series) in a dedicated stream.  
-Connection with Pryv is established to store collected measures in the stream "**HF demo**":
+Connection with Pryv is established to store collected measures in the stream "**HF demo**" (see file [connection.js](js/connection.js)):
 ```javascript
 async function setupStreamStructure(connection) {
   const resultHandlers = [];
@@ -157,8 +157,7 @@ async function setupStreamStructure(connection) {
     resultHandlers.push(null);
   }
 ```
-
-[HF events](https://api.pryv.com/reference/#create-hf-event) and their streams need to be created to hold the mouse position, which will be consisting of points along the x and y-axis of type `count/generic` (see [Event Types Reference](https://api.pryv.com/event-types/)):
+As both X and Y positions will be captured during the recording, two substreams are created - "**Mouse-X**" and "**Mouse-Y**" - to hold events related to measured positions:
 ```javascript
 if (!hasDesktopStream) {
       apiCalls.push(
@@ -184,6 +183,11 @@ if (!hasDesktopStream) {
 
       resultHandlers.push(null, null, null, null);
     }
+```
+
+[HF events](https://api.pryv.com/reference/#create-hf-event) need to be created to hold the mouse position, which will be consisting of points along the x and y-axis of type `count/generic` (see [Event Types Reference](https://api.pryv.com/event-types/)):
+
+```javascript
     apiCalls.push(
       {
         method: 'events.create',
@@ -242,172 +246,133 @@ function sendHfPoints(connection, measures) {
 
 ### Collect HF data using the mobile version
 
-The tracking task is also available in a mobile version that allows to collect the device orientation in three dimensions. The code for the accelerometer collector is contained in the section "**Build mobile version**" of the file [script.js](script.js).
+The tracking task is also available in a mobile version that allows to collect the device orientation in three dimensions. The code for the mobile accelerometer is contained in the file [mobile.js](js/mobile.js).  
 
-Similarly as for the [Desktop version](#collect-hf-data-using-the-desktop-version), data is stored in the dedicated stream "**HF demo**".  
+Similarly as for the [Desktop version](#collect-hf-data-using-the-desktop-version), connection with Pryv is established to store collected measures in the stream "**HF demo**" (see [connection.js](js/connection.js)). 
+In the mobile version, as three different angles will be captured during the recording, three substreams are created - "**Orientation-Alpha**", "**Orientation-Beta**" and "**Orientation-Gamma**" - to hold events related to measured angles:
 
-This stream is populated with HF events that will hold data collected from the accelerometer (*alpha*, *beta* and *gamma* orientation angles, thus events of [type](https://api.pryv.com/event-types/) `angle/deg`) of the device:
 ```javascript
-if (!hasMobile) {
-  postData.push(
-      // Accelerometer
-      {
-          method: 'streams.create',
-          params: {
-              id: 'hfdemo-orientation-gamma',
-              name: 'Orientation-Gamma',
-              parentId: 'hfdemo'
-          }
-      },
-      {
-          method: 'streams.update',
-          params: {
-              id: 'hfdemo-orientation-gamma',
-              update: {
-                  clientData: buildPlotlyOptions('Orientation', 'angle/deg', 'Gamma')
-              }
-          }
-      },
-      {
-          method: 'events.create',
-          params: {
-              streamId: 'hfdemo-orientation-gamma',
-              type: 'series:angle/deg',
-              description: 'Holder for device gamma'
-          }
-      },
-      {
-          method: 'streams.create',
-          params: {
-              id: 'hfdemo-orientation-beta',
-              name: 'Orientation-Beta',
-              parentId: 'hfdemo'
-          }
-      },
-      {
-          method: 'streams.update',
-          params: {
-              id: 'hfdemo-orientation-beta',
-              update: {
-                  clientData: buildPlotlyOptions('Orientation', 'angle/deg', 'Beta')
-              }
-          }
-      },
-      {
-          method: 'events.create',
-          params: {
-              streamId: 'hfdemo-orientation-beta',
-              type: 'series:angle/deg',
-              description: 'Holder for device beta'
-          }
-      },
-      {
-          method: 'streams.create',
-          params: {
-              id: 'hfdemo-orientation-alpha',
-              name: 'Orientation-Alpha',
-              parentId: 'hfdemo'
-          }
-      },
-      {
-          method: 'streams.update',
-          params: {
-              id: 'hfdemo-orientation-alpha',
-              update: {
-                  clientData: buildPlotlyOptions('Orientation', 'angle/deg', 'Alpha')
-              }
-          }
-      },
-      {
-          method: 'events.create',
-          params: {
-              streamId: 'hfdemo-orientation-alpha',
-              type: 'series:angle/deg',
-              description: 'Holder for device alpha'
-          }
+if (!hasMobileStream) {
+  apiCalls.push(
+    {
+      method: 'streams.create',
+      params: {
+        id: 'hfdemo-orientation-gamma',
+        name: 'Orientation-Gamma',
+        parentId: 'hfdemo',
+        clientData: buildPlotlyOptions('Orientation', 'angle/deg', 'Gamma')
       }
+    },
+    {
+      method: 'streams.create',
+      params: {
+        id: 'hfdemo-orientation-beta',
+        name: 'Orientation-Beta',
+        parentId: 'hfdemo',
+        clientData: buildPlotlyOptions('Orientation', 'angle/deg', 'Beta')
+      }
+    },
+    {
+      method: 'streams.create',
+      params: {
+        id: 'hfdemo-orientation-alpha',
+        name: 'Orientation-Alpha',
+        parentId: 'hfdemo',
+        clientData: buildPlotlyOptions('Orientation', 'angle/deg', 'Alpha')
+      }
+    }
   );
-```
 
-Collected data from the accelerometer orientation is then inserted in the previously created HF events:
+  resultHandlers.push(null, null, null, null, null, null);
+}
+```
+These streams are populated with HF events that will hold data collected from the accelerometer (*alpha*, *beta* and *gamma* orientation angles, thus events of [type](https://api.pryv.com/event-types/) `angle/deg`):
+
 ```javascript
-resultTreatment.push(
-  null,
-  null,
-  function handleCreateEventGamma(result) {
-      pryvHF.measures.orientationGamma.event = result.event;
-      console.log('handle gammaEvent set', result.event);
-  },
-  null,
-  null,
-  function handleCreateEventBeta(result) {
-      pryvHF.measures.orientationBeta.event = result.event;
-      console.log('handle betaEvent set', result.event);
-  },
-  null,
-  null,
-  function handleCreateEventAlpha(result) {
-      pryvHF.measures.orientationAlpha.event = result.event;
-      console.log('handle alphaEvent set', result.event);
-  }
-);
-    } else {
-        postData.push(
-            {
-                method: 'events.create',
-                params: {
-                    streamId: 'hfdemo-orientation-gamma',
-                    type: 'series:angle/deg',
-                    description: 'Holder for device gamma'
-                }
-            },
-            {
-                method: 'events.create',
-                params: {
-                    streamId: 'hfdemo-orientation-beta',
-                    type: 'series:angle/deg',
-                    description: 'Holder for device beta'
-                }
-            },
-            {
-                method: 'events.create',
-                params: {
-                    streamId: 'hfdemo-orientation-alpha',
-                    type: 'series:angle/deg',
-                    description: 'Holder for device alpha'
-                }
-            }
-        );
-resultTreatment.push(
-    function handleCreateEventGamma(result) {
+apiCalls.push(
+      {
+        method: 'events.create',
+        params: {
+          streamId: 'hfdemo-orientation-gamma',
+          type: 'series:angle/deg',
+          description: 'Holder for device gamma'
+        }
+      },
+      {
+        method: 'events.create',
+        params: {
+          streamId: 'hfdemo-orientation-beta',
+          type: 'series:angle/deg',
+          description: 'Holder for device beta'
+        }
+      },
+      {
+        method: 'events.create',
+        params: {
+          streamId: 'hfdemo-orientation-alpha',
+          type: 'series:angle/deg',
+          description: 'Holder for device alpha'
+        }
+      }
+    );
+    resultHandlers.push(
+      function handleCreateEventGamma(result) {
         pryvHF.measures.orientationGamma.event = result.event;
         console.log('handle gammaEvent set', result.event);
-    },
-    function handleCreateEventBeta(result) {
+      },
+      function handleCreateEventBeta(result) {
         pryvHF.measures.orientationBeta.event = result.event;
         console.log('handle betaEvent set', result.event);
-    },
-    function handleCreateEventAlpha(result) {
+      },
+      function handleCreateEventAlpha(result) {
         pryvHF.measures.orientationAlpha.event = result.event;
         console.log('handle alphaEvent set', result.event);
+      }
+    );
+```
+
+Similarly as for the X and Y mouse positions of the [Desktop version](#collect-hf-data-using-the-desktop-version), collected data from the accelerometer orientation is inserted in the previously created HF events:
+```javascript
+function savePoints() {
+  if (pryvHF.pryvConn) {
+    sendHfPoints(pryvHF.pryvConn, pryvHF.measures);
+  }
+  setTimeout(savePoints, SAMPLE_POST_MS);
+}
+
+function sendHfPoints(connection, measures) {
+  for (let key in measures) {
+    let bufferLength = measures[key].buffer.length;
+    if (measures[key].event && bufferLength > 0) {
+      let points = measures[key].buffer;
+      connection.addPointsToHFEvent(
+        measures[key].event.id,
+        measures[key].event.content.fields,
+        points
+      );
+      measures[key].buffer = [];
     }
-);
+  }
 }
 ```
 
 ## Create a sharing
 
 Once data from the tracking task has been collected, the app is designed to allow the user to share his data with a third-party.
-The section "**Sharings**" enables the user to create a sharing that consists of a URL link with a Pryv apiEndpoint that displays the visualization from the tracking test. The code for the sharing creation is contained in the section **Sharings** of the file [script.js](script.js).  
+
+The functions from the file [sharing.js](hf-data/js/sharing.js) enable the user to create a sharing that consists of a URL link with a Pryv apiEndpoint that displays the visualization from the tracking test. 
+
 In order to create a sharing, we add a listener to the *Create* button:
 
 ```javascript
-window.onload = (event) => {
-  document.getElementById('create-sharing').addEventListener("click", createSharing);
-  // ...
-}; 
+function buildSharing() {
+  const sharing = document.getElementById('create-sharing');
+  sharing.addEventListener('click', createSharing);
+} 
 ```
-The function *createSharing()* translates the sharing into the creation of a [shared access](https://api.pryv.com/concepts/#accesses) in Pryv.io. 
+
+The *sharing* is translated into the creation of a [shared access](https://api.pryv.com/concepts/#accesses) in Pryv.io. Values for the scope of the sharing ('streamId' and 'level' for permissions) are fetched, in our case "read" level on the stream "**HF Demo**":
+
 ```javascript
 async function createSharing() {
     const name = document.getElementById('sharing-name').value.trim();
@@ -415,18 +380,14 @@ async function createSharing() {
         alert('Enter a name for your sharing');
         return;
     }
-```
-It will first fetch values for the scope of the sharing ('streamId' for permissions), in our case "read" level on the stream "**HF Demo**":
-```javascript
     const permissions = [{ streamId: 'hfdemo', level: 'read' }];
 ```
 
-It will package those values into an [accesses.create](https://api.pryv.com/reference/#create-access) API call.
+These values are packaged into an [accesses.create](https://api.pryv.com/reference/#create-access) API call:
 ```javascript
   const results = await pryvHF.pryvConn.api([
-    // https://github.com/pryv/lib-js#api-calls
     {
-      method: 'accesses.create', // creates the selected access: https://api.pryv.com/reference/#create-access
+      method: 'accesses.create',
       params: {
         name: name,
         permissions: permissions
@@ -483,8 +444,8 @@ async function deleteSharing(accessId) {
 
 ## Display the sharing (view-only mode)
 
-Once the sharing has been created, it should enable third parties to consult data from the user in a "view-only" mode. In this mode, a table containing all performed tests is displayed, along with the date of the test and the tracking method. For example:
-[https://api.pryv.com/app-web-examples/hf-data/?apiEndpoint=https://cke8hrluz00o31kqod5lcdudm@hf-test.pryv.me/](https://api.pryv.com/app-web-examples/hf-data/?apiEndpoint=https://cke8hrluz00o31kqod5lcdudm@hf-test.pryv.me/)  
+Once the sharing has been created, it should enable third parties to consult data from the user in a "view-only" mode. In this mode, a table containing all performed tests is displayed, along with the date of the test and the tracking method. 
+Example: [https://api.pryv.com/app-web-examples/hf-data/?apiEndpoint=https://cke8hrluz00o31kqod5lcdudm@hf-test.pryv.me/](https://api.pryv.com/app-web-examples/hf-data/?apiEndpoint=https://cke8hrluz00o31kqod5lcdudm@hf-test.pryv.me/)  
 
 The recipient of the link can open the data visualization by clicking on the chosen test:
 - the **Desktop version** contains the drawing performed with the mouse tracker
@@ -544,7 +505,7 @@ Either the mobile or the desktop versions are displayed depending on the user's 
 
 ### Custom service info
 
-Following our [app guidelines](https://api.pryv.com/guides/app-guidelines/), we build apps that can work for multiple Pryv.io platforms providing a `serviceInfo` parameter:
+Following our [app guidelines](https://api.pryv.com/guides/app-guidelines/), we build apps that can work for multiple Pryv.io platforms providing a `serviceInfo` parameter in the file [connection.js](js/connection.js):
 
 ```javascript
 async function fetchServiceInfo() {

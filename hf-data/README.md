@@ -68,6 +68,6 @@ When opened, it displays either the drawing from the desktop version or the phon
 
 ## Next steps
 
-You can check out the tutorial to collect and view HF data :
+You can check out the tutorial to implement high-frequency data collection for your app:
 
-- [Collect HF Data Tutorial](tutorial.md)
+- [Collect High-Frequency Data Tutorial](tutorial.md)
