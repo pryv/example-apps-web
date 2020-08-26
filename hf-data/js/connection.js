@@ -65,7 +65,7 @@ async function performAuthRequest() {
         {
           streamId: 'hf',
           defaultName: 'HF',
-          level: 'manage' // permission for the app to manage data in the stream 'Health'
+          level: 'manage' // permission for the app to manage data in the stream 'HF'
         }
       ],
       requestingAppId: 'app-web-hfdemo'

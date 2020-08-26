@@ -3,7 +3,7 @@
 
 You can try the live version of the app [here](link-to-gh-pages).
 
-All you need to run this app is to download [index.html](index.html), [script.js](script.js) files, [js/](js) and [assets](assets) folders and open **index.html** with your browser.
+All you need to run this app is to download [index.html](index.html), [script.js](script.js) files, [js/](js) and [assets](assets) folders and open [index.html](index.html) with your browser.
 
 This is a data collection and sharing web app that first displays a welcome message and a button to initiate the authentication process.
 <p align="center">
@@ -44,7 +44,7 @@ The sharing link enables the recipient to consult the list of trackings, along w
 
 ## Authenticate your app
 
-For this application, we have used the [Pryv JavaScript library](https://github.com/pryv/lib-js), loading it for [the browser](https://github.com/pryv/lib-js#browser) as following:
+For this application, we have used the [Pryv JavaScript library](https://github.com/pryv/lib-js), loading it for [the browser](https://github.com/pryv/lib-js#browser) as following in [index.html](index.html):
 
 ```html
 <script src="https://api.pryv.com/lib-js/pryv.js"></script>
@@ -56,45 +56,31 @@ For authentication, we will use the [Pryv.io consent process](https://github.com
 <span id="pryv-button"></span>
 ```
 
-The [auth request parameters](https://api.pryv.com/reference/#auth-request) and callback are defined in the separate [script.js](script.js) file:
+The [auth request parameters](https://api.pryv.com/reference/#auth-request) and callback are defined in the separate [connection.js](js/connection.js) file:
 
 ```javascript
-async function authRequest() {
-    Pryv.Browser.setupAuth(authSettings, serviceInfoInput.value);
-}
-
-const authSettings = {
+async function performAuthRequest() {
+  const authSettings = {
     spanButtonID: 'pryv-button', 
-    onStateChange: pryvAuthStateChange, 
+    onStateChange: pryvAuthStateChange,
     authRequest: {
-        requestingAppId: 'app-web-hfdemo',
-        requestedPermissions: [{
-            streamId: 'hf',
-            defaultName: 'HF',
-            level: 'manage' 
-        }],
-        requestingAppId: 'app-web-hfdemo',
+      requestingAppId: 'app-web-hfdemo',
+      requestedPermissions: [
+        {
+          streamId: 'hf',
+          defaultName: 'HF',
+          level: 'manage'
+        }
+      ],
+      requestingAppId: 'app-web-hfdemo'
     }
-};
+  };
 
-async function pryvAuthStateChange(state) {
-    console.log('##pryvAuthStateChange', state);
-    if (state.id === Pryv.Browser.AuthStates.AUTHORIZED) {
-        console.log(state);
-        var connection = new Pryv.Connection(state.apiEndpoint);
-        await setupStreamStructure(connection);
-        updateSharings();
-        showCollectAndVisualize(true);
-    }
-    if (state.id === Pryv.Browser.AuthStates.INITIALIZED) {
-        pryvHF.pryvConn = null;
-        connection = null;
-        showCollectAndVisualize(false);
-    }
+  Pryv.Browser.setupAuth(authSettings, serviceInfoInput.value);
 }
 ```
 
-The root stream of the `requestedPermissions` array is created if it doesn't exist yet. It will then be populated with events data from the tracking test.
+The root stream "**HF**" of the `requestedPermissions` array is created if it doesn't exist yet. It will then be populated with events data from the tracking test.
 
 The auth request is done on page load, except when the shared data is loaded by a third-party.
 
@@ -102,40 +88,11 @@ The auth request is done on page load, except when the shared data is loaded by 
 
 Data collected from the mouse movement (desktop version) or device orientation (accelerometer version) will be stored in the form of [HF series](https://api.pryv.com/reference/#data-structure-high-frequency-series) which are collections of homogenous data points in Pryv.io.
 
-```javascript
-var pryvHF = {
-    pryvConn: null,
-    measures: {
-        mouseX: {
-            event: null,
-            buffer: []
-        },
-        mouseY: {
-            event: null,
-            buffer: []
-        },
-        orientationGamma: {
-            event: null,
-            buffer: []
-        },
-        orientationBeta: {
-            event: null,
-            buffer: []
-        },
-        orientationAlpha: {
-            event: null,
-            buffer: []
-        }
-    }
-
-};
-```
-
 ### Collect HF data using the Desktop version
 
 Once the user is signed in (Desktop version), he can perform the test using the mouse tracker. The code for the mouse tracker is contained in the file [desktop.js](./js/desktop.js).  
-
 Data collected from the mouse movement (X and Y positions) will be stored in the form of [HF series](https://api.pryv.com/reference/#data-structure-high-frequency-series) in a dedicated stream.  
+
 Connection with Pryv is established to store collected measures in the stream "**HF demo**" (see file [connection.js](js/connection.js)):
 ```javascript
 async function setupStreamStructure(connection) {
@@ -157,7 +114,7 @@ async function setupStreamStructure(connection) {
     resultHandlers.push(null);
   }
 ```
-As both X and Y positions will be captured during the recording, two substreams are created - "**Mouse-X**" and "**Mouse-Y**" - to hold events related to measured positions:
+As both X and Y positions will be captured during the recording, two substreams "**Mouse-X**" and "**Mouse-Y**" are created to hold events related to measured positions:
 ```javascript
 if (!hasDesktopStream) {
       apiCalls.push(
@@ -248,8 +205,9 @@ function sendHfPoints(connection, measures) {
 
 The tracking task is also available in a mobile version that allows to collect the device orientation in three dimensions. The code for the mobile accelerometer is contained in the file [mobile.js](js/mobile.js).  
 
-Similarly as for the [Desktop version](#collect-hf-data-using-the-desktop-version), connection with Pryv is established to store collected measures in the stream "**HF demo**" (see [connection.js](js/connection.js)). 
-In the mobile version, as three different angles will be captured during the recording, three substreams are created - "**Orientation-Alpha**", "**Orientation-Beta**" and "**Orientation-Gamma**" - to hold events related to measured angles:
+Similarly as for the [Desktop version](#collect-hf-data-using-the-desktop-version), connection with Pryv is established to store collected measures in the stream "**HF demo**" (see [connection.js](js/connection.js)).  
+
+In the mobile version, as three different angles will be captured during the recording, three substreams "**Orientation-Alpha**", "**Orientation-Beta**" and "**Orientation-Gamma**" are created to hold events related to measured angles:
 
 ```javascript
 if (!hasMobileStream) {
@@ -360,7 +318,7 @@ function sendHfPoints(connection, measures) {
 
 Once data from the tracking task has been collected, the app is designed to allow the user to share his data with a third-party.
 
-The functions from the file [sharing.js](hf-data/js/sharing.js) enable the user to create a sharing that consists of a URL link with a Pryv apiEndpoint that displays the visualization from the tracking test. 
+The functions from the file [sharing.js](hf-data/js/sharing.js) enable the user to create a sharing that consists of a URL link (with a Pryv API endpoint) that displays the visualization from the tracking test. 
 
 In order to create a sharing, we add a listener to the *Create* button:
 
@@ -371,7 +329,7 @@ function buildSharing() {
 } 
 ```
 
-The *sharing* is translated into the creation of a [shared access](https://api.pryv.com/concepts/#accesses) in Pryv.io. Values for the scope of the sharing ('streamId' and 'level' for permissions) are fetched, in our case "read" level on the stream "**HF Demo**":
+The sharing is translated into the creation of a [shared access](https://api.pryv.com/concepts/#accesses) in Pryv.io. Values for the scope of the sharing ('streamId' and 'level' for permissions) are fetched, in our case "read" level on the stream "**HF Demo**":
 
 ```javascript
 async function createSharing() {
@@ -444,8 +402,9 @@ async function deleteSharing(accessId) {
 
 ## Display the sharing (view-only mode)
 
-Once the sharing has been created, it should enable third parties to consult data from the user in a "view-only" mode. In this mode, a table containing all performed tests is displayed, along with the date of the test and the tracking method. 
-Example: [https://api.pryv.com/app-web-examples/hf-data/?apiEndpoint=https://cke8hrluz00o31kqod5lcdudm@hf-test.pryv.me/](https://api.pryv.com/app-web-examples/hf-data/?apiEndpoint=https://cke8hrluz00o31kqod5lcdudm@hf-test.pryv.me/)  
+Once the sharing has been created, it should enable third parties to consult data from the user in a "view-only" mode. In this mode, a table containing all performed tests is displayed, along with the date of the test and the tracking method.   
+
+*Example: [https://api.pryv.com/app-web-examples/hf-data/?apiEndpoint=https://cke8hrluz00o31kqod5lcdudm@hf-test.pryv.me/](https://api.pryv.com/app-web-examples/hf-data/?apiEndpoint=https://cke8hrluz00o31kqod5lcdudm@hf-test.pryv.me/)* 
 
 The recipient of the link can open the data visualization by clicking on the chosen test:
 - the **Desktop version** contains the drawing performed with the mouse tracker
@@ -453,7 +412,7 @@ The recipient of the link can open the data visualization by clicking on the cho
 
 The code for the visualization mode is contained in the [js/view_only.js](js/view_only.js).
 
-This will load the app already authenticated, by passing the `pryvApiEndpoint` parameter in the function *buildVisualizationOnly(apiEndpoint, urlParams)*. 
+This will load the app already authenticated, by passing the `apiEndpoint` parameter in the function buildVisualizationOnly(apiEndpoint, urlParams). 
 
 ```javascript
 async function buildVisualizationOnly(apiEndpoint, urlParams) {
