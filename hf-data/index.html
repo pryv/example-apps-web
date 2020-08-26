@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="https://api.pryv.com/style/pryv.min.css">
+        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400">
+        <link href="assets/style.css" rel="stylesheet" type="text/css" />
+        <title>Pryv HF</title>
+        <script src="https://api.pryv.com/lib-js/pryv.js"></script>
+        <script src="https://threejs.org/build/three.js"></script>
+        <script src="js/desktop.js"></script>
+        <script src="js/mobile.js"></script>
+        <script src="js/view_only.js"></script>
+        <script src="js/sharing.js"></script>
+        <script src="js/connection.js"></script>
+        <script src="js/script.js"></script>
+    </head>
+
+    <body>
+        <div class="container" id="container">
+            <h1>Pryv.io collect and visualize HF Data</h1>
+
+            <div class="card" id="welcome" style="display: none">
+                <div class="card-body">
+                    <h2 class="card-title">Welcome</h2>
+                    <br />
+                    <p>We invite you to evaluate our postural and kinetic tremor to check for Parkinson's disease symptoms using the following tracking task. Please login to start the test, and follow the instructions of the tracker.</p>
+
+                </div>
+            </div>
+
+            <div class="card" id="service" style="display: none">
+                <div class="card-body">
+                    <button class="collapsible">Service information</button>
+                    <div class="service_info">
+                        <br> Enter the <a href="https://api.pryv.com/reference/#service-info">service information URL</a> for the authentication process.
+                        <br> You can use the selector to initialize the URL depending on your deployment type:
+                        <br>
+                        <select name="service-info-select" id="service-info-select">
+                      <optgroup label="Pryv.io">
+                        <option value="https://reg.pryv.me/service/info"
+                                selected="selected">Pryv Lab</option>
+                        <option value="https://reg.{DOMAIN}/service/info">Your own domain</option>
+                      </optgroup>
+                    </select>
+                        <div class="form-group">
+                            <label for="service-info">Service Information URL:</label>
+                            <input type="text" class="form-control" id="service-info-text" value="https://reg.pryv.me/service/info" />
+                        </div>
+
+                    </div>
+                    <br />
+                    <div class="spaced">
+                        <button type="button" id="fetch-service-info-button" class="btn btn-primary mb-2">Fetch service
+              info</button>
+                        <br>
+                        <span id="pryv-button"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" id="selection-data" style="display:none">
+                <div class="card-body">
+                    <h2 class="card-title" id="name-selection"></h2>
+                    <table id='data-collection' class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Tracking method</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+
+            <div class="card" id="mouse-tracker" style="display:none">
+                <div class="card-body">
+                    <h2 class="card-title">Mouse Tracker</h2>
+                    <br/>
+                    <p>You can select the image of your choice in the selector, and start drawing by following the image outlines as precisely as possible. If you change the image, it will erase your drawing on the screen. You need to left click to begin and to stop drawing.</p>
+                    <br/>
+                    <select name="image-selector" id="image-selector">
+                  <option value="assets/images/heart.png">Heart</option>
+                  <option value="assets/images/house.png">House</option>
+                </select>
+                    <div id="drawing-field">
+                        <canvas class="canvas" id="drawing-canvas" height="400px" width="600px"></canvas>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+            <div class="card" id="mouse-visualization" style="display:none">
+                <div class="card-body">
+                    <h2 class="card-title">Mouse Visualization</h2>
+                    <br />
+                    <p>Click on previous/next to see the saved images. Click on current to see the current drawing.</p>
+                    <br/>
+                    <span id="counter-mouse">Number of stored images: 0</span>
+                    <br />
+                    <span id="frequency-mouse"></span>
+                    <br/>
+                    <div id="canvas-container">
+                        <canvas class="canvas" id="render-canvas" height="400px" width="600px"></canvas>
+                        <div id="image-button">
+                            <button id="previous" class="image-button">Previous</button>
+                            <button id="current" class="image-button">Current</button>
+                            <button id="next" class="image-button">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" id="accelerometer-collect" style="display:none">
+                <div class="card-body">
+                    <h2 class="card-title">Accelerometer Collect</h2>
+                    <br />
+                    <p>Hold your phone still by keeping your arm horizontal for at least 10 seconds. Click on the button to start/stop data collection.</p>
+                    <br/>
+                    <br />
+                    <button id="accelerometer-button" class="btn btn-primary mb-2">Start/Stop Collect</button>
+                    <br />
+                    <div id="canvas-container">
+                        <canvas class="canvas" id="accelerometer-canvas" height="400px" width="300px"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="card" id="accelerometer-visualization" style="display:none">
+                <div class="card-body">
+                    <h2 class="card-title">Accelerometer Visualization</h2>
+                    <br />
+                    <span id="counter-accelerometer">Number of stored recordings: 0</span>
+                    <br/>
+                    <span id="frequency-accelerometer"></span>
+                    <br/>
+                    <div class="spaced" id="record-div">
+                        <select name="recording-select" id="recording-select">
+                        </select>
+                        <button id="accelerometer-show" class="btn btn-primary mb-2">Show</button>
+                    </div>
+
+                    <br />
+                    <div id="canvas-container">
+                        <canvas class="canvas" id="accelerometer-visualization-canvas" height="400px" width="300px"></canvas>
+                    </div>
+
+                </div>
+            </div>
+            <div class="card" id="sharing-view" style="display: none">
+                <div class="card-body">
+                  <h2 class="card-title">Sharings</h2>
+                  <form class="form-inline">
+          
+                    <button type="button" id="create-sharing" class="btn btn-primary btn-sm">Create</button>
+                    &nbsp;
+                    <input type="text" id="sharing-name" placeholder="name of the sharing">
+          
+                  </form>
+                  <table id='sharings-table' class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Link</th>
+                        <th scope="col">Mail</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                  <small id='sharing-delete-message'>Click on the name of a sharing to delete it.</small>
+                </div>
+              </div>
+            <div class="next-example">
+                Next example: <a href="../collect-survey-data/index.html">Collect survey data</a>
+              </div>
+
+        </div>
+
+        </div>
+        <!-- Script for the Service information collapsible -->
+        <script>
+            var coll = document.getElementsByClassName("collapsible");
+            var i;
+
+            for (i = 0; i < coll.length; i++) {
+                coll[i].addEventListener("click", function() {
+                    this.classList.toggle("active");
+                    var content = this.nextElementSibling;
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    }
+                });
+            }
+        </script>
+
+    </body>
+
+</html>
