@@ -15,6 +15,7 @@ let cubeBetaVisu = 0;
 let currentRecording = [];
 let is_recording;
 let recordings = [];
+let is_showing;
 
 const samplingAccRate = 30;
 /* Build mobile version */
@@ -156,13 +157,20 @@ function showRecording() {
   }
   let time = 0;
   const recording = recordings[selected];
-  for (let i = 0; i < recording.length; i++) {
-    let point = recording[i];
-    time = samplingAccRate * i;
+  if (!is_showing) {
+    is_showing = true;
+    for (let i = 0; i < recording.length; i++) {
+      let point = recording[i];
+      time = samplingAccRate * i;
+      setTimeout(() => {
+        cubeAlphaVisu = point[0];
+        cubeBetaVisu = point[1];
+        cubeGammaVisu = point[2];
+      }, time);
+    }
+    // Wait until the end of the recording before being able to run another.
     setTimeout(() => {
-      cubeAlphaVisu = point[0];
-      cubeBetaVisu = point[1];
-      cubeGammaVisu = point[2];
-    }, time);
+      is_showing = false;
+    }, samplingAccRate * recording.length);
   }
 }
