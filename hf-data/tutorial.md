@@ -1,7 +1,7 @@
 
 # Pryv Collect and view HF data tutorial
 
-You can try the live version of the app [here](link-to-gh-pages).
+You can try the live version of the app [here](https://api.pryv.com/app-web-examples/hf-data/).
 
 All you need to run this app is to download [index.html](index.html), [script.js](script.js) files, [js/](js) and [assets](assets) folders and open [index.html](index.html) with your browser.
 
