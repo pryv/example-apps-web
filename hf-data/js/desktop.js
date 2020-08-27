@@ -77,6 +77,7 @@ function mouseDown(e) {
     pryvHF.measures.mouseX.buffer.push([now, IMAGE_END]);
     pryvHF.measures.mouseY.buffer.push([now, IMAGE_END]);
   } else {
+    clearCtx(drawingCtx);
     //Add point to indicate the beggining of a drawing
     pryvHF.measures.mouseX.buffer.push([now, IMAGE_START]);
     pryvHF.measures.mouseY.buffer.push([now, IMAGE_START]);
