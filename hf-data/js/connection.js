@@ -450,11 +450,11 @@ function computeFrequency() {
   if (pryvHF.pryvConn) {
     if (pryvHF.measures.mouseX.event) {
       frequencyMouse.innerHTML =
-        'Fetch frequency: ' + pointsSecondMouse + ' points/s';
+        'Data points rate: ' + pointsSecondMouse + ' NUM/s';
     }
     if (pryvHF.measures.orientationGamma.event) {
       frequencyAccelerometer.innerHTML =
-        'Fetch frequency: ' + pointsSecondAccelerometer + ' points/s';
+        'Data points rate: ' + pointsSecondAccelerometer + ' NUM/s';
     }
     pointsSecondMouse = 0;
     pointsSecondAccelerometer = 0;

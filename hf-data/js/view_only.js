@@ -8,7 +8,7 @@ async function buildVisualizationOnly(apiEndpoint, urlParams) {
 
   const username = await pryvHF.pryvConn.username();
   document.getElementById('name-selection').innerHTML =
-    'Data Collection Of ' + username;
+    'Tracking sessions of ' + username;
 
   const eventId_mouseX = urlParams.get('posXEventId');
   const eventId_mouseY = urlParams.get('posYEventId');
