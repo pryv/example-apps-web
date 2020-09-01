@@ -404,7 +404,7 @@ async function deleteSharing(accessId) {
 
 Once the sharing has been created, it should enable third parties to consult data from the user in a "view-only" mode. In this mode, a table containing all performed tests is displayed, along with the date of the test and the tracking method.   
 
-*Example: [https://api.pryv.com/app-web-examples/hf-data/?apiEndpoint=https://cke8hrluz00o31kqod5lcdudm@hf-test.pryv.me/](https://api.pryv.com/app-web-examples/hf-data/?apiEndpoint=https://cke8hrluz00o31kqod5lcdudm@hf-test.pryv.me/)* 
+*Example: [https://api.pryv.com/app-web-examples/hf-data/?apiEndpoint=https://ckejrnjlq00z61kqosakom3wi@hf-app.pryv.me/](https://api.pryv.com/app-web-examples/hf-data/?apiEndpoint=https://ckejrnjlq00z61kqosakom3wi@hf-app.pryv.me/)* 
 
 The recipient of the link can open the data visualization by clicking on the chosen test:
 - the **Desktop version** contains the drawing performed with the mouse tracker
