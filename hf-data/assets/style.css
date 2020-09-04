@@ -91,3 +91,7 @@
 #record-div {
     margin-top: 20px;
 }
+
+#accelerometer-live {
+    background-color: red;
+}

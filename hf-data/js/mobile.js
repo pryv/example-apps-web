@@ -16,8 +16,11 @@ let currentRecording = [];
 let is_recording;
 let recordings = [];
 let is_showing;
+let is_live;
+let recordingTimeout = [];
+let lastBatch;
 
-const samplingAccRate = 30;
+const samplingAccRate = 15;
 /* Build mobile version */
 function buildMobile() {
   let accelerometerCanvas = document.getElementById('accelerometer-canvas');
@@ -46,6 +49,8 @@ function buildMobile() {
   accelerometerRecordCounter = document.getElementById('counter-accelerometer');
   const accelerometerButtonShow = document.getElementById('accelerometer-show');
   accelerometerButtonShow.addEventListener('click', showRecording);
+  const accelerometerButtonLive = document.getElementById('accelerometer-live');
+  accelerometerButtonLive.addEventListener('click', showLive);
 
   recordSelect = document.getElementById('recording-select');
 
@@ -131,6 +136,15 @@ function recordAccelerometer(pointsAlpha, pointsBeta, pointsGamma, l) {
   for (let i = 0; i < l; i++) {
     if (pointsAlpha[i] != IMAGE_START && pointsAlpha[i] != IMAGE_END) {
       currentRecording.push([pointsAlpha[i], pointsBeta[i], pointsGamma[i]]);
+      if(is_live){
+        time = samplingAccRate * i;
+        recordingTimeout[i] = setTimeout(() => {
+          cubeAlphaVisu = pointsAlpha[i];
+          cubeBetaVisu = pointsBeta[i];
+          cubeGammaVisu = pointsGamma[i];
+        }, time)
+
+      }
     } else if (pointsAlpha[i] == IMAGE_START) {
       currentRecording = [];
     } else if (pointsAlpha[i] == IMAGE_END) {
@@ -150,6 +164,7 @@ function recordAccelerometer(pointsAlpha, pointsBeta, pointsGamma, l) {
 }
 
 function showRecording() {
+  is_live = false;
   const selected = recordSelect.value;
   if (selected == '') {
     alert('No recording available');
@@ -162,7 +177,7 @@ function showRecording() {
     for (let i = 0; i < recording.length; i++) {
       let point = recording[i];
       time = samplingAccRate * i;
-      setTimeout(() => {
+      recordingTimeout[i] = setTimeout(() => {
         cubeAlphaVisu = point[0];
         cubeBetaVisu = point[1];
         cubeGammaVisu = point[2];
@@ -172,5 +187,18 @@ function showRecording() {
     setTimeout(() => {
       is_showing = false;
     }, samplingAccRate * recording.length);
+  }
+}
+
+function showLive() {
+  // Stop to show the recording
+  emptyRecordingBuffer();
+  is_showing = false;
+  is_live = true;
+}
+
+function emptyRecordingBuffer(){
+  for(let i=0; i<recordingTimeout.length; ++i){
+    clearTimeout(recordingTimeout[i]);
   }
 }
