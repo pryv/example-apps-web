@@ -1,5 +1,4 @@
 let drawingCtx, renderCtx, drawingField;
-let button_current, is_display_current_canvas;
 
 const SIZE_DOT = 3;
 const RED_COMPONENT = 255;
@@ -8,7 +7,6 @@ const BLUE_COMPONENT = 0;
 const ALPHA_COMPONENT = 255;
 
 function buildDesktop() {
-  is_display_current_canvas = true;
   const imageSelector = document.getElementById('image-selector');
   imageSelector.addEventListener('change', setBackgroundImage);
 

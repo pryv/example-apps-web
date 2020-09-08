@@ -1,4 +1,4 @@
-let serviceInfo, service;
+let serviceInfo, service, serviceInfoSelect, serviceInfoInput;
 
 const pryvHF = {
   pryvConn: null,

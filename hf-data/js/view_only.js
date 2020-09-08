@@ -1,7 +1,8 @@
-/* Visualization only */
 const firstFetchWithMouse = 1;
 const notFirstFetch = -1;
 let isFirstEventMouse = false;
+
+/* Visualization only */
 async function buildVisualizationOnly(apiEndpoint, urlParams) {
   Array.from(document.getElementsByClassName('delete-event-button')).forEach(element => element.style.display = 'none');
   document.getElementById('selection-data').style.display = '';
@@ -45,6 +46,10 @@ async function buildVisualizationOnly(apiEndpoint, urlParams) {
 
   }
   if (!eventId_mouseX && !eventId_alpha) {
+    buildLive();
+  }
+
+  function buildLive() {
     buildDesktop();
     buildMobile();
     is_live = true;

@@ -1,4 +1,3 @@
-let serviceInfoSelect, serviceInfoInput;
 let isMobile = false;
 
 window.onload = event => {

@@ -2,7 +2,7 @@ let rendererCollect, cubeCollect, edgesCollect, sceneCollect, cameraCollect;
 
 let rendererVisu, cubeVisu, edgesVisu, sceneVisu, cameraVisu;
 
-let accelerometerRecordCounter, recordSelect, frequencyAccelerometer;
+let recordSelect, frequencyAccelerometer;
 
 let cubeAlphaCollect = 0;
 let cubeGammaCollect = 0;
@@ -12,13 +12,11 @@ let cubeAlphaVisu = 0;
 let cubeGammaVisu = 0;
 let cubeBetaVisu = 0;
 
-let currentRecording = [];
+let recording = [];
 let is_recording;
-let recordings = [];
 let is_showing;
 let is_live;
 let recordingTimeout = [];
-let lastBatch;
 
 const samplingAccRate = 15;
 /* Build mobile version */
@@ -138,7 +136,7 @@ function animateVisu() {
 
 function recordAccelerometer(pointsAlpha, pointsBeta, pointsGamma, l) {
   for (let i = 0; i < l; i++) {
-    currentRecording.push([pointsAlpha[i], pointsBeta[i], pointsGamma[i]]);
+    recording.push([pointsAlpha[i], pointsBeta[i], pointsGamma[i]]);
     if (is_live) {
       time = samplingAccRate * i;
       recordingTimeout[i] = setTimeout(() => {
@@ -153,7 +151,6 @@ function recordAccelerometer(pointsAlpha, pointsBeta, pointsGamma, l) {
 function showRecording() {
   is_live = false;
   let time = 0;
-  const recording = currentRecording;
   if (!is_showing) {
     is_showing = true;
     for (let i = 0; i < recording.length; i++) {
