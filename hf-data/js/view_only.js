@@ -49,7 +49,7 @@ async function buildVisualizationOnly(apiEndpoint, urlParams) {
     buildLive();
   }
 
-  function buildLive() {
+  async function buildLive() {
     buildDesktop();
     buildMobile();
     is_live = true;
