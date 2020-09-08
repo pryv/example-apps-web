@@ -61,10 +61,6 @@
     display: inline;
 }
 
-.image-button {
-    width: 100px;
-}
-
 #drawing-field {
     height: 400px;
     width: 600px;
@@ -92,6 +88,10 @@
     margin-top: 20px;
 }
 
-#accelerometer-live {
+#live {
+    background-color: red;
+}
+
+.delete-event-button{
     background-color: red;
 }

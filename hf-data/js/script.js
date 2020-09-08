@@ -1,10 +1,5 @@
 let serviceInfoSelect, serviceInfoInput;
-
-let fromTime = 0;
 let isMobile = false;
-
-const IMAGE_START = -1000;
-const IMAGE_END = -2000;
 
 window.onload = event => {
   let queryString = window.location.search;
@@ -31,6 +26,7 @@ window.onload = event => {
     fetchServiceInfo();
     buildSharing();
     savePoints();
+    Array.from(document.getElementsByClassName('delete-event-button')).forEach(element => element.addEventListener('click',deleteCurrentEvent));
   }
   computeFrequency();
   fetchPoints();
