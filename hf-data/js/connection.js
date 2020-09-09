@@ -258,6 +258,7 @@ async function newStream(connection, isMobile) {
 }
 
 async function newEvent(connection, isMobile) {
+  // Can be good to add generic tuple types for the event (1 event instead of 2-3). 
   const apiCalls = [];
   const resultHandlers = [];
   if (isMobile) {

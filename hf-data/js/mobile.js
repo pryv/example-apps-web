@@ -16,6 +16,7 @@ let recording = [];
 let is_recording;
 let is_showing;
 let is_live;
+let end_time_last_batch = new Date(0);
 let recordingTimeout = [];
 
 const samplingAccRate = 15;
@@ -135,10 +136,14 @@ function animateVisu() {
 }
 
 function recordAccelerometer(pointsAlpha, pointsBeta, pointsGamma, l) {
+  let now = new Date();
+  let diff = end_time_last_batch - now;
+  diff = diff > 0 ? diff:0;
+  end_time_last_batch = new Date(now.getTime() + diff + samplingAccRate * l);
   for (let i = 0; i < l; i++) {
     recording.push([pointsAlpha[i], pointsBeta[i], pointsGamma[i]]);
     if (is_live) {
-      time = samplingAccRate * i;
+      time = (diff + samplingAccRate * i);
       recordingTimeout[i] = setTimeout(() => {
         cubeAlphaVisu = pointsAlpha[i];
         cubeBetaVisu = pointsBeta[i];
