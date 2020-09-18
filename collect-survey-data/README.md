@@ -1,5 +1,9 @@
 ## Pryv collect survey data example 
 
+- [Live Demo](https://api.pryv.com/app-web-examples/collect-survey-data/)
+- [Tutorial](tutorial.md)
+- [Video](https://youtu.be/SN11LSxL8q4)
+
 Web app for creation & collection of answers using a simple form.
 
 ## Story

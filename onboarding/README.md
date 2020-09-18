@@ -1,5 +1,9 @@
 # Pryv.io onboarding
 
+- [Live Demo](https://api.pryv.com/app-web-examples/onboarding/)
+- [Tutorial](tutorial.md)
+- [Video](https://www.youtube.com/watch?v=258UsM1Qq0o)
+
 This example describes how to implement an onboarding experience for your users.
 
 It demonstrates how your application should initialize, allowing the developer to interactively perform the different steps to illustrate the process.

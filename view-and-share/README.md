@@ -1,5 +1,9 @@
 ## Pryv view and share data example 
 
+- [Live Demo](https://api.pryv.com/app-web-examples/view-and-share/)
+- [Tutorial](tutorial.md)
+- [Video](https://youtu.be/gEfPmkQmtAI)
+
 Web app for data visualization & sharing with third parties.
 
 ## Story

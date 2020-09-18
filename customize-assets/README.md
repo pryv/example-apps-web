@@ -1,5 +1,9 @@
 # Customize assets for your Pryv.io web apps
 
+- [Live Demo](https://youtu.be/VI1zjLLcR9Q)
+- [Tutorial](tutorial.md)
+- [Video](https://youtu.be/VI1zjLLcR9Q) 
+
 This example describes how to edit icons and assets for your Pryv.io web apps. 
 
 It demonstrates how you can modify the logo to adapt it to your own branding.

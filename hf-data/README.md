@@ -1,9 +1,11 @@
 ## Pryv collect and view HF data
 
+- [Live Demo](https://api.pryv.com/app-web-examples/hf-data/)
+- [Tutorial](tutorial.md)
+- [Video](https://youtu.be/l6uOXr1_ivA)
+
 Web app for high-frequency data collection, visualization & sharing with third parties.   
 The goal of this sample app is to help you get familiar with [high-frequency data](https://api.pryv.com/reference/#hf-series) and how to use it within your apps to collect, display and share HF data.  
-
-You can watch the full flow on [in our video](https://youtu.be/l6uOXr1_ivA).
 
 ## Story
 
