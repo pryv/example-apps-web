@@ -50,19 +50,19 @@ The user can select an image to draw for the **Desktop tracking task** (kinetic 
 
 |Desktop                                                 | Mobile                                                  |
 | -------------------------------------------------------|---------------------------------------------------------| 
-| <img src="images/tracker-1.png" alt="tracker" style="zoom:50%;" /> | <img src="images/collect-acc.jpg" alt="collect" style="zoom:50%;" /> |
+| <img src="images/tracker-1.png" alt="tracker" style="zoom:50%;" /> | <img src="images/collect-acc.jpg" alt="collect" style="zoom:20%;" /> |
 
 
 Collected HF data from mouse or phone motion is displayed in real time to the user along with the fetch frequency (in NUM/s). The recorded event can be deleted by clicking on the "Delete" button.
 
 |Desktop                                                 | Mobile                                                  |
 | -------------------------------------------------------|---------------------------------------------------------| 
-| <img src="images/visu-2.png" alt="view" style="zoom:50%;" /> | <img src="images/delete-acc.jpg" alt="view" style="zoom:50%;" /> |
+| <img src="images/visu-2.png" alt="view" style="zoom:50%;" /> | <img src="images/delete-acc.jpg" alt="view" style="zoom:20%;" /> |
 
 ## Data sharing
 
 Data visualization from both tests can be shared with third-parties. This translates into a 'read' access to the shared stream "HF" in which the data from the test is stored. The sharing consists in a link that can be communicated directly or by email to a third party.
-When opened, it displays either the drawing from the desktop version or the phone orientation from the mobile version:
+When opened, it can display either the drawing from the desktop version or the phone orientation from the mobile version by clicking on the chosen **Tracking method**:
 
 <p align="center">
 <img src="images/share-data.png" alt="visualization" width=700 />
@@ -70,7 +70,7 @@ When opened, it displays either the drawing from the desktop version or the phon
 
 ## Live tracking
 
-The app also allows for live-tracking. When opening the sharing link, the functionality "Show Live Event" enables the data accessor to display the drawing or the phone orientation (depending on the chosen version) while the patient is performing the test remotely:
+The app also allows for live-tracking. When opening the sharing link, the functionality **Show Live Event** enables the data accessor to display the drawing or the phone orientation (depending on the tracking method) while the patient is performing the test remotely:
 
 <p align="center">
 <img src="images/live-tracking.gif" alt="live-tracking" />
