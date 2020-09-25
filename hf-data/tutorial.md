@@ -39,13 +39,9 @@ The sharing link enables the recipient to consult the list of trackings, along w
 
 |Desktop                                                 | Mobile                                                  |
 | -------------------------------------------------------|---------------------------------------------------------|
-| <img src="images/share-desktop.png" alt="view" style="zoom:50%;" /> | <img src="images/share-acc.png" alt="view" style="zoom:50%;" /> |
+| <img src="images/share-data.png" alt="desktop" style="zoom:50%;" /> | <img src="images/share-acc2.png" alt="mobile" style="zoom:50%;" /> |
 
-The functionality **Show Live Event** enables the data accessor to display the drawing or the phone orientation (depending on the tracking method) while the patient is performing the test remotely:
-
-<p align="center">
-<img src="images/share-data.png" alt="live" width="700"/>
-</p>
+The functionality **Show Live Event** enables the data accessor to display the drawing or the phone orientation (depending on the tracking method) while the patient is performing the test remotely.
 
 ## Authenticate your app
 
