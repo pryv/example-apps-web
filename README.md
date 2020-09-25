@@ -13,3 +13,8 @@ This is the main repository for all the web apps that you can implement using Pr
 |       [Customize Assets](customize-assets/)  | [Live Demo](https://youtu.be/VI1zjLLcR9Q)  | [Tutorial](customize-assets/tutorial.md) | [Video](https://youtu.be/VI1zjLLcR9Q) |
 |       [View and Share Data](view-and-share/)  | [Live Demo](https://api.pryv.com/app-web-examples/view-and-share/)  | [Tutorial](view-and-share/tutorial.md) | [Video](https://youtu.be/gEfPmkQmtAI) |
 |       [Collect and Visualize High Frequency Data](hf-data/)  | [Live Demo](https://api.pryv.com/app-web-examples/hf-data/)  | [Tutorial](hf-data/tutorial.md) | [Video](https://youtu.be/l6uOXr1_ivA) |
+
+  
+*The **Live Demo** enables you to test directly the app.*    
+*The **Tutorial** explains the web app code that can be customized for your own use.*    
+*The **Video** presents the functionalities of the web app in an interactive way.*  

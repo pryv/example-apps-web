@@ -10,7 +10,7 @@
         <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400">
         <link href="assets/style.css" rel="stylesheet" type="text/css" />
         <title>Pryv HF</title>
-        <script src="https://api.pryv.com/lib-js/pryv.js"></script>
+        <script src="https://api.pryv.com/lib-js/pryv-socket.io-monitor.js"></script>
         <script src="https://threejs.org/build/three.js"></script>
         <script src="js/desktop.js"></script>
         <script src="js/mobile.js"></script>
@@ -63,21 +63,6 @@
                 </div>
             </div>
 
-            <div class="card" id="selection-data" style="display:none">
-                <div class="card-body">
-                    <h2 class="card-title" id="name-selection"></h2>
-                    <table id='data-collection' class="table">
-                        <thead>
-                          <tr>
-                            <th scope="col">Date</th>
-                            <th scope="col">Tracking method</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                      </table>
-                </div>
-            </div>
 
             <div class="card" id="mouse-tracker" style="display:none">
                 <div class="card-body">
@@ -102,20 +87,15 @@
                 <div class="card-body">
                     <h2 class="card-title">Stored Data Visualisation</h2>
                     <br />
-                    <p>Click on previous/next to browse through the saved images. Click on current to follow the live drawing.</p>
+                    <span class="spaced" id="date-mouse"></span>
                     <br/>
-                    <span id="counter-mouse">Number of stored images: 0</span>
-                    <br />
                     <span id="frequency-mouse"></span>
                     <br/>
                     <div id="canvas-container">
-                        <canvas class="canvas" id="render-canvas" height="400px" width="600px"></canvas>
-                        <div id="image-button">
-                            <button id="previous" class="image-button">Previous</button>
-                            <button id="current" class="image-button">Current</button>
-                            <button id="next" class="image-button">Next</button>
-                        </div>
+                        <canvas class="canvas" id="render-canvas" height="400px" width="600px"></canvas> 
                     </div>
+                    <br/>
+                    <button class="delete-event-button btn btn-primary mb-2">DELETE IMAGE</button>
                 </div>
             </div>
 
@@ -126,7 +106,7 @@
                     <p>Hold your phone still by keeping your arm horizontal for at least 10 seconds. Click on the button to start/stop data collection.</p>
                     <br/>
                     <br />
-                    <button id="accelerometer-button" class="btn btn-primary mb-2">Start/Stop Collect</button>
+                    <button id="accelerometer-button" class="btn btn-primary mb-2">Start Collect</button>
                     <br />
                     <div id="canvas-container">
                         <canvas class="canvas" id="accelerometer-canvas" height="400px" width="300px"></canvas>
@@ -136,21 +116,24 @@
             <div class="card" id="accelerometer-visualization" style="display:none">
                 <div class="card-body">
                     <h2 class="card-title">Stored Data Visualisation</h2>
-                    <br />
-                    <span id="counter-accelerometer">Number of stored recordings: 0</span>
+                    <br/>
+                    <span class="spaced" id="date-accelerometer"></span>
                     <br/>
                     <span id="frequency-accelerometer"></span>
                     <br/>
                     <div class="spaced" id="record-div">
-                        <select name="recording-select" id="recording-select">
-                        </select>
-                        <button id="accelerometer-show" class="btn btn-primary mb-2">Show</button>
+                        <div>
+                            <button id="accelerometer-show" class="btn btn-primary mb-2">Show</button>
+                        </div>
+                        
                     </div>
 
                     <br />
                     <div id="canvas-container">
                         <canvas class="canvas" id="accelerometer-visualization-canvas" height="400px" width="300px"></canvas>
                     </div>
+                    <br/>
+                    <button class="delete-event-button btn btn-primary mb-2">DELETE RECORDING</button>
 
                 </div>
             </div>
@@ -178,13 +161,28 @@
                   <small id='sharing-delete-message'>Click on the name of a sharing to delete it.</small>
                 </div>
               </div>
-            <div class="next-example">
-                Previous example: <a href="../collect-survey-data/index.html">Collect survey data</a>
-              </div>
-
+            <div class="card" id="selection-data" style="display:none">
+            <div class="card-body">
+                <h2 class="card-title" id="name-selection"></h2>
+                <br/>
+                <button class="btn btn-primary mb-2" id="live">Show live event</button>
+                <table id='data-collection' class="table">
+                    <thead>
+                        <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Tracking method</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    </table>
+            </div>
         </div>
-
+        <div class="next-example">
+            Previous example: <a href="../collect-survey-data/index.html">Collect survey data</a>
         </div>
+    </div>
+</div>
         <!-- Script for the Service information collapsible -->
         <script>
             var coll = document.getElementsByClassName("collapsible");

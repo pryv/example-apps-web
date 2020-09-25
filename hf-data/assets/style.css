@@ -61,10 +61,6 @@
     display: inline;
 }
 
-.image-button {
-    width: 100px;
-}
-
 #drawing-field {
     height: 400px;
     width: 600px;
@@ -90,4 +86,12 @@
 
 #record-div {
     margin-top: 20px;
+}
+
+#live {
+    background-color: red;
+}
+
+.delete-event-button{
+    background-color: red;
 }

@@ -21,13 +21,13 @@ Once you have accepted, you can start the tracking task using the accelerometer 
 
 |Desktop                                                 | Mobile                                                  |
 | -------------------------------------------------------|---------------------------------------------------------|
-| <img src="images/tracker-1.png" alt="tracker" style="zoom:50%;" /> | <img src="images/acc-collect.png" alt="collect" style="zoom:50%;" /> |
+| <img src="images/tracker-1.png" alt="tracker" style="zoom:50%;" /> | <img src="images/collect-acc.jpg" alt="collect" style="zoom:10%;" /> |
 
 You can visualize your data in the "Visualization" section of the app:
 
 |Desktop                                                 | Mobile                                                  |
 | -------------------------------------------------------|---------------------------------------------------------|
-| <img src="images/visualization-2.png" alt="view" style="zoom:50%;" /> | <img src="images/acc-view.png" alt="view" style="zoom:50%;" /> |
+| <img src="images/visu-2.png" alt="view" style="zoom:50%;" /> | <img src="images/delete-acc.jpg" alt="view" style="zoom:10%;" /> |
 
 You can then share your data by creating a new sharing at the bottom of the page. This will generate a URL link that contains your tracking visualization from the stream "**HF**".
 
@@ -39,8 +39,9 @@ The sharing link enables the recipient to consult the list of trackings, along w
 
 |Desktop                                                 | Mobile                                                  |
 | -------------------------------------------------------|---------------------------------------------------------|
-| <img src="images/share-desktop.png" alt="view" style="zoom:50%;" /> | <img src="images/share-acc.png" alt="view" style="zoom:50%;" /> |
+| <img src="images/share-data.png" alt="desktop" style="zoom:50%;" /> | <img src="images/share-acc2.png" alt="mobile" style="zoom:50%;" /> |
 
+The functionality **Show Live Event** enables the data accessor to display the drawing or the phone orientation (depending on the tracking method) while the patient is performing the test remotely.
 
 ## Authenticate your app
 
