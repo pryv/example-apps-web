@@ -1,5 +1,10 @@
+const firstFetchWithMouse = 1;
+const notFirstFetch = -1;
+let isFirstEventMouse = false;
+
 /* Visualization only */
 async function buildVisualizationOnly(apiEndpoint, urlParams) {
+  Array.from(document.getElementsByClassName('delete-event-button')).forEach(element => element.style.display = 'none');
   document.getElementById('selection-data').style.display = '';
   pryvHF.pryvConn = new Pryv.Connection(apiEndpoint);
 
@@ -9,7 +14,7 @@ async function buildVisualizationOnly(apiEndpoint, urlParams) {
   const username = await pryvHF.pryvConn.username();
   document.getElementById('name-selection').innerHTML =
     'Tracking sessions of ' + username;
-
+  document.getElementById('live').addEventListener('click', switchToLive);
   const eventId_mouseX = urlParams.get('posXEventId');
   const eventId_mouseY = urlParams.get('posYEventId');
   if (eventId_mouseX && eventId_mouseY) {
@@ -38,6 +43,80 @@ async function buildVisualizationOnly(apiEndpoint, urlParams) {
     };
     buildMobile();
     document.getElementById('accelerometer-visualization').style.display = '';
+
+  }
+  if (!eventId_mouseX && !eventId_alpha) {
+    buildLive();
+  }
+
+  async function buildLive() {
+    buildDesktop();
+    buildMobile();
+    is_live = true;
+    document.getElementById('accelerometer-show').style.display = 'none';
+    const monitor = await (new Pryv.Monitor(apiEndpoint, { limit: 3 })
+      .on(Pryv.Monitor.Changes.EVENT, function (event) {
+        switch (event.streamId) {
+          case 'hfdemo-mouse-y':
+            // Because fetch 3 events at the loading and if we fetch mouse event => the third can be another sketch/recording
+            if(isFirstEventMouse == firstFetchWithMouse){
+              isFirstEventMouse = notFirstFetch;
+              break;
+            }
+            if(!isFirstEventMouse){
+              isFirstEventMouse = firstFetchWithMouse;
+            }
+            prepareLive(false);
+            const eventDate = new Date(event.time * 1000)
+            document.getElementById('date-mouse').innerHTML = 'Start date: ' + eventDate.toUTCString();
+            clearCtx(renderCtx);
+            pryvHF.measures.mouseY.event = event;
+            break;
+          case 'hfdemo-mouse-x':
+            pryvHF.measures.mouseX.event = event;
+            break;
+          case 'hfdemo-orientation-alpha':
+            if(isFirstEventMouse == firstFetchWithMouse){
+              isFirstEventMouse = notFirstFetch;
+              break;
+            } else{
+              prepareLive(true);
+              const eventDate = new Date(event.time * 1000);
+              document.getElementById('date-accelerometer').innerHTML = 'Start date: ' + eventDate.toUTCString();
+              const now = Date.now() / 1000;
+              fromTime = now;
+              emptyRecordingBuffer();
+              isFirstEventMouse = notFirstFetch;
+              pryvHF.measures.orientationAlpha.event = event;
+              break;
+            }
+          case 'hfdemo-orientation-beta':
+            pryvHF.measures.orientationBeta.event = event;
+            break;
+          case 'hfdemo-orientation-gamma':
+            pryvHF.measures.orientationGamma.event = event;
+        }
+        console.log('> New event', event);
+      })
+      //.addUpdateMethod(new Pryv.Monitor.UpdateMethod.EventsTimer(1000))
+      .addUpdateMethod(new Pryv.Monitor.UpdateMethod.Socket())
+    ).start();
+  }
+
+  function prepareLive(isMobile) {
+    if (isMobile) {
+      document.getElementById('mouse-visualization').style.display = 'none';
+      document.getElementById('accelerometer-visualization').style.display = '';
+    }
+    else {
+      document.getElementById('mouse-visualization').style.display = '';
+      document.getElementById('accelerometer-visualization').style.display = 'none';
+    }
+    pryvHF.measures.mouseX.event = null;
+    pryvHF.measures.mouseY.event = null;
+    pryvHF.measures.orientationAlpha.event = null;
+    pryvHF.measures.orientationBeta.event = null;
+    pryvHF.measures.orientationGamma.event = null;
   }
 
   /* Aggregate the related events from different streams together */
@@ -113,4 +192,9 @@ function addListEvent(table, event) {
   const row = table.insertRow(-1);
   row.insertCell(-1).innerHTML = date.toUTCString();
   row.insertCell(-1).innerHTML = link;
+}
+
+function switchToLive() {
+  const baseUrl = window.location.href.split('&')[0].replace('#', '');
+  window.location.href = baseUrl;
 }

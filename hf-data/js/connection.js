@@ -1,4 +1,4 @@
-let serviceInfo, service;
+let serviceInfo, service, serviceInfoSelect, serviceInfoInput;
 
 const pryvHF = {
   pryvConn: null,
@@ -32,6 +32,10 @@ let length_last_batch;
 
 let pointsSecondMouse = 0;
 let pointsSecondAccelerometer = 0;
+
+let countError = 0;
+
+let fromTime = 0;
 
 function buildServiceInfo() {
   document.getElementById('service').style.display = '';
@@ -97,9 +101,7 @@ function showCollectAndVisualize(isDisplay) {
   let display = isDisplay ? '' : 'none';
   if (isMobile) {
     document.getElementById('accelerometer-collect').style.display = display;
-    document.getElementById(
-      'accelerometer-visualization'
-    ).style.display = display;
+    document.getElementById('accelerometer-visualization').style.display = display;
   } else {
     document.getElementById('mouse-tracker').style.display = display;
     document.getElementById('mouse-visualization').style.display = display;
@@ -126,44 +128,140 @@ async function setupStreamStructure(connection) {
       }
     });
     resultHandlers.push(null);
+    executeCalls(connection, apiCalls, resultHandlers, false);
   }
   if (isMobile) {
     /* If streams for mobile devices do not exist */
     if (!hasMobileStream) {
-      apiCalls.push(
-        // Accelerometer
-        {
-          method: 'streams.create',
-          params: {
-            id: 'hfdemo-orientation-gamma',
-            name: 'Orientation-Gamma',
-            parentId: 'hfdemo',
-            clientData: buildPlotlyOptions('Orientation', 'angle/deg', 'Gamma')
-          }
-        },
-        {
-          method: 'streams.create',
-          params: {
-            id: 'hfdemo-orientation-beta',
-            name: 'Orientation-Beta',
-            parentId: 'hfdemo',
-            clientData: buildPlotlyOptions('Orientation', 'angle/deg', 'Beta')
-          }
-        },
-        {
-          method: 'streams.create',
-          params: {
-            id: 'hfdemo-orientation-alpha',
-            name: 'Orientation-Alpha',
-            parentId: 'hfdemo',
-            clientData: buildPlotlyOptions('Orientation', 'angle/deg', 'Alpha')
-          }
-        }
-      );
-
-      resultHandlers.push(null, null, null, null, null, null);
+      await newStream(connection, true);
     }
-    // https://api.pryv.com/reference/#create-hf-event
+    // await newEvent(connection, true)
+  } else {
+    if (!hasDesktopStream) {
+      await newStream(connection, false);
+    }
+    // await newEvent(connection, false);
+  }
+  pryvHF.pryvConn = connection;
+
+  /**
+   * @returns hasRootStream: True if streams hfdemo exists
+   * @returns hasDesktopStream: True if streams for desktop devices exist
+   * @returns hasMobileStream: True if streams for mobile devices exist
+   */
+  function hasStreams(streams) {
+    let hasDesktopStream = false;
+    let hasMobileStream = false;
+    let hasRootStream = false;
+    if (streams.length == 0) {
+      return [hasRootStream, hasDesktopStream, hasMobileStream];
+    }
+    streams = streams[0].children.filter(x => x.id == 'hfdemo');
+    if (streams.length == 0) {
+      return [hasRootStream, hasDesktopStream, hasMobileStream];
+    }
+    hasRootStream = true;
+    hasDesktopStream = streams[0].children.filter(x => x.name == 'Mouse-X')
+      .length;
+    hasMobileStream = streams[0].children.filter(
+      x => x.name == 'Orientation-Alpha'
+    ).length;
+    return [hasRootStream, hasDesktopStream, hasMobileStream];
+  }
+}
+
+async function executeCalls(connection, apiCalls, resultHandlers, isCreatingEvent) {
+  try {
+    const results = await connection.api(apiCalls);
+    console.log('...structure created: ', results);
+    for (let i = 0; i < results.length; i++) {
+      if (resultHandlers[i]) {
+        /* If no new event is created => error with token */
+        if (isCreatingEvent && results[i].event == null) {
+          throw new Error(
+            "The given token's access permissions do not allow to create an event. Please suppress the app access before reconnecting"
+          );
+        }
+        resultHandlers[i].call(null, results[i]);
+      }
+    }
+  }
+  catch (error) {
+    console.error('...error: ', error);
+    alert(error);
+    showCollectAndVisualize(false);
+  }
+}
+
+async function newStream(connection, isMobile) {
+  const apiCalls = [];
+  const resultHandlers = [];
+  if (isMobile) {
+    apiCalls.push(
+      // Accelerometer
+      {
+        method: 'streams.create',
+        params: {
+          id: 'hfdemo-orientation-gamma',
+          name: 'Orientation-Gamma',
+          parentId: 'hfdemo',
+          clientData: buildPlotlyOptions('Orientation', 'angle/deg', 'Gamma')
+        }
+      },
+      {
+        method: 'streams.create',
+        params: {
+          id: 'hfdemo-orientation-beta',
+          name: 'Orientation-Beta',
+          parentId: 'hfdemo',
+          clientData: buildPlotlyOptions('Orientation', 'angle/deg', 'Beta')
+        }
+      },
+      {
+        method: 'streams.create',
+        params: {
+          id: 'hfdemo-orientation-alpha',
+          name: 'Orientation-Alpha',
+          parentId: 'hfdemo',
+          clientData: buildPlotlyOptions('Orientation', 'angle/deg', 'Alpha')
+        }
+      }
+    );
+    resultHandlers.push(null, null, null, null, null, null);
+  }
+  else {
+    apiCalls.push(
+      // MOUSE
+      {
+        method: 'streams.create',
+        params: {
+          id: 'hfdemo-mouse-x',
+          name: 'Mouse-X',
+          parentId: 'hfdemo',
+          clientData: buildPlotlyOptions('Mouse', 'count/generic', 'X')
+        }
+      },
+      {
+        method: 'streams.create',
+        params: {
+          id: 'hfdemo-mouse-y',
+          name: 'Mouse-Y',
+          parentId: 'hfdemo',
+          clientData: buildPlotlyOptions('Mouse', 'count/generic', 'Y')
+        }
+      }
+    );
+
+    resultHandlers.push(null, null, null, null);
+  }
+  await executeCalls(connection, apiCalls, resultHandlers, false);
+}
+
+async function newEvent(connection, isMobile) {
+  // Can be good to add generic tuple types for the event (1 event instead of 2-3). 
+  const apiCalls = [];
+  const resultHandlers = [];
+  if (isMobile) {
     apiCalls.push(
       {
         method: 'events.create',
@@ -205,33 +303,8 @@ async function setupStreamStructure(connection) {
         console.log('handle alphaEvent set', result.event);
       }
     );
-  } else {
-    if (!hasDesktopStream) {
-      apiCalls.push(
-        // MOUSE
-        {
-          method: 'streams.create',
-          params: {
-            id: 'hfdemo-mouse-x',
-            name: 'Mouse-X',
-            parentId: 'hfdemo',
-            clientData: buildPlotlyOptions('Mouse', 'count/generic', 'X')
-          }
-        },
-        {
-          method: 'streams.create',
-          params: {
-            id: 'hfdemo-mouse-y',
-            name: 'Mouse-Y',
-            parentId: 'hfdemo',
-            clientData: buildPlotlyOptions('Mouse', 'count/generic', 'Y')
-          }
-        }
-      );
-
-      resultHandlers.push(null, null, null, null);
-    }
-    // https://api.pryv.com/reference/#create-hf-event
+  }
+  else {
     apiCalls.push(
       {
         method: 'events.create',
@@ -262,51 +335,130 @@ async function setupStreamStructure(connection) {
       }
     );
   }
+  await executeCalls(connection, apiCalls, resultHandlers, true);
+}
 
-  try {
-    const results = await connection.api(apiCalls);
-    console.log('...structure created: ', results);
-    for (let i = 0; i < results.length; i++) {
-      if (resultHandlers[i]) {
-        /* If no new event is created => error with token */
-        if (results[i].event == null) {
-          throw new Error(
-            "The given token's access permissions do not allow to create an event. Please suppress the app access before reconnecting"
-          );
+async function deleteCurrentEvent() {
+  const apiCalls = [];
+  const resultHandlers = [];
+  if (!pryvHF.measures.mouseX.event && !pryvHF.measures.orientationAlpha.event) {
+    alert('No event to delete');
+  }
+  else {
+    const confirmation = confirm('Are you sure to delete the current event?');
+    if (confirmation) {
+      if (pryvHF.measures.mouseX.event) {
+        apiCalls.push(
+          {
+            method: 'events.delete',
+            params: {
+              id: pryvHF.measures.mouseX.event.id
+            }
+          },
+          {
+            method: 'events.delete',
+            params: {
+              id: pryvHF.measures.mouseX.event.id
+            }
+          },
+          {
+            method: 'events.delete',
+            params: {
+              id: pryvHF.measures.mouseY.event.id
+            }
+          },
+          {
+            method: 'events.delete',
+            params: {
+              id: pryvHF.measures.mouseY.event.id
+            }
+          }
+        );
+        resultHandlers.push(
+          function deleteEventX() {
+            pryvHF.measures.mouseX.event = null;
+          },
+          function confirmDeletionEventX(result) {
+            console.log('deletion xEvent', result);
+          },
+          function registerEventY() {
+            pryvHF.measures.mouseY.event = null;
+          },
+          function confirmDeletionEventY(result) {
+            console.log('deletion yEvent', result);
+          }
+        );
+        clearCtx(renderCtx);
+        clearCtx(drawingCtx)
+        if (is_recording) {
+          mouseDown();
         }
-        resultHandlers[i].call(null, results[i]);
+      }
+      else {
+        apiCalls.push(
+          {
+            method: 'events.delete',
+            params: {
+              id: pryvHF.measures.orientationAlpha.event.id
+            }
+          },
+          {
+            method: 'events.delete',
+            params: {
+              id: pryvHF.measures.orientationAlpha.event.id
+            }
+          },
+          {
+            method: 'events.delete',
+            params: {
+              id: pryvHF.measures.orientationBeta.event.id
+            }
+          },
+          {
+            method: 'events.delete',
+            params: {
+              id: pryvHF.measures.orientationBeta.event.id
+            }
+          },
+          {
+            method: 'events.delete',
+            params: {
+              id: pryvHF.measures.orientationGamma.event.id
+            }
+          },
+          {
+            method: 'events.delete',
+            params: {
+              id: pryvHF.measures.orientationGamma.event.id
+            }
+          }
+        );
+        resultHandlers.push(
+          function deleteEventAlpha() {
+            pryvHF.measures.orientationAlpha.event = null;
+          },
+          function confirmDeletionEventAlpha(result) {
+            console.log('deletion alphaEvent', result);
+          },
+          function registerEventBeta() {
+            pryvHF.measures.orientationBeta.event = null;
+          },
+          function confirmDeletionEventBeta(result) {
+            console.log('deletion betaEvent', result);
+          },
+          function registerEventGamma() {
+            pryvHF.measures.orientationGamma.event = null;
+          },
+          function confirmDeletionEventGamma(result) {
+            console.log('deletion gammaEvent', result);
+          }
+        );
+      }
+      await executeCalls(pryvHF.pryvConn, apiCalls, resultHandlers, false);
+      if (is_recording) {
+        startStopButton();
       }
     }
-  } catch (error) {
-    console.error('...error: ', error);
-    alert(error);
-    showCollectAndVisualize(false);
-  }
-  pryvHF.pryvConn = connection;
-
-  /**
-   * @returns hasRootStream: True if streams hfdemo exists
-   * @returns hasDesktopStream: True if streams for desktop devices exist
-   * @returns hasMobileStream: True if streams for mobile devices exist
-   */
-  function hasStreams(streams) {
-    let hasDesktopStream = false;
-    let hasMobileStream = false;
-    let hasRootStream = false;
-    if (streams.length == 0) {
-      return [hasRootStream, hasDesktopStream, hasMobileStream];
-    }
-    streams = streams[0].children.filter(x => x.id == 'hfdemo');
-    if (streams.length == 0) {
-      return [hasRootStream, hasDesktopStream, hasMobileStream];
-    }
-    hasRootStream = true;
-    hasDesktopStream = streams[0].children.filter(x => x.name == 'Mouse-X')
-      .length;
-    hasMobileStream = streams[0].children.filter(
-      x => x.name == 'Orientation-Alpha'
-    ).length;
-    return [hasRootStream, hasDesktopStream, hasMobileStream];
   }
 }
 
@@ -386,9 +538,14 @@ async function fetchSerieMouse() {
         draw(pointsX.points, pointsY.points, l);
       }
     });
+    countError = 0
   } catch (error) {
-    container.style.display = 'none';
-    alert('Error to fetch data');
+    // To avoid crash after deleting event, due to fetch order just after deletion
+    if (countError > 0) {
+      container.style.display = 'none';
+      alert('Error to fetch data');
+    }
+    countError += 1;
   }
 }
 
@@ -418,30 +575,27 @@ async function fetchSerieAccelerometer() {
         if (l) {
           fromTime = pointsGamma.points[l - 1][0];
           pointsGamma = pointsGamma.points.map(([timestamp, x]) => {
-            if (x == IMAGE_START || x == IMAGE_END) {
-              return x;
-            }
             return THREE.Math.degToRad(x);
           });
           pointsBeta = pointsBeta.points.map(([timestamp, x]) => {
-            if (x == IMAGE_START || x == IMAGE_END) {
-              return x;
-            }
             return THREE.Math.degToRad(x);
           });
           pointsAlpha = pointsAlpha.points.map(([timestamp, x]) => {
-            if (x == IMAGE_START || x == IMAGE_END) {
-              return x;
-            }
             return THREE.Math.degToRad(x);
           });
           recordAccelerometer(pointsAlpha, pointsBeta, pointsGamma, l);
         }
       }
     );
+    countError = 0;
+
   } catch (error) {
-    container.style.display = 'none';
-    alert('Error to fetch data');
+    // To avoid crash after deleting event, due to fetch order just after deletion
+    if (countError > 0) {
+      container.style.display = 'none';
+      alert('Error to fetch data');
+    }
+    countError += 1;
   }
 }
 

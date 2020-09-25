@@ -2,7 +2,7 @@ let rendererCollect, cubeCollect, edgesCollect, sceneCollect, cameraCollect;
 
 let rendererVisu, cubeVisu, edgesVisu, sceneVisu, cameraVisu;
 
-let accelerometerRecordCounter, recordSelect, frequencyAccelerometer;
+let recordSelect, frequencyAccelerometer;
 
 let cubeAlphaCollect = 0;
 let cubeGammaCollect = 0;
@@ -12,12 +12,14 @@ let cubeAlphaVisu = 0;
 let cubeGammaVisu = 0;
 let cubeBetaVisu = 0;
 
-let currentRecording = [];
+let recording = [];
 let is_recording;
-let recordings = [];
 let is_showing;
+let is_live;
+let end_time_last_batch = new Date(0);
+let recordingTimeout = [];
 
-const samplingAccRate = 30;
+const samplingAccRate = 15;
 /* Build mobile version */
 function buildMobile() {
   let accelerometerCanvas = document.getElementById('accelerometer-canvas');
@@ -31,45 +33,51 @@ function buildMobile() {
   animateCollect();
 
   let accelerometerButton = document.getElementById('accelerometer-button');
-  accelerometerButton.addEventListener('click', samplingButton);
+  accelerometerButton.addEventListener('click', startStopButton);
 
-  window.addEventListener('deviceorientation', deviceorientation, false);
-
-  let accelerometerVisuCanvas = document.getElementById(
-    'accelerometer-visualization-canvas'
-  );
+  let accelerometerVisuCanvas = document.getElementById('accelerometer-visualization-canvas');
   [sceneVisu, cameraVisu, rendererVisu, cubeVisu, edgesVisu] = create3DCanvas(
     accelerometerVisuCanvas
   );
   animateVisu();
 
-  accelerometerRecordCounter = document.getElementById('counter-accelerometer');
   const accelerometerButtonShow = document.getElementById('accelerometer-show');
   accelerometerButtonShow.addEventListener('click', showRecording);
-
-  recordSelect = document.getElementById('recording-select');
 
   frequencyAccelerometer = document.getElementById('frequency-accelerometer');
 }
 
-function samplingButton(e) {
+function startStopButton() {
+  if (typeof DeviceMotionEvent.requestPermission === 'function') {
+    // iOS 13+
+    DeviceOrientationEvent.requestPermission()
+      .then(response => {
+        if (response == 'granted') {
+          window.addEventListener('deviceorientation', deviceorientation, false);
+        }
+        else {
+          document.getElementById('container').style.display = 'none';
+          alert('You have to grant the right over accelerometer to continue');
+        }
+      }).catch(console.error)
+  } else {
+    // non iOS 13+
+    window.addEventListener('deviceorientation', deviceorientation, false);
+  }
+
   if (!pryvHF.pryvConn) {
     alert('Please connect first to your Pryv account!');
     return;
   }
   const now = Date.now() / 1000;
   if (is_recording) {
-    //Add point to indicate the end of a drawing
-    pryvHF.measures.orientationGamma.buffer.push([now, IMAGE_END]);
-    pryvHF.measures.orientationBeta.buffer.push([now, IMAGE_END]);
-    pryvHF.measures.orientationAlpha.buffer.push([now, IMAGE_END]);
+    document.getElementById("accelerometer-button").innerHTML = 'Start Collect'
   } else {
-    //Add point to indicate the beggining of a drawing
-    pryvHF.measures.orientationGamma.buffer.push([now, IMAGE_START]);
-    pryvHF.measures.orientationBeta.buffer.push([now, IMAGE_START]);
-    pryvHF.measures.orientationAlpha.buffer.push([now, IMAGE_START]);
+    newEvent(pryvHF.pryvConn, true);
+    document.getElementById("accelerometer-button").innerHTML = 'Stop Collect'
   }
   is_recording = !is_recording;
+
 }
 
 function deviceorientation(event) {
@@ -128,41 +136,32 @@ function animateVisu() {
 }
 
 function recordAccelerometer(pointsAlpha, pointsBeta, pointsGamma, l) {
+  let now = new Date();
+  let diff = end_time_last_batch - now;
+  diff = diff > 0 ? diff:0;
+  end_time_last_batch = new Date(now.getTime() + diff + samplingAccRate * l);
   for (let i = 0; i < l; i++) {
-    if (pointsAlpha[i] != IMAGE_START && pointsAlpha[i] != IMAGE_END) {
-      currentRecording.push([pointsAlpha[i], pointsBeta[i], pointsGamma[i]]);
-    } else if (pointsAlpha[i] == IMAGE_START) {
-      currentRecording = [];
-    } else if (pointsAlpha[i] == IMAGE_END) {
-      //Add option to the select
-      const index = recordings.length;
-      const opt = document.createElement('option');
-      opt.appendChild(document.createTextNode('Recording ' + index));
-      opt.value = index;
-      recordSelect.appendChild(opt);
-
-      // Push new recording in images
-      recordings.push(currentRecording);
-      accelerometerRecordCounter.innerHTML =
-        'Number of stored recordings: ' + recordings.length;
+    recording.push([pointsAlpha[i], pointsBeta[i], pointsGamma[i]]);
+    if (is_live) {
+      time = (diff + samplingAccRate * i);
+      recordingTimeout[i] = setTimeout(() => {
+        cubeAlphaVisu = pointsAlpha[i];
+        cubeBetaVisu = pointsBeta[i];
+        cubeGammaVisu = pointsGamma[i];
+      }, time);
     }
   }
 }
 
 function showRecording() {
-  const selected = recordSelect.value;
-  if (selected == '') {
-    alert('No recording available');
-    return;
-  }
+  is_live = false;
   let time = 0;
-  const recording = recordings[selected];
   if (!is_showing) {
     is_showing = true;
     for (let i = 0; i < recording.length; i++) {
       let point = recording[i];
       time = samplingAccRate * i;
-      setTimeout(() => {
+      recordingTimeout[i] = setTimeout(() => {
         cubeAlphaVisu = point[0];
         cubeBetaVisu = point[1];
         cubeGammaVisu = point[2];
@@ -172,5 +171,11 @@ function showRecording() {
     setTimeout(() => {
       is_showing = false;
     }, samplingAccRate * recording.length);
+  }
+}
+
+function emptyRecordingBuffer() {
+  for (let i = 0; i < recordingTimeout.length; ++i) {
+    clearTimeout(recordingTimeout[i]);
   }
 }
