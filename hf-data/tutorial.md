@@ -21,13 +21,13 @@ Once you have accepted, you can start the tracking task using the accelerometer 
 
 |Desktop                                                 | Mobile                                                  |
 | -------------------------------------------------------|---------------------------------------------------------|
-| <img src="images/tracker-1.png" alt="tracker" style="zoom:50%;" /> | <img src="images/collect-acc.jpg" alt="collect" style="zoom:30%;" /> |
+| <img src="images/tracker-1.png" alt="tracker" style="zoom:50%;" /> | <img src="images/collect-acc.jpg" alt="collect" style="zoom:10%;" /> |
 
 You can visualize your data in the "Visualization" section of the app:
 
 |Desktop                                                 | Mobile                                                  |
 | -------------------------------------------------------|---------------------------------------------------------|
-| <img src="images/visu-2.png" alt="view" style="zoom:50%;" /> | <img src="images/delete-acc.jpg" alt="view" style="zoom:30%;" /> |
+| <img src="images/visu-2.png" alt="view" style="zoom:50%;" /> | <img src="images/delete-acc.jpg" alt="view" style="zoom:10%;" /> |
 
 You can then share your data by creating a new sharing at the bottom of the page. This will generate a URL link that contains your tracking visualization from the stream "**HF**".
 
