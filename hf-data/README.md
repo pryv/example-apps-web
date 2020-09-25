@@ -16,7 +16,7 @@ When the patient logs in to his Pryv.io account, he is asked to perform a tracki
 - **Web version**: Draw the shape of either a heart or a house with the mouse
 - **Mobile version**: Keep the phone horizontally with the arm stretched for at least 10 seconds
 
-Results from the tests are saved in the Pryv.io account of the patient, and can be shared through a URL link to a third-party.  
+Results from the tests are saved in the Pryv.io account of the patient, and can be shared through a URL link to a third-party. Live-tracking is also permitted through the same URL link.
 
 In this web app, you provide the user with a tool to evaluate possible tremor by collecting high frequency data (mouse motion or arm motion) and sharing it with third parties.
 
@@ -29,9 +29,10 @@ In this web app, you provide the user with a tool to evaluate possible tremor by
 - Ask for login
 - Request access for the app "app-web-hfdemo" to manage the stream "HF"
 - Collect high-frequency data resulting from mouse motion (web version) or phone's accelerometer (mobile version)
-- Display the data
+- Display or delete data
 - Create or delete a sharing to a third party
 - Display shared data 
+- Allow live tracking
 
 ## Data structure
 
@@ -49,14 +50,14 @@ The user can select an image to draw for the **Desktop tracking task** (kinetic 
 
 |Desktop                                                 | Mobile                                                  |
 | -------------------------------------------------------|---------------------------------------------------------| 
-| <img src="images/tracker-1.png" alt="tracker" style="zoom:50%;" /> | <img src="images/acc-collect.png" alt="collect" style="zoom:50%;" /> |
+| <img src="images/tracker-1.png" alt="tracker" style="zoom:50%;" /> | <img src="images/collect-acc.png" alt="collect" style="zoom:50%;" /> |
 
 
-Collected HF data from mouse or phone motion is displayed in real time to the user, along with the previous recordings and the fetch frequency (in points/s).
+Collected HF data from mouse or phone motion is displayed in real time to the user along with the fetch frequency (in NUM/s). The recorded event can be deleted by clicking on the "Delete" button.
 
 |Desktop                                                 | Mobile                                                  |
 | -------------------------------------------------------|---------------------------------------------------------| 
-| <img src="images/visualization-2.png" alt="view" style="zoom:50%;" /> | <img src="images/acc-view.png" alt="view" style="zoom:50%;" /> |
+| <img src="images/visu-2.png" alt="view" style="zoom:50%;" /> | <img src="images/delete-acc.png" alt="view" style="zoom:50%;" /> |
 
 ## Data sharing
 
@@ -64,12 +65,19 @@ Data visualization from both tests can be shared with third-parties. This transl
 When opened, it displays either the drawing from the desktop version or the phone orientation from the mobile version:
 
 <p align="center">
-<img src="images/created-sharing.png" alt="visualization" width=700 />
+<img src="images/share-data.png" alt="visualization" width=700 />
 </p>
 
+## Live tracking
+
+The app also allows for live-tracking. When opening the sharing link, the functionality "Show Live Event" enables the data accessor to display the drawing or the phone orientation (depending on the chosen version) while the patient is performing the test remotely:
+
+<p align="center">
+<img src="images/live-tracking.png" alt="live-tracking" />
+</p>
 
 ## Next steps
 
-You can check out the tutorial to implement high-frequency data collection for your app:
+You can check out the tutorial to implement high-frequency data collection for your own app:
 
 - [Collect High-Frequency Data Tutorial](tutorial.md)
