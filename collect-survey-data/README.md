@@ -1,6 +1,6 @@
 ## Pryv collect survey data example 
 
-- [Live Demo](https://api.pryv.com/app-web-examples/collect-survey-data/)
+- [Live Demo](https://api.pryv.com/example-apps-web/collect-survey-data/)
 - [Tutorial](tutorial.md)
 - [Video](https://youtu.be/SN11LSxL8q4)
 

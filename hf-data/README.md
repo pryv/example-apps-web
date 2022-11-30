@@ -1,6 +1,6 @@
 ## Pryv collect and view HF data
 
-- [Live Demo](https://api.pryv.com/app-web-examples/hf-data/)
+- [Live Demo](https://api.pryv.com/example-apps-web/hf-data/)
 - [Tutorial](tutorial.md)
 - [Video](https://youtu.be/l6uOXr1_ivA)
 

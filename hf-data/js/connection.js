@@ -506,7 +506,7 @@ async function fetchPoints() {
   if (pryvHF.pryvConn) {
     length_last_batch = 0;
     if (pryvHF.measures.mouseX.event) {
-      await fetchSerieMouse();
+      await ();
     }
     if (pryvHF.measures.orientationGamma.event) {
       await fetchSerieAccelerometer();

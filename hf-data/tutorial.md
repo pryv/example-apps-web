@@ -1,7 +1,7 @@
 
 # Pryv Collect and view HF data tutorial
 
-You can try the live version of the app [here](https://api.pryv.com/app-web-examples/hf-data/).
+You can try the live version of the app [here](https://api.pryv.com/example-apps-web/hf-data/).
 
 All you need to run this app is to download [index.html](index.html), [script.js](script.js) files, [js/](js) and [assets](assets) folders and open [index.html](index.html) with your browser.
 
@@ -405,7 +405,7 @@ async function deleteSharing(accessId) {
 
 Once the sharing has been created, it should enable third parties to consult data from the user in a "view-only" mode. In this mode, a table containing all performed tests is displayed, along with the date of the test and the tracking method.   
 
-*Example: [https://api.pryv.com/app-web-examples/hf-data/?apiEndpoint=https://ckejrnjlq00z61kqosakom3wi@hf-app.pryv.me/](https://api.pryv.com/app-web-examples/hf-data/?apiEndpoint=https://ckejrnjlq00z61kqosakom3wi@hf-app.pryv.me/)* 
+*Example: [https://api.pryv.com/example-apps-web/hf-data/?apiEndpoint=https://ckejrnjlq00z61kqosakom3wi@hf-app.pryv.me/](https://api.pryv.com/example-apps-web/hf-data/?apiEndpoint=https://ckejrnjlq00z61kqosakom3wi@hf-app.pryv.me/)* 
 
 The recipient of the link can open the data visualization by clicking on the chosen test:
 - the **Desktop version** contains the drawing performed with the mouse tracker
