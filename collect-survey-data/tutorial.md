@@ -179,8 +179,8 @@ const serviceInfoUrl = Pryv.Browser.serviceInfoFromUrl() || 'https://reg.pryv.m
 
 To set a custom Pryv.io platform, provide the service information URL as shown here for the Pryv Lab:
 
-[https://api.pryv.com/app-web-examples/collect-survey-data/?pryvServiceInfoUrl=https://reg.pryv.me/service/info](https://api.pryv.com/app-web-examples/collect-survey-data/?pryvServiceInfoUrl=https://reg.pryv.me/service/info)
+[https://api.pryv.com/example-apps-web/collect-survey-data/?pryvServiceInfoUrl=https://reg.pryv.me/service/info](https://api.pryv.com/example-apps-web/collect-survey-data/?pryvServiceInfoUrl=https://reg.pryv.me/service/info)
 
  To launch this app on your [local Open Pryv.io platform](https://github.com/pryv/open-pryv.io#development) use (the link requires to have a running Open Pryv.io with the rec-la SSL proxy):
 
-[https://api.pryv.com/app-web-examples/collect-survey-data/?pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info](https://api.pryv.com/app-web-examples/collect-survey-data/?pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info).
+[https://api.pryv.com/example-apps-web/collect-survey-data/?pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info](https://api.pryv.com/example-apps-web/collect-survey-data/?pryvServiceInfoUrl=https://my-computer.rec.la:4443/reg/service/info).

@@ -47,7 +47,7 @@ Once your changes are done, copy the content of your **assets-open-pryv.io** fol
 
 Run your Open Pryv instance from your terminal.
 
-You can test your changes by opening the onboarding example page [https://api.pryv.com/app-web-examples/onboarding/](https://api.pryv.com/app-web-examples/onboarding/).
+You can test your changes by opening the onboarding example page [https://api.pryv.com/example-apps-web/onboarding/](https://api.pryv.com/example-apps-web/onboarding/).
 <p align="center">
     <img src="images/onboarding.png" alt="onboarding" width="600"/>
 </p>

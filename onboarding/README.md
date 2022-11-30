@@ -1,6 +1,6 @@
 # Pryv.io onboarding
 
-- [Live Demo](https://api.pryv.com/app-web-examples/onboarding/)
+- [Live Demo](https://api.pryv.com/example-apps-web/onboarding/)
 - [Tutorial](tutorial.md)
 - [Video](https://www.youtube.com/watch?v=258UsM1Qq0o)
 
