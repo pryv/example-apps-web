@@ -201,9 +201,8 @@ async function addListAccess(table, access) { // add permissions to the sharings
   
   const permissions = [];
   for (const permission of access.permissions) permissions.push(permission.streamId);
-  const apiEndpoint = await service.apiEndpointFor(username, access.token);
 
-  const sharingURL = window.location.href.split('?')[0] + '?pryvApiEndpoint=' + apiEndpoint;
+  const sharingURL = window.location.href.split('?')[0] + '?pryvApiEndpoint=' + access.apiEndpoint;
   const sharingLink = '<a href="' + sharingURL + '" target="_new"> open </a>';
 
   const emailSubject = encodeURIComponent('Access my ' + permissions.join(', ') + ' data');
