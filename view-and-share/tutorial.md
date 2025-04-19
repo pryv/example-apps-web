@@ -111,7 +111,7 @@ function showLoginMessage() {
 }
 ```
 
-The root streams of the `requestedPermissions` array are created if they don't exist yet. They will already be populated with events data if you ran the [Collect survey data example](collect-survey-data) previously.
+The root streams of the `requestedPermissions` array are created if they don't exist yet. They will already be populated with events data if you ran the [Collect survey data example](https://github.com/pryv/example-apps-web/tree/master/collect-survey-data) previously.
 
 The auth request is done on page load, except when the shared data is loaded by a third-party:
 
@@ -124,7 +124,7 @@ window.onload = async (event) => {
 
 ## Load data
 
-Once the user is signed in, data from his Pryv.io account is fetched. If there is no data, a warning is displayed to invite the user to fill in the form from the previous [example](collect-survey-data) on **Survey data collection**.
+Once the user is signed in, data from his Pryv.io account is fetched. If there is no data, a warning is displayed to invite the user to fill in the form from the previous [example](https://github.com/pryv/example-apps-web/tree/master/collect-survey-data) on **Survey data collection**.
 
 ```javascript
 async function loadData() {

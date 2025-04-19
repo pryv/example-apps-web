@@ -62,7 +62,7 @@ function showLoginMessage() {
 // following the APP GUIDELINES: https://api.pryv.com/guides/app-guidelines/
 const urlParams = new URLSearchParams(window.location.search);
 const apiEndpoint = urlParams.get('pryvApiEndpoint');
-const serviceInfoUrl = urlParams.get('pryvServiceInfoURL') || 'https://reg.pryv.me/service/info';
+const serviceInfoUrl = Pryv.Browser.serviceInfoFromUrl() || 'https://reg.pryv.me/service/info';
 
 var service = null; // will be initialized after setupAuth;
 var username = null; // will be inialized after AUTHORIZED auth State is received
@@ -201,9 +201,8 @@ async function addListAccess(table, access) { // add permissions to the sharings
   
   const permissions = [];
   for (const permission of access.permissions) permissions.push(permission.streamId);
-  const apiEndpoint = await service.apiEndpointFor(username, access.token);
 
-  const sharingURL = window.location.href.split('?')[0] + '?pryvApiEndpoint=' + apiEndpoint;
+  const sharingURL = window.location.href.split('?')[0] + '?pryvApiEndpoint=' + access.apiEndpoint;
   const sharingLink = '<a href="' + sharingURL + '" target="_new"> open </a>';
 
   const emailSubject = encodeURIComponent('Access my ' + permissions.join(', ') + ' data');
