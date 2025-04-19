@@ -62,7 +62,7 @@ function showLoginMessage() {
 // following the APP GUIDELINES: https://api.pryv.com/guides/app-guidelines/
 const urlParams = new URLSearchParams(window.location.search);
 const apiEndpoint = urlParams.get('pryvApiEndpoint');
-const serviceInfoUrl = urlParams.get('pryvServiceInfoURL') || 'https://reg.pryv.me/service/info';
+const serviceInfoUrl = Pryv.Browser.serviceInfoFromUrl() || 'https://reg.pryv.me/service/info';
 
 var service = null; // will be initialized after setupAuth;
 var username = null; // will be inialized after AUTHORIZED auth State is received
